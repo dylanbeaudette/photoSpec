@@ -1,3 +1,9 @@
+
+verts <- data.frame(x = c(0.2, 0.72, 0.33),
+	y = c(0.04, 0.29, 0.33))
+
+plotCIEselection(verts)
+
 plotCIEselection <- function(vertices, ff = 1.0, ...) {
 
 	# Function to draw the CIE chromaticity diagram
@@ -16,7 +22,7 @@ plotCIEselection <- function(vertices, ff = 1.0, ...) {
 	xyz <- expand.grid(xx,yy)
 	names(xyz) <- c("x", "y")
 
-	grad <- 
+	grad <- vertices
 	insideL <- inout(xyz, grad, bound = TRUE) # TRUE = inside
 	outsideL <-!insideL # TRUE = outside now
 	xyz$z <- 1 - xyz$x - xyz$y
@@ -74,7 +80,7 @@ plotCIEselection <- function(vertices, ff = 1.0, ...) {
 		vjust = c(1, 0, 0, 0, 0, 0, 0, 0, 1),
 		gp = gpar(cex = 0.75))
 
-	grid.polygon(g$x, g$y, default.units = "native")
+	grid.polygon(vertices$x, vertices$y, default.units = "native")
 
 
 	}
