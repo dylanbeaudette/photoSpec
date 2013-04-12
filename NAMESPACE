@@ -1,2 +1,2 @@
 exportPattern("^[^.]")
-import(grid, splancs, R.utils)
+import(grid, splancs, R.utils, rgl, ChemoSpec, colorspace)

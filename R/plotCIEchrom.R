@@ -1,5 +1,5 @@
 plotCIEchrom <- function(gradient = NULL, colSpace = "sRGB", ff = 1.0,
-	opts = c("D65", "specLocus", "purples", "sRGB"), ...) {
+	opts = c("D65", "specLocus", "purples"), ...) {
 
 	# Function to draw the CIE chromaticity diagram
 	# with various decorations
@@ -84,14 +84,19 @@ plotCIEchrom <- function(gradient = NULL, colSpace = "sRGB", ff = 1.0,
 
 	pushViewport(viewport(width = 0.7, height = 0.7,
 		xscale = c(-0.1, 0.9), yscale = c(-0.1, 0.9)))
-	grid.raster(finras, x = 0.5, y = 0.5, interpolate = FALSE, default.units = "npc")
+
+	if (!is.null(gradient)) {
+		grid.raster(finras, x = 0.5, y = 0.5, interpolate = FALSE, default.units = "npc")
+		msg <- "Warning: the color gradient appearance\nwill vary with the device, surface\n& incident light used to view it\nand is not likely correct anywhere"
+		grid.text(msg, x = 0.98, y = 0.9, gp = gpar(fontface = "italic", cex = 0.9),
+			just = "right")
+		}
+
 	grid.polygon(Lxyz$x, Lxyz$y)
 	grid.rect()
 	tickpos <- seq(0.0, 0.8, by = 0.1)
 	grid.xaxis(at = tickpos)
 	grid.yaxis(at = tickpos)
-	msg <- "Warning: the color gradient appearance\nwill vary with the device, surface\n& incident light used to view it\nand is not likely correct anywhere"
-	grid.text(msg, x = 0.98, y = 0.9, gp = gpar(fontface = "italic", cex = 0.9), just = "right")
 
 	# Labels for the spectral locus
 	
@@ -113,7 +118,7 @@ plotCIEchrom <- function(gradient = NULL, colSpace = "sRGB", ff = 1.0,
 	# White point labels
 	
 	if ("D65" %in% opts) {
-		wh <- getGamutValues("D65")
+		wh <- getWhiteValues("D65")
 		grid.points(wh$x, wh$y, gp = gpar(col = "black"),
 			size = unit(0.5, "char"), default.units = "native")
 		grid.text(wh$x, wh$y, label = "  D65", just = "left",
@@ -121,7 +126,7 @@ plotCIEchrom <- function(gradient = NULL, colSpace = "sRGB", ff = 1.0,
 		}
 
 	if ("D50" %in% opts) {
-		wh <- getGamutValues("D50")
+		wh <- getWhiteValues("D50")
 		grid.points(wh$x, wh$y, gp = gpar(col = "black"),
 			size = unit(0.5, "char"), default.units = "native")
 		grid.text(wh$x, wh$y, label = "  D50", just = "left",
@@ -129,7 +134,7 @@ plotCIEchrom <- function(gradient = NULL, colSpace = "sRGB", ff = 1.0,
 		}
 
 	if ("C" %in% opts) {
-		wh <- getGamutValues("C")
+		wh <- getWhiteValues("C")
 		grid.points(wh$x, wh$y, gp = gpar(col = "black"),
 			size = unit(0.5, "char"), default.units = "native")
 		grid.text(wh$x, wh$y, label = "  C", just = "left",
@@ -137,7 +142,7 @@ plotCIEchrom <- function(gradient = NULL, colSpace = "sRGB", ff = 1.0,
 		}
 
 	if ("E" %in% opts) {
-		wh <- getGamutValues("E")
+		wh <- getWhiteValues("E")
 		grid.points(wh$x, wh$y, gp = gpar(col = "black"),
 			size = unit(0.5, "char"), default.units = "native")
 		grid.text(wh$x, wh$y, label = "  E", just = "left",

@@ -12,3 +12,4 @@ The functions which mostly work, _but may still change a lot_ are:
 + showCalColSpace
 + getGamutValues (not user facing)
 + getWhiteValues (not user facing)
++ plotCIEselection (not user facing)

@@ -5,18 +5,25 @@ tst <- c("#ff00fe", "#ff79fe", "#ffb5ff", "#ffdeff", "#feffff", "#ffffff") # 5 c
 
 tst2 <- c("#a52a2a", "#ff4040", "#8b0000", "#ff1493", "#cd1076", "#B22222", "#ff69b4", "#8b3a62", "#ff00ff", "#ff34b3") # several colors in the red/pink/magenta range
 
-showCalColSpace <- function(calCols, sampCol, sampName) {
+demo <- data.frame(x = runif(1), y = runif(1), z = runif(1))
+dc <- paste("#", as.hexmode(floor(demo$x*255)),
+	as.hexmode(floor(demo$y*255)), as.hexmode(floor(demo$z*255)), sep = "")
+
+showCalColSpace(calCols = tst2, sampCol = dc)
+
+
+
+showCalColSpace <- function(calCols, sampCol = NULL, sampName = "Demo") {
 
 	rgb <- col2rgb(calCols)
 	rgb <- t(rgb/255)
 	rgb <- as.data.frame(rgb)
 	names(rgb) <- c("x", "y", "z")
-
-	# Run PCA to find the line of best fit
 	
 	rgbCent <- as.matrix(rgb - colMeans(rgb))
 	eig <- eigen(cov(rgbCent))
 	eigVal <- eig$values
+	# Run PCA to find the line of best fit
 	# eigVec <- eig$vectors # these are the loadings
 	# scores <- rgbCent %*% eigVec
 	# PC1 <- rbind(eigVec[,1], -eigVec[,1]) * 0.5*diff(range(scores))
@@ -25,11 +32,11 @@ showCalColSpace <- function(calCols, sampCol, sampName) {
 	# PC2R <- PC2 %*% t(eigVec) + colMeans(rgb)
 	
 	ell <- makeEllipsoid(rgb)
-	# Print perc variance explained
-	cat("Cumulative variance explained:\n")
-	print(cumsum(eigVal)/sum(eigVal))
-	
-	# Perhaps 3D ellipse would be nice?
+	# Print percent variance explained
+	pcs <- data.frame(component = c("PC 1","PC 2", "PC 3"),
+		percent = round(cumsum(eigVal)*100/sum(eigVal), 1))
+	message("Cumulative variance explained:")
+	print(pcs)
 	
 	# Plot pure white & pure black as reference points (but hide them)
 	# also serves to establish the overall scale/space
@@ -41,17 +48,17 @@ showCalColSpace <- function(calCols, sampCol, sampName) {
 		texts = "white", adj = c(0, 0))
 	text3d(x = -0.05, y = -0.05, z = -0.05,
 		texts = "black", adj = c(1, 1))
-	title3d(xlab = "red", ylab = "green", zlab = "blue")
-	points3d(rgb, col = calCols, size = 5)
+	title3d(xlab = "red", ylab = "green", zlab = "blue", main = sampName)
+	points3d(rgb, col = calCols, size = 5, point_antialias = TRUE)
 	points3d(ell, col = "gray", size = 1)
+	
 #	segments3d(PC1R, col = "green", size = 10)
 #	segments3d(PC2R, col = "green", size = 10)
 	
-	# add a random point as an illustration of a sample
-	demo <- data.frame(x = runif(1), y = runif(1), z = runif(1))
-	dc <- paste("#", as.hexmode(floor(demo$x*255)),
-		as.hexmode(floor(demo$y*255)), as.hexmode(floor(demo$z*255)), sep = "")
-#	points3d(demo, size = 8, col = dc)
+	if (!is.null(sampCol)) {
+		xyz <- hex2RGB(sampCol)@coords[1,]
+		points3d(xyz[1], xyz[2], xyz[3], size = 10, col = sampCol, point_antialias = TRUE)
+		}	
 	
-	rgb
+	invisible(rgb)
 	}

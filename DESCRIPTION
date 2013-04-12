@@ -7,4 +7,4 @@ Author: Bryan A. Hanson DePauw University, Greencastle Indiana USA
 Maintainer: Bryan A. Hanson <hanson@depauw.edu>
 Description:
 License: GPL-3
-Imports: grid, splancs, R.utils
+Imports: grid, splancs, R.utils, rgl, ChemoSpec, colorspace
