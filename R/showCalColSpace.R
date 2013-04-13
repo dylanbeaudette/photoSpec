@@ -1,9 +1,9 @@
 
 
-# 5 colors along one radius of D65, the 5 colors used if no colors
+# 10 colors along one radius of D65, the 10 colors used if no colors
 # given in plotSampleCard()
 
-tst1 <- c("#FF00FF", "#FF05FF", "#FF9AFF", "#FFD5FF", "#FEFFFF")
+tst1 <- c("#FF00FF", "#FF48FF", "#FF69FF", "#FF83FF", "#FF9AFF", "#FFB0FF", "#FFC4FF", "#FFD8FF", "#FFECFF", "#FEFFFF")
 
 tst2 <- c("#a52a2a", "#ff4040", "#8b0000", "#ff1493", "#cd1076", "#B22222", "#ff69b4", "#8b3a62", "#ff00ff", "#ff34b3") # several colors in the red/pink/magenta range
 

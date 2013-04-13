@@ -1,7 +1,7 @@
 
 
 plotSampleCard <- function(calCols = NULL, size = c(6, 4), wavelength = NULL,
-	scale = c(3.5, 2.5), ff = 1.65, guide = FALSE) {
+	scale = c(3.5, 2.5), ff = 1.0, guide = FALSE) {
 
 	# Main viewport
 	
@@ -38,15 +38,29 @@ plotSampleCard <- function(calCols = NULL, size = c(6, 4), wavelength = NULL,
 		# The following draws some purples as the complement of 550 nm
 		# aka the dominant wavelength
 		# pc = no. paint chips to draw
-		pc <- 5
-		myc <- data.frame(x = 0.312, y = seq(0.09, 0.329, length.out = pc))
-		myc$z <- 1 - myc$x - myc$y
+		pc <- 10
+		
+		# Original approach: equally spaced in CIE space, but the
+		# perceptual distance is not equal
+		# myc <- data.frame(x = 0.312, y = seq(0.09, 0.329, length.out = pc))
+		# myc$z <- 1 - myc$x - myc$y
+		# myc2 <- convertColor(myc, from = "XYZ", to = "sRGB")
+		# myc2 <- myc2*ff # may wish to hardwire to 1.65 for the example
+		# myc2[myc2 > 1] <- 1.0
+		# myc3 <- rgb(myc2)
+		# myc4 <- cbind(myc, myc2, myc3)
+		# names(myc4) <- c("CIE_x", "CIE_y", "CIE_z", "r", "g", "b", "hex")
+		
+		# 2nd approach: Use Lab space to get consistent perceptual distance
+		C0 <- c(0.312, 0.09, 0.598) # one end of the gradient in XYZ
+		C1 <- c(0.312, 0.329, 0.359) # the other end
+		myc <- matrix(c(C0, C1), byrow = TRUE, nrow = 2)
 		myc2 <- convertColor(myc, from = "XYZ", to = "sRGB")
-		myc2 <- myc2*ff # may wish to hardwire to 1.65 for the example
-		myc2[myc2 > 1] <- 1.0
-		myc3 <- rgb(myc2)
-		myc4 <- cbind(myc, myc2, myc3)
-		names(myc4) <- c("CIE_x", "CIE_y", "CIE_z", "r", "g", "b", "hex")
+		myc2 <- myc2*1.65
+		myc2[myc2 > 1] <- 1.0 # only needed due to ff
+		myc3 <- getInterRGB(seq(0, 1, length.out = pc),
+			rgb(myc2[1,1], myc2[1,2], myc2[1,3]),
+			rgb(myc2[2,1], myc2[2,2], myc2[2,3]))
 
 		# Set up locations of paint chips (in cm)
 		# x values spread across width, starting 1 cm in from edges 
@@ -61,7 +75,7 @@ plotSampleCard <- function(calCols = NULL, size = c(6, 4), wavelength = NULL,
 		if (guide) {
 			grid.rect(df$x[c(pc, pc*2)], df$y[c(pc, pc*2)],
 				width = 1.0, height = 1.0, default.units = "cm")
-			dups <- duplicated(myc2)
+			dups <- duplicated(myc3)
 			labs <- rep("unique", pc)
 			labs <- ifelse(dups == TRUE, "dup", labs)
 			labs[pc] <- "white?"
@@ -84,7 +98,7 @@ plotSampleCard <- function(calCols = NULL, size = c(6, 4), wavelength = NULL,
 	
 	# Return the collection of colors to be drawn for troubleshooting
 	
-	invisible(myc4)
+	invisible(myc3)
 	
 	} # end of function
 
