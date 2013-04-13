@@ -1,61 +1,66 @@
 
 
-plotSampleCard <- function(colors = NULL, size = c(6, 4), wavelength = NULL,
+plotSampleCard <- function(calCols = NULL, size = c(6, 4), wavelength = NULL,
 	scale = c(3.5, 2.5), ff = 1.65, guide = FALSE) {
 
 	# Main viewport
 	
 	pushViewport(viewport(width = size[1], height = size[2], default.units = "in"))
 #	grid.rect() # just for reference while troubleshooting
-	if (is.null(colors)) wavelength <- c(550, 550)
+	if (is.null(calCols)) wavelength <- c(550, 550)
 	msg <- bquote("photoSpec sample card for " ~lambda[max] ~.(wavelength[1]) - .(wavelength[2]) ~ "nm")
-#	grid.text(msg, x = 0.02, y = 0.97, just = "left",
-#		gp = gpar(cex = 0.75))
+	grid.text(msg, x = 0.02, y = 0.97, just = "left",
+		gp = gpar(cex = 0.75))
 	
 	# Draw the sample region with calibration grill/grid
 	
 	pushViewport(viewport(width = scale[1], height = scale[2], default.units = "cm",
 		xscale = c(0, scale[1]), yscale = c(0, scale[2])))
-	# tickposX <- seq(0.0, scale[1], by = 0.5)
-	# tickposY <- seq(0.0, scale[2], by = 0.5)
-	# grid.grill(v = unit(tickposX, "cm"), h = unit(tickposY, "cm"),
-		# gp = gpar(col = "grey70"))
+	tickposX <- seq(0.0, scale[1], by = 0.5)
+	tickposY <- seq(0.0, scale[2], by = 0.5)
+	grid.grill(v = unit(tickposX, "cm"), h = unit(tickposY, "cm"),
+		gp = gpar(col = "grey70"))
 
-	# grid.xaxis(at = tickposX, gp = gpar(cex = 0.5))
-	# grid.yaxis(at = tickposY, gp = gpar(cex = 0.5))
-	# grid.xaxis(at = tickposX, gp = gpar(cex = 0.5), main = FALSE)
-	# grid.yaxis(at = tickposY, gp = gpar(cex = 0.5), main = FALSE)
+	grid.xaxis(at = tickposX, gp = gpar(cex = 0.5))
+	grid.yaxis(at = tickposY, gp = gpar(cex = 0.5))
+	grid.xaxis(at = tickposX, gp = gpar(cex = 0.5), main = FALSE)
+	grid.yaxis(at = tickposY, gp = gpar(cex = 0.5), main = FALSE)
 
 	popViewport()
 	
 	# Now draw paint chips in the main vp
 
-	if (is.null(colors)) {
+	if (is.null(calCols)) {
 		
 		# Compute paint chip colors
-		message("No colors provided, drawing sample paint chips")
+		message("No calCols provided, drawing sample paint chips")
 		
 		# The following draws some purples as the complement of 550 nm
 		# aka the dominant wavelength
 		# pc = no. paint chips to draw
-		pc <- 6
+		pc <- 5
 		myc <- data.frame(x = 0.312, y = seq(0.09, 0.329, length.out = pc))
 		myc$z <- 1 - myc$x - myc$y
 		myc2 <- convertColor(myc, from = "XYZ", to = "sRGB")
-		myc2 <- myc2*ff
+		myc2 <- myc2*ff # may wish to hardwire to 1.65 for the example
 		myc2[myc2 > 1] <- 1.0
 		myc3 <- rgb(myc2)
 		myc4 <- cbind(myc, myc2, myc3)
 		names(myc4) <- c("CIE_x", "CIE_y", "CIE_z", "r", "g", "b", "hex")
 
-		# Set up locations of paint chips
+		# Set up locations of paint chips (in cm)
+		# x values spread across width, starting 1 cm in from edges 
 		x <- seq(1, size[1]*2.54 -1, length.out = pc)
 		x <- c(x, rev(x))
-		y <- rep(c(2, 8), each = pc)
+		# y values centered on space above and below the grid
+		# note the grid is centered on the page
+		ay <- (size[2]*2.54 - scale[2])*0.25
+		y <- rep(c(ay, (size[2]*2.54 - ay)), each = pc)
 		df <- data.frame(x, y)
 
 		if (guide) {
-			grid.rect(df$x[c(pc, pc*2)], df$y[c(pc, pc*2)], width = 1.0, height = 1.0, default.units = "cm")
+			grid.rect(df$x[c(pc, pc*2)], df$y[c(pc, pc*2)],
+				width = 1.0, height = 1.0, default.units = "cm")
 			dups <- duplicated(myc2)
 			labs <- rep("unique", pc)
 			labs <- ifelse(dups == TRUE, "dup", labs)
@@ -71,14 +76,15 @@ plotSampleCard <- function(colors = NULL, size = c(6, 4), wavelength = NULL,
 				
 		}
 
-	if (!is.null(colors)) {
+	if (!is.null(calCols)) {
 		
 		# Need to make a general layout depending upon number of colors passed
 		
 		}
 	
 	# Return the collection of colors to be drawn for troubleshooting
-	myc4
+	
+	invisible(myc4)
 	
 	} # end of function
 

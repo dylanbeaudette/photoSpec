@@ -1,7 +1,9 @@
 
 
+# 5 colors along one radius of D65, the 5 colors used if no colors
+# given in plotSampleCard()
 
-tst <- c("#ff00fe", "#ff79fe", "#ffb5ff", "#ffdeff", "#feffff", "#ffffff") # 5 colors along one radius of D65
+tst1 <- c("#FF00FF", "#FF05FF", "#FF9AFF", "#FFD5FF", "#FEFFFF")
 
 tst2 <- c("#a52a2a", "#ff4040", "#8b0000", "#ff1493", "#cd1076", "#B22222", "#ff69b4", "#8b3a62", "#ff00ff", "#ff34b3") # several colors in the red/pink/magenta range
 
@@ -9,11 +11,12 @@ demo <- data.frame(x = runif(1), y = runif(1), z = runif(1))
 dc <- paste("#", as.hexmode(floor(demo$x*255)),
 	as.hexmode(floor(demo$y*255)), as.hexmode(floor(demo$z*255)), sep = "")
 
-showCalColSpace(calCols = tst2, sampCol = dc)
+showCalColSpace(calCols = tst1, sampCol = dc)
 
 
 
-showCalColSpace <- function(calCols, sampCol = NULL, sampName = "Demo") {
+showCalColSpace <- function(calCols, sampCol = NULL, sampName = "Demo",
+	ellipsoid = TRUE) {
 
 	rgb <- col2rgb(calCols)
 	rgb <- t(rgb/255)
@@ -31,7 +34,6 @@ showCalColSpace <- function(calCols, sampCol = NULL, sampName = "Demo") {
 	# PC2 <- rbind(eigVec[,2], -eigVec[,2]) * 0.5*diff(range(scores))
 	# PC2R <- PC2 %*% t(eigVec) + colMeans(rgb)
 	
-	ell <- makeEllipsoid(rgb)
 	# Print percent variance explained
 	pcs <- data.frame(component = c("PC 1","PC 2", "PC 3"),
 		percent = round(cumsum(eigVal)*100/sum(eigVal), 1))
@@ -41,8 +43,10 @@ showCalColSpace <- function(calCols, sampCol = NULL, sampName = "Demo") {
 	# Plot pure white & pure black as reference points (but hide them)
 	# also serves to establish the overall scale/space
 	
-	points3d(x = 0.0, y = 0.0, z = 0.0, col = "black", size = 8, alpha = 0.0)
-	points3d(x = 1.0, y = 1.0, z = 1.0, col = "black", size = 8, alpha = 0.0)
+	points3d(x = 0.0, y = 0.0, z = 0.0, col = "transparent",
+		size = 8, alpha = 0.0, smooth = FALSE)
+	points3d(x = 1.0, y = 1.0, z = 1.0, col = "transparent",
+		size = 8, alpha = 0.0, smooth = FALSE)
 	axes3d(box = TRUE, expand = 0.9)
 	text3d(x = 1.05, y = 1.05, z = 1.05,
 		texts = "white", adj = c(0, 0))
@@ -50,7 +54,11 @@ showCalColSpace <- function(calCols, sampCol = NULL, sampName = "Demo") {
 		texts = "black", adj = c(1, 1))
 	title3d(xlab = "red", ylab = "green", zlab = "blue", main = sampName)
 	points3d(rgb, col = calCols, size = 5, point_antialias = TRUE)
-	points3d(ell, col = "gray", size = 1)
+	
+	if (ellipsoid) {
+		ell <- makeEllipsoid(rgb)
+		points3d(ell, col = "gray", size = 1)
+		}
 	
 #	segments3d(PC1R, col = "green", size = 10)
 #	segments3d(PC2R, col = "green", size = 10)
