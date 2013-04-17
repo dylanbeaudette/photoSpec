@@ -1,20 +1,4 @@
 
-
-# 10 colors along one radius of D65, the 10 colors used if no colors
-# given in plotSampleCard()
-
-tst1 <- c("#FF00FF", "#FF48FF", "#FF69FF", "#FF83FF", "#FF9AFF", "#FFB0FF", "#FFC4FF", "#FFD8FF", "#FFECFF", "#FEFFFF")
-
-tst2 <- c("#a52a2a", "#ff4040", "#8b0000", "#ff1493", "#cd1076", "#B22222", "#ff69b4", "#8b3a62", "#ff00ff", "#ff34b3") # several colors in the red/pink/magenta range
-
-demo <- data.frame(x = runif(1), y = runif(1), z = runif(1))
-dc <- paste("#", as.hexmode(floor(demo$x*255)),
-	as.hexmode(floor(demo$y*255)), as.hexmode(floor(demo$z*255)), sep = "")
-
-showCalColSpace(calCols = tst1, sampCol = dc)
-
-
-
 showCalColSpace <- function(calCols, sampCol = NULL, sampName = "Demo",
 	ellipsoid = TRUE) {
 
@@ -67,6 +51,8 @@ showCalColSpace <- function(calCols, sampCol = NULL, sampName = "Demo",
 		xyz <- hex2RGB(sampCol)@coords[1,]
 		points3d(xyz[1], xyz[2], xyz[3], size = 10, col = sampCol, point_antialias = TRUE)
 		}	
-	
+
+	# Report on fit
+	computeSampleAbs(calCols, sampCol)	
 	invisible(rgb)
 	}

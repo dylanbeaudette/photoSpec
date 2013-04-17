@@ -4,5 +4,5 @@ photoSpec: A photographic spectrophotometer
 Bryan A. Hanson DePauw University, Greencastle Indiana USA
 
 ##### Version 0.1-0
-Date: 
->> First release to github as a very crude devel version
+Date: 16 April 2013
+>> First release in a version that builds and checks.  The 0.1 series is for proof of concept and there are several features that are implemented in less-than-ideal fashion.  These will eventually be improved.

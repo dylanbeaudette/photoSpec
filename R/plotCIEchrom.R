@@ -1,3 +1,4 @@
+
 plotCIEchrom <- function(gradient = NULL, colSpace = "sRGB", ff = 1.0,
 	opts = c("D65", "specLocus", "purples"), ...) {
 
@@ -5,24 +6,17 @@ plotCIEchrom <- function(gradient = NULL, colSpace = "sRGB", ff = 1.0,
 	# with various decorations
 	
 	# Bryan Hanson, DePauw University, March 2013 hanson@depauw.edu
-	# WORK IN PROGRESS - use at your own risk, or better, improve it.
 	# Part of the photoSpec package
 	
-	# Spectral locus data file from http://cvrl.ioo.ucl.ac.uk/index.htm
-	# Go to the site above, then choose 'NEW CIE XYZ...'
-	# In that page, go to 'Chromaticity coordinates' and
-	# get the 2-deg coordinates at 0.1 nm resolution
-	 	
 ##### Get and prepare the data
 	# These are the coordinates of the spectral locus, which is a curve
 	# describing the pure colors of the spectrum/rainbow
 
-#	Lxyz <- read.csv("~/Desktop/photoSpec Support/cc2012xyz2_fine_5dp.csv")
-	Lxyz <- loadObject("CVRLxyz.RData")
+	Lxyz <- data("CIExyz")
 	# Note z = 1- x - y
 	# Cutoff the data at 650 nm; beyond that the curve strangely
 	# turns back on itself
-#	Lxyz <- subset(Lxyz, wavelength <= 650)
+	Lxyz <- subset(Lxyz, Lxyz$wavelength <= 650)
 		
 ##### Prepare the raster with the color gradient
 	

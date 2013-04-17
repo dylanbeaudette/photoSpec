@@ -3,8 +3,13 @@
 computeSampleAbs <- function(calCols, sampCol, sampName) {
 	
 	# Function to interpolate a sample color on the paint chip scale
+	# Generation 1 Approach:
+	# Of all the calibration paint chips, find the two that
+	# are closest to the sample color, and then interpolate
+	# between these two points.
 	
-	# This next part is based upon color.id {plotrix}
+	# Find the distances between the calCols and sampCol
+	# Based upon color.id {plotrix}
     sc <- col2rgb(sampCol)
     coltab <- col2rgb(calCols)
     # distances between each paint chip and the sample:
@@ -13,7 +18,6 @@ computeSampleAbs <- function(calCols, sampCol, sampName) {
 		red = coltab[1,], green = coltab[2,], blue = coltab[3,])
 	# sorted from closest to furthest:
 	cdist2 <- arrange(cdist2, dist) # 
-	
 	# Now some trigonometry
 	
 	# P1, P2, the two closest paint chips; Ps the sample point
@@ -34,24 +38,18 @@ computeSampleAbs <- function(calCols, sampCol, sampName) {
 	# C1 & C2 will be the two pieces of C where the normal dropped from Ps hits
 	C1 <- A*b
 	C2 <- B*a
-#	print(C1+C2-C) # looks correct!
-	res <- getInterRGB(C1/C, calCols[cdist2[1,1]], calCols[cdist2[1,2]])
-	res # returns hex code, need to put on some kind of quantitative 
-}
 
-getInterRGB
-function (vals, zeroColor, oneColor) 
-{
-    if (any(vals < 0 || vals > 1)) {
-        stop("vals values should range in [0,1]")
-    }
-    labzero <- RGB2Lab(col2rgb(zeroColor)/255)
-    labone <- RGB2Lab(col2rgb(oneColor)/255)
-    interL <- vals * labone[1] + (1 - vals) * labzero[1]
-    intera <- vals * labone[2] + (1 - vals) * labzero[2]
-    interb <- vals * labone[3] + (1 - vals) * labzero[3]
-    rgbmat <- Lab2RGB(cbind(interL, intera, interb))
-    rgbres <- rgb(rgbmat[, 1], rgbmat[, 2], rgbmat[, 3])
-    return(rgbres)
+	# Compute some measures of the quality of the fit
+	# sin of angle a should be between 0 and 1 with smaller numbers being
+	# better fit
+	s <- sin(acos(a))
+	# Length of D from the P1-P2 line
+	# This is based upon a cube with sides 255; diagonal is 1.73*255
+	D <- s*B*100/(1.73*255)
+	message("Smaller is better (%):")
+	print(D)
+
+
+	res <- getInterRGB(C1/C, calCols[cdist2[1,1]], calCols[cdist2[1,2]])
+	res # returns hex code, need to put answer into some kind of quantitative form 
 }
-<environment: namespace:patchPlot>
