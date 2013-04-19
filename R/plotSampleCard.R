@@ -1,12 +1,13 @@
 
 
 plotSampleCard <- function(calCols = NULL, size = c(6, 4), wavelength = NULL,
-	scale = c(3.5, 2.5), ff = 1.0, guide = FALSE) {
+	ruler = c(3.5, 2.5), chips = "random", chip.rep = 3, ff = 1.0, guide = FALSE) {
 
 	# Main viewport
 	
 	pushViewport(viewport(width = size[1], height = size[2], default.units = "in"))
 #	grid.rect() # just for reference while troubleshooting
+	if (is.null(wavelength)) wavelength <- c("?", "?")
 	if (is.null(calCols)) wavelength <- c(550, 550)
 	msg <- bquote("photoSpec sample card for " ~lambda[max] ~.(wavelength[1]) - .(wavelength[2]) ~ "nm")
 	grid.text(msg, x = 0.02, y = 0.97, just = "left",
@@ -14,10 +15,10 @@ plotSampleCard <- function(calCols = NULL, size = c(6, 4), wavelength = NULL,
 	
 	# Draw the sample region with calibration grill/grid
 	
-	pushViewport(viewport(width = scale[1], height = scale[2], default.units = "cm",
-		xscale = c(0, scale[1]), yscale = c(0, scale[2])))
-	tickposX <- seq(0.0, scale[1], by = 0.5)
-	tickposY <- seq(0.0, scale[2], by = 0.5)
+	pushViewport(viewport(width = ruler[1], height = ruler[2], default.units = "cm",
+		xscale = c(0, ruler[1]), yscale = c(0, ruler[2])))
+	tickposX <- seq(0.0, ruler[1], by = 0.5)
+	tickposY <- seq(0.0, ruler[2], by = 0.5)
 	grid.grill(v = unit(tickposX, "cm"), h = unit(tickposY, "cm"),
 		gp = gpar(col = "grey70"))
 
@@ -66,9 +67,9 @@ plotSampleCard <- function(calCols = NULL, size = c(6, 4), wavelength = NULL,
 		# x values spread across width, starting 1 cm in from edges 
 		x <- seq(1, size[1]*2.54 -1, length.out = pc)
 		x <- c(x, rev(x))
-		# y values centered on space above and below the grid
+		# y values centered in space above and below the grid
 		# note the grid is centered on the page
-		ay <- (size[2]*2.54 - scale[2])*0.25
+		ay <- (size[2]*2.54 - ruler[2])*0.25
 		y <- rep(c(ay, (size[2]*2.54 - ay)), each = pc)
 		df <- data.frame(x, y)
 
@@ -76,13 +77,14 @@ plotSampleCard <- function(calCols = NULL, size = c(6, 4), wavelength = NULL,
 			grid.rect(df$x[c(pc, pc*2)], df$y[c(pc, pc*2)],
 				width = 1.0, height = 1.0, default.units = "cm")
 			dups <- duplicated(myc3)
-			labs <- rep("unique", pc)
-			labs <- ifelse(dups == TRUE, "dup", labs)
-			labs[pc] <- "white?"
+			labsL <- rep("unique", pc)
+			labsL <- ifelse(dups == TRUE, "dup", labsL)
+			labsL[pc] <- "white?"
 			grid.text(label = 1:pc, x = df$x, y = df$y - rep(c(0.75, -0.75), each = pc),
 				default.units = "cm", just = "center", gp = gpar(cex = 0.75))
-			grid.text(label = labs, x = df$x, y = df$y - rep(c(-0.75, 0.75), each = pc),
+			grid.text(label = labsL, x = df$x, y = df$y - rep(c(-0.75, 0.75), each = pc),
 				default.units = "cm", just = "center", gp = gpar(cex = 0.75))
+			# add hex code labels
 			}
 			
 		grid.rect(x = df$x, y = df$y, width = 0.5, height = 0.5, default.units = "cm",
@@ -92,13 +94,50 @@ plotSampleCard <- function(calCols = NULL, size = c(6, 4), wavelength = NULL,
 
 	if (!is.null(calCols)) {
 		
-		# Need to make a general layout depending upon number of colors passed
+		# First, a grid of equally spaced paint chip locations
+		cx <- size[1]*2.54
+		cy <- size[2]*2.54
+		pcx <- seq(1L, round(cx -1))
+		pcy <- seq(1L, round(cy -1))
+		xy <- expand.grid(x = pcx, y = pcy) # grid over whole card on 1 cm centers
 		
+		# Now figure out which of xy would overlap the grid
+		# and drop them
+		minx <- floor(0.5*cx - 0.5*ruler[1])-1
+		maxx <- ceiling(0.5*cx + 0.5*ruler[1])+1
+		miny <- floor(0.5*cy - 0.5*ruler[2])-1
+		maxy <- ceiling(0.5*cy + 0.5*ruler[2])+1
+		nox <- (xy$x > minx) & (xy$x < maxx)
+		noy <- (xy$y > miny) & (xy$y < maxy)
+		xy <- subset(xy, !(nox & noy))
+		# plot(xy, asp = cx/cy) # proof of concept
+		# rect(minx, miny, maxx, maxy, col = "red")
+		
+		# Get the paint chips ready
+		
+		rpc <- chip.rep # repeat the color chips; could maximize this w/i nrow(xy)
+		if (length(calCols)*rpc > nrow(xy)) {
+			stop("Too many calibration colors to fit on the card\n  Increase the card size, decrease the grid size\n  or reduce chip.reps")
+			}
+
+		if (chips == "random") {
+			wh <- sample(1:nrow(xy), length(calCols)*rpc)
+			xy <- xy[wh,] # these will be the pc's to be used
+			grid.rect(x = xy$x, y = xy$y, width = 0.5, height = 0.5, default.units = "cm",
+			gp = gpar(fill = calCols, col = "transparent"))
+
+			}
+		if (guide) {
+			grid.rect(x = xy$x, y = xy$y, width = 0.6, height = 0.6, default.units = "cm")
+			labs <- rep(calCols, rpc)
+			grid.text(label = labs, x = xy$x, y = xy$y - 0.5,
+				default.units = "cm", just = "center", gp = gpar(cex = 0.5))
+			}
 		}
 	
 	# Return the collection of colors to be drawn for troubleshooting
 	
-	invisible(myc3)
+	return(TRUE)
 	
 	} # end of function
 

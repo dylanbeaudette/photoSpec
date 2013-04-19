@@ -12,8 +12,8 @@ PENDING
 \tabular{ll}{
 Package: \tab photoSpec\cr
 Type: \tab Package\cr
-Version: \tab 0.1-0\cr
-Date: \tab 2013-04-26\cr
+Version: \tab 0.1-1\cr
+Date: \tab 2013-04-18\cr
 License: \tab GPL-3\cr
 LazyLoad: \tab yes\cr
 }
