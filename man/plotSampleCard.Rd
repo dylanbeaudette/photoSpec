@@ -4,15 +4,15 @@
 Plot a sample card containing calibration colors (paint chips)
 }
 \description{
-NEED DESCRIPTION
+This function plots a 'card' containing a series of colors swatches (paint chips) for use in calibration, and a simple grid calibrated in cm.  A sample is placed on the grid and photographed.  The photo is saved as a jpeg file, which is then analyzed.
 }
 \usage{
 plotSampleCard(calCols = NULL, size = c(6, 4), wavelength = NULL,
-	ruler = c(3.5, 2.5), chips = "random", chip.rep = 3, ff = 1, guide = FALSE)
+	ruler = c(3.5, 2.5), chips = "random", chip.rep = 3, ff = 1.0, guide = FALSE)
 }
 \arguments{
   \item{calCols}{
-A vector of strings describing colors in hexidecimal format.
+A vector of strings describing colors in hexadecimal format.
 }
   \item{size}{
 The width, height of the printed card in inches.
@@ -37,7 +37,7 @@ Logical.  If TRUE, annotate the card colors to show which ones are unique, and w
 }
 }
 \value{
-None.  A plot is drawn using \code{grid} graphics.
+None.  A plot is drawn using \code{grid} graphics.  This should be saved as a pdf or jpeg and printed for use.
 }
 \references{
 NEED A REFERENCE
@@ -46,6 +46,7 @@ NEED A REFERENCE
 Bryan A. Hanson, DePauw University. \email{hanson@depauw.edu}
 }
 \examples{
-# NEED AN EXAMPLE
+tst2 <- c("#a52a2a", "#ff4040", "#8b0000", "#ff1493", "#cd1076", "#B22222", "#ff69b4", "#8b3a62", "#ff00ff", "#ff34b3")
+plotSampleCard(tst2)
 }
 \keyword{ plot }

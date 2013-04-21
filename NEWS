@@ -3,6 +3,10 @@ NEWS file for package photoSpec
 photoSpec: A photographic spectrophotometer
 Bryan A. Hanson DePauw University, Greencastle Indiana USA
 
+##### Version 0.1-2
+Date: 20 April 2013
+>> Improved documentation.
+
 ##### Version 0.1-1
 Date: 18 April 2013
 >> Added handling of any number of calCols to plotSampleCard.

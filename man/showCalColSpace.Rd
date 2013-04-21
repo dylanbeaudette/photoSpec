@@ -4,14 +4,14 @@
 Use rgl to draw a plot of calibration colors in the rgb space.
 }
 \description{
-This function takes a list of colors used for calibration and plots them in the rgb color space using package rgl.  A sample color can also be plotted, along with an ellipsoid showing the 95 percent confidence region around the calibration colors.  The position of the sample relative to the calibration colors and ellipsoid can be used to determine if the sample is sufficiently close to the calibration curve.  In addition, some measures of the fit of the sample to the calibration points are printed at the console.
+This function takes a vector of colors used for calibration and plots them in the rgb color space using package \code{rgl}.  A sample color can also be plotted, along with an ellipsoid showing the 95 percent confidence region around the calibration colors.  The position of the sample relative to the calibration colors and the ellipsoid can be used to determine if the sample is sufficiently close to the calibration colors.  In addition, some measures of the fit of the sample color to the calibration colors are printed at the console.
 }
 \usage{
 showCalColSpace(calCols, sampCol = NULL, sampName = "Demo", ellipsoid = TRUE)
 }
 \arguments{
   \item{calCols}{
-A vector of colors as hexadecimal strings to be used as the calibration points.
+A vector of colors as hexadecimal strings to be used as the calibration colors.
 }
   \item{sampCol}{
 A single color as a hexadecimal string to be plotted for comparison.
@@ -51,7 +51,7 @@ showCalColSpace(calCols = good.cal, sampCol = tp2)
 # A good calibration set, and sample is close:
 showCalColSpace(calCols = good.cal, sampCol = tp1)
 # A really poor calibration set; location of the sample doesn't much matter
-showCalColSpace(calCols = bac.cal, sampCol = tp2)
+showCalColSpace(calCols = bad.cal, sampCol = tp2)
 }
 }
 \keyword{ multivariate }

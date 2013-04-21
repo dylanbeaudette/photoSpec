@@ -14,7 +14,7 @@ computeSampleAbs(calCols, sampCol, sampName)
 A vector of colors as hexadecimal strings to be used as the calibration points.
 }
   \item{sampCol}{
-A single color as a hexadecimal string to be plotted for comparison and interpolation by projection onto the calibration curve.
+A single color as a hexadecimal string to be interpolated by projection onto the calibration curve.
 }
   \item{sampName}{
 A character vector giving the name of the sample.

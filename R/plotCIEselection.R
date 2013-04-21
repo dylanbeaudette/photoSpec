@@ -9,8 +9,8 @@ plotCIEselection <- function(vertices, ff = 1.0, ...) {
 	# Part of the photoSpec package
 	# Derived from plotCIEchrom() - more comments there
 	
-	Lxyz <- load("CIExyz")
-	Lxyz <- subset(Lxyz, Lxyz$wavelength <= 650)
+	data(CIExyz)
+	Lxyz <- subset(CIExyz, CIExyz$wavelength <= 650)
 	message("I'm painting a beautiful gradient, please give me a moment...")
 		
 	xx <- seq(-0.1, 0.9, 0.002) 

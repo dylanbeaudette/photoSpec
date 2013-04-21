@@ -1,10 +1,10 @@
 Package: photoSpec
 Type: Package
 Title: photoSpec: A photographic spectrophotometer
-Version: 0.1-1
+Version: 0.1-2
 Date: 2013-04-18
 Author: Bryan A. Hanson DePauw University, Greencastle Indiana USA
 Maintainer: Bryan A. Hanson <hanson@depauw.edu>
-Description: PENDING <- <- <-
+Description: photoSpec allows one to use a photograph as a spectrophotomer.
 License: GPL-3
 Imports: grid, splancs, rgl, ChemoSpec, colorspace, patchPlot, plyr
