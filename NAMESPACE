@@ -1,2 +1,2 @@
 exportPattern("^[^.]")
-import(grid, splancs, rgl, ChemoSpec, colorspace, patchPlot, plyr)
+import(grid, splancs, rgl, ChemoSpec, colorspace, patchPlot, plyr, knitr)

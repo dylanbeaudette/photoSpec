@@ -12,7 +12,7 @@ plotCIEchrom <- function(gradient = NULL, colSpace = "sRGB", ff = 1.0,
 	# These are the coordinates of the spectral locus, which is a curve
 	# describing the pure colors of the spectrum/rainbow
 
-	data(CIExyz)
+	data("CIExyz", envir = environment())
 	# Note z = 1- x - y
 	# Cutoff the data at 650 nm; beyond that the curve strangely
 	# turns back on itself
