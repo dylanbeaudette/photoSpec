@@ -13,8 +13,10 @@ plotCIEselection <- function(vertices, ff = 1.0, ...) {
 	
 	data("CIExyz", envir = environment())
 	Lxyz <- subset(CIExyz, CIExyz$wavelength <= 650)
-	rgb <- prepCIEgradient(vertices, "sRGB", ff)
-	finras <- as.raster(rgb)
+	bgr <- prepCIEgradient(vertices, "sRGB", ff)
+#	print(head(bgr))
+	finras <- as.raster(bgr)
+#	print(head(finras))
 	
 ##### Create the plot using grid graphics
 
@@ -56,6 +58,6 @@ plotCIEselection <- function(vertices, ff = 1.0, ...) {
 
 	grid.polygon(vertices$x, vertices$y, default.units = "native")
 
-	invisible(rgb)
+	invisible(finras)
 
 	}

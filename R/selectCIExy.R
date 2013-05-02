@@ -164,22 +164,25 @@ selectCIExy <- function(L1 = NULL, L2 = NULL) {
  	verts <- rbind(CIExyz[mink:maxk,], CIExyz[maxk+1,], c(NA, segs[3,1], segs[3,2], NA))
  	
  	# Do the plot
-	rgb <- plotCIEselection(verts[,2:3])
+	bgr <- plotCIEselection(verts[,2:3])
+	str(bgr)
 	grid.segments(x0 = in.segs[1:2,1], y0 = in.segs[1:2,2],
 		x1 = in.segs[c(3,3),1], y1 = in.segs[c(3,3),2],
 		default.units = "native", gp = gpar(lty = 2))
-	
+
 	# NEED colSpace and ff ARGUMENTS
 
 	# convert the raster into a list of calibration colors
 	# eliminate the pure whites
-	rgb <- as.vector(rgb)
-	rgb <- rgb[rgb != "#FFFFFF"]
+	bgr <- as.raster(bgr)
+	str(bgr)
+	bgr <- as.vector(bgr)
+	bgr <- bgr[bgr != "#FFFFFF"]
 
 	# This next part is to get it running, we can do better
 	
-	rgb <- sample(unique(rgb), 10)
+	bgr <- sample(unique(bgr), 10)
 	
-	invisible(rgb)
+	invisible(bgr)
 
 	} # end of function

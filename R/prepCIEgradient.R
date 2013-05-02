@@ -34,5 +34,6 @@ prepCIEgradient <- function(vertices, colSpace, ff) {
 	fin[,,1] <- mr
 	fin[,,2] <- mg
 	fin[,,3] <- mb
+	str(fin)
 	fin <- aperm(fin, c(2,1,3)) # This is needed to position the fin correctly
 	}
