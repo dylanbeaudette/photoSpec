@@ -3,6 +3,15 @@ NEWS file for package photoSpec
 photoSpec: A photographic spectrophotometer
 Bryan A. Hanson DePauw University, Greencastle Indiana USA
 
+
+##### Version 0.1-3
+Date: 2013-05-01
+>> Added a proto-vignette.
+>> Added grid.newpage() to several functions.
+>> Broke out the gradient computations into a new function, prepCIEgradient.
+>> Added selectCIExy (depending upon the wavelengths chosen, it breaks)
+>> Added enough documentation to pass checks.
+
 ##### Version 0.1-2
 Date: 20 April 2013
 >> Improved documentation.

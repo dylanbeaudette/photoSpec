@@ -7,13 +7,13 @@ Select a region of the CIE chromaticity diagram.
 NEED A DESCRIPTION
 }
 \usage{
-selectCIExy(lambda1, lambda2)
+selectCIExy(L1, L2)
 }
 \arguments{
-  \item{lambda1}{
+  \item{L1}{
 Numeric, giving the wavelength at one edge of the region to be analyzed.
 }
-  \item{lambda2}{
+  \item{L2}{
 Numeric, giving the wavelength at one edge of the region to be analyzed.
 }
 }
@@ -21,17 +21,12 @@ Numeric, giving the wavelength at one edge of the region to be analyzed.
 MAY NEED DETAILS
 }
 \value{
-A data frame containing the vertices of a polygon which contains...
+A vector of colors that fall in the polygon specified by the wavelength range.  Currently, this is sampled down to just 10 values.
 }
 \references{
 NEED A REFERENCE
 }
 \author{
 Bryan A. Hanson, DePauw University. \email{hanson@depauw.edu}
-}
-\examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
 }
 \keyword{ plot }

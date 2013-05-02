@@ -7,37 +7,74 @@
 
 %%%% This is a knitr not sweave document.
 
-\documentclass[10pt]{article}
-\pagestyle{headings}
+\documentclass{tufte-handout}
 
-\usepackage{mathpazo}
-\usepackage{color}
-\usepackage{hyperref, url}
+\graphicspath{{./graphics/}} % knitr also uses it's own hook, see later
 \usepackage{graphicx}
-\usepackage[margin=2.0cm]{geometry}
+\usepackage{hyperref}
+
 \usepackage[version = 3]{mhchem}
-\usepackage[parfill]{parskip}
-\geometry{letterpaper}
+\usepackage{xtab}
 
-\usepackage[square, comma, numbers, sort&compress]{natbib} % allows grouping of references [1-4, 8]
+%%%%% This next section from SO to abbreviate 2nd occurence of a citation
 
-\usepackage{ccaption} % Stuff to change the format of a figure caption
-\captionnamefont{\bfseries\large}
-\captiontitlefont{\bfseries\large}
-%\renewcommand{\figurename}{Example}
+\usepackage{etoolbox}% provides some support for comma-separated lists
 
-\setlength{\belowcaptionskip}{10pt} % not part of ccaption
+\makeatletter
+% We'll keep track of the old/seen bibkeys here.
+\def\@tufte@old@bibkeys{}
 
-\renewcommand*\familydefault{\sfdefault} % Use if the base font of the document is to be sans serif
+% This macro prints the full citation if it's the first time it's been used
+% and a shorter citation if it's been used before.
+\newcommand{\@tufte@print@margin@citation}[1]{%
+  % print full citation if bibkey is not in the old bibkeys list
+  \ifinlist{#1}{\@tufte@old@bibkeys}{%
+    \citealp{#1}% print short entry
+  }{%
+    \bibentry{#1}% print full entry
+  }%
+  % add bibkey to the old bibkeys list
+  \listgadd{\@tufte@old@bibkeys}{#1}%
+}
 
-% You must knit this file with getwd() set to the directory it is in!
+% We've modified this Tufte-LaTeX macro to call \@tufte@print@margin@citation
+% instead of \bibentry.
+\renewcommand{\@tufte@normal@cite}[2][0pt]{%
+  % Snag the last bibentry in the list for later comparison
+  \let\@temp@last@bibkey\@empty%
+  \@for\@temp@bibkey:=#2\do{\let\@temp@last@bibkey\@temp@bibkey}%
+  \sidenote[][#1]{%
+    % Loop through all the bibentries, separating them with semicolons and spaces
+    \normalsize\normalfont\@tufte@citation@font%
+    \setcounter{@tufte@num@bibkeys}{0}%
+    \@for\@temp@bibkeyx:=#2\do{%
+      \ifthenelse{\equal{\@temp@last@bibkey}{\@temp@bibkeyx}}{%
+        \ifthenelse{\equal{\value{@tufte@num@bibkeys}}{0}}{}{and\ }%
+        \@tufte@trim@spaces\@temp@bibkeyx% trim spaces around bibkey
+        \@tufte@print@margin@citation{\@temp@bibkeyx}%
+      }{%
+        \@tufte@trim@spaces\@temp@bibkeyx% trim spaces around bibkey
+        \@tufte@print@margin@citation{\@temp@bibkeyx};\space
+      }%
+      \stepcounter{@tufte@num@bibkeys}%
+    }%
+  }%
+}
 
-%%%%%     End of Configuration Stuff, Mostly     %%%%%
 
-% run a few things in the background for use later
+% Calling this macro will reset the list of remembered citations. This is
+% useful if you want to revert to full citations at the beginning of each
+% chapter.
+\newcommand{\resetcitations}{%
+  \gdef\@tufte@old@bibkeys{}%
+}
+\makeatother
+
+%%%%%     End of LaTeX Configuration     %%%%%
+
+%%%%%     Set up R and knitr     %%%%%
+
 << SetUp, echo = FALSE, eval = TRUE, results = "hide" >>=
-
-# You must knit this file with getwd() set to the directory it is in!
 
 # R options & configuration:
 rm(list = ls())
@@ -45,7 +82,7 @@ options(width =  50, show.signif.stars = FALSE)
 #if (!file.exists("graphics")) dir.create("graphics")
 
 desc <- packageDescription("photoSpec")
-vers <- paste("(Package Version ", desc$Version, ")", sep = "")
+vers <- paste("package version ", desc$Version, sep = "")
 
 # Stuff specifically for knitr:
 library("knitr")
@@ -57,19 +94,22 @@ opts_chunk$set(out.width = "0.8\\textwidth", fig.align = "center", fig.width = 7
 # Note: defaults are eval = TRUE, echo = TRUE
 @
 
-
-\title{photoSpec: A photographic spectrophotometer\\
-\Sexpr{vers}}
-\author{Bryan A. Hanson\\
-e-mail: \href{mailto:hanson@depauw.edu}{hanson@depauw.edu}\\
-\\
-DePauw University\\
-Department of Chemistry \& Biochemistry\\
-Greencastle Indiana USA\\
-\\
-\href{http://github.com/bryanhanson/photoSpec}{github.com/bryanhanson/photoSpec}\\
-}
+\title{photoSpec: A photographic spectrophotometer}
+\author{Bryan A. Hanson}
 \date{\today}
+
+%\title{photoSpec: A photographic spectrophotometer\\
+%\Sexpr{vers}}
+%\author{Bryan A. Hanson\\
+%e-mail: \href{mailto:hanson@depauw.edu}{hanson@depauw.edu}\\
+%\\
+%DePauw University\\
+%Department of Chemistry \& Biochemistry\\
+%Greencastle Indiana USA\\
+%\\
+%\href{http://github.com/bryanhanson/photoSpec}{github.com/bryanhanson/photoSpec}\\
+%}
+%\date{\today}
 
 %%%%%     Now we start the document     %%%%%
 
@@ -77,43 +117,72 @@ Greencastle Indiana USA\\
 
 \maketitle
 
-*photoSpec is a WORK IN PROGRESS and is pretty crude shape*
+\vspace{1 cm}
 
-Notes for Rd and Vignette of photoSpec
+\section{Status}
 
-Monitors and printing are technologies.  They have real limitations.  You won't see the same thing when you print the same image using an inkjet printer, a photo printer or a laser printer.  Monitors can be CRT or LCD.  Various types of papers and pigments are available.
+\texttt{photoSpec} is a WORK IN PROGRESS and some parts are in pretty crude shape.  This DRAFT manual relates to \Sexpr{vers}.  \texttt{photoSpec} code and installation instructions can be found at \footnote{\href{http://github.com/bryanhanson/photoSpec}{github.com/bryanhanson/photoSpec}}  For bugs and feature requests, please use the issue tracker at github.
 
-light reflected from an object (which depends upon the illuminating light) -> electrical signal from camera detector -> processing for storage -> processing for display OR processing for printing (printer driver, which probably has color management)
+\section{What photoSpec Does}
 
-Color specifications to software are almost always rgb (grid graphics requires it).  Put another way, displays use some form of rgb as their native language.
+\texttt{photoSpec} is intended to be used as a photographic spectrophotometer.  Explain more \ldots
 
-Calibrate sample card by adjusting ff so that the palest color is white/invisible.
+As an alternative to a spectrophotomer, it is hoped that \texttt{photoSpec} will give decent quantitative results.
 
-Importance of reproducible research concepts.
+\texttt{photoSpec} is especially well-suited for studying specimens which cannot be damaged, or conveniently extracted.  For instance, solid objects that don't dissolve (seeds) or leaves of endangered species.
 
-pdf has a colormodel argument.
+\section{Background \& Caveats}
 
-Work Flow for photoSpec [Generation 1]
+It is imperative to understand that color is produced by a combination of physical processes coupled with perception in the eyes.  Any attempt to quantify or describe color in a rigorous manner is fraught with difficulties.  The most useful approach for understanding this is the CIE system.\footnote{Wikipedia articles on color are generally useful.}  Function \texttt{plotCIEchrom()} is helpful in understanding color concepts.
 
-Understand the color concepts (plotCIEchrom will be of help).
+Keep in mind that monitors, cameras and printing are technologies.  They have real limitations.  You won't see the same thing when you print the same image using an inkjet printer, a photo printer or a laser printer.  Monitors can be CRT or LCD.  Various types of papers and pigments are available.  Further, anytime a computer file recording or representing an image is writen, it can be written in various formats, and information may be lost or altered during the write process.  Changing the format or device can alter the image.
 
-Determine the wavelength range of interest.  This will correspond to the maximum/plateau of the absorbance vs wavelength plot.
+Color specifications in software generally use the rgb colorspace and displays use some form of rgb as their native way to express color.  There are several other colorspaces available, which have pros and cons, but eventually the output has to be in rgb to be displayed via computer.
 
-Use selectCIExy() to determine the CIE xy values which cover the wavelengths complementary to the wavelengths of interest.  STATUS: Matt is working on this.
+The appearance of a color depends upon the illuminating light or mechanism (reflected light, backlit display), the printing media (think gloss or matte photos), as well as the 'true' color of the object.  The steps by which an object attains its color in a computer image or print is, at least in part:
 
-Use showCIEselection() to verify selection. STATUS: Ready for further testing.
+\begin{itemize}
+	\item Incident light with particular wavelengths reflect off an object, or light passes through the object.
+	\item The light is captured by a device (in a camera) which has limitations.
+	\item This data is stored in the camera, possibly with some processing, in a chosen format.
+	\item The data may be manipulated purposefully by a program.
+	\item The data may be displayed on a monitor, which has a particular gamut and color management system, or
+	\item The data may be printed on some kind of media (plain paper, photo paper) by a printer (inkjet, dye sublimation, laser printer etc).  The device has a driver which likely uses some kind of color management.
+	\item The process repeats: you observe the image of the object under some illumination\ldots
+\end{itemize}
 
-The CIE xy values are passed to plotSampleCard() which produces graphical output which can be printed (need to test various media).  The sample card contains calibration paint chips and a place for the sample.  STATUS: Works, but undoubtedly needs improvement.
+\texttt{photoSpec} analyses should be run using scripts which call the various functions.  This enables reproducible research which is fully documented.
 
-A sample is placed on the sample card and photographed. The photograph is transferred to the computer as a jpeg.
+\section{Work Flow for photoSpec [v 0.1]}
 
-The jpeg is opened in Inkscape or a similar program.  The hexidecimal code of each paint chip is written down, as is the code for the sample (need a means to average over the sample region). [Generation 2: this process will be automated using image segmentation methods]
+These are the steps to use \texttt{photoSpec} as a photographic spectrophotometer.
 
-The paint chip and sample codes/values are passed to showCalColSpace() which will plot the paint chip values and the sample value.  Determine if the sample value is sufficiently close to the paint chip values (how?).  If not, adjust wavelength range and reprint card, take a new photograph and repeat the calibration check.  STATUS: Works, probably close to done.  If the sample and paint chip values are OK (need to determine exactly how to define that), pass the values to the next function.
+\begin{enumerate}
 
-Use computeSampleAbs() to find the paint chip value closest to the sample value and interpolate.  Need to set up some kind of quantitative scale.  STATUS: Function works but returns the interpolated color, not a quantitative value.
+\item Using data from traditional spectrophotometry or the literature, determine the wavelength range of interest. This will correspond to the maximum of the absorbance versus wavelength plot, commonly called $\lambda_{max}$.  Since these peaks generally have a fairly broad plateau, you will want to specify a range of at least 5 nm.  As you increase this range, you are specifying more colors for your calibration curve, and these colors will be less pure.  For example, if you are studying the betacyanin pigments, these generally have a $\lambda_{max}$ near 540 nm.  If you specify a narrow range, say 538-542 nm, you will get a range of fairly pure colors complementary to this wavelength.  If your sample is close to this color this may be satisfactory.  But if you are not sure, you might want to do a preliminary run using a wider range, say 530-550 nm, and see how this performs.  Later, you can optimize your wavelength selection.
 
- 
+\item Use \texttt{selectCIExy()} to determine the CIE xy values which cover the wavelengths complementary to the wavelengths of interest.  This function will call  \texttt{showCIEselection(vertices)} so you can verify your selection visually.
+
+\item Use \texttt{plotSampleCard()} to produce a sample card.  This sample card contains calibration paint chips and a place for the sample.  Print this on the media of your choice (plain paper, photo paper, etc - keep in mind the comments above under Background \& Caveats).
+
+	\begin{enumerate}
+		\item How do you calibrate the sample card?  Adjust ff so that the palest color is white or invisible?
+		\item At least pdf has a color model argument.
+	\end{enumerate}
+
+\item A sample is placed on the sample card and photographed. The photograph is transferred to the computer as a jpeg image (other formats may be possible).
+
+\item The jpeg is opened in Inkscape or a similar program.  The hexadecimal code of each paint chip is written down, as is the hexadecimal code for the sample.  Note that the paint chips were put down on real media, photographed by a real CCD, and possibly manipulated by the camera software, and brought into your program before you can record the hexadecimal code. Thus the codes you record at this point are probably not the codes that were originally intended (and can be seen on the card by setting \texttt{guide = TRUE}. Note: this step will be automated in a future version.
+
+\item Use \texttt{showCalColSpace()} to check the quality and utility of your calibration curve, and get your quantitative information.  This function plots the paint chip values and the sample value in interactive, 3D space.  Determine if the sample value is sufficiently close to the paint chip values.  If not, go back to \texttt{selectCIExy()} and adjust the wavelength range and reprint the card, take a new photograph and repeat the calibration check.  This function calls texttt{computeSampleAbs()} to find the paint chip value closest to the sample value and carries out an interpolation.  This is your final answer and conceptually represents the absorbance of your sample at the given wavelength range.
+
+\end{enumerate}
+
+\section{Glossary}
+
+\begin{description}
+	\item [term] definition
+\end{description}
 
 %\begin{flushleft}
 %\bibliographystyle{ieeetr} % Cause refs to be numbered and collected in order used

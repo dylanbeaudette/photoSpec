@@ -5,6 +5,7 @@ plotSampleCard <- function(calCols = NULL, size = c(6, 4), wavelength = NULL,
 
 	# Main viewport
 	
+	grid.newpage()
 	pushViewport(viewport(width = size[1], height = size[2], default.units = "in"))
 #	grid.rect() # just for reference while troubleshooting
 	if (is.null(wavelength)) wavelength <- c("?", "?")

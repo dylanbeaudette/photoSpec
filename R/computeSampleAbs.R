@@ -3,7 +3,7 @@
 computeSampleAbs <- function(calCols, sampCol, sampName) {
 	
 	# Function to interpolate a sample color on the paint chip scale
-	# Generation 1 Approach:
+	# Version 0.1 Approach:
 	# Of all the calibration paint chips, find the two that
 	# are closest to the sample color, and then interpolate
 	# between these two points.

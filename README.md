@@ -1,9 +1,9 @@
 
-*photoSpec is a WORK IN PROGRESS and is pretty crude shape*
+*photoSpec is a WORK IN PROGRESS and parts of it are in pretty crude shape*
 
 ### photoSpec: A photographic spectrophotometer [v 0.1]
 
-At this time, `photoSpec is a WORK IN PROGRESS`.  Do not trust anything in it.  The documentation is pretty thin and we won't complete it just yet, too much is changing.  This is our first stab at the concept and we already know we will change the way several things work in a future generation [probably v 0.2].
+At this time, `photoSpec is a WORK IN PROGRESS`.  Do not trust anything in it.  The documentation is pretty thin and we won't perfect it just yet, too much is changing.  This is our first stab at the concept and we already know we will change the way several things work in a future generation [probably v 0.2].
 
 `photoSpec` does check and build, at least until we break it again.
 

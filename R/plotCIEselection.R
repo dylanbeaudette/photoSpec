@@ -2,6 +2,8 @@
 
 plotCIEselection <- function(vertices, ff = 1.0, ...) {
 
+	# NEEDS A COLSPACE ARGUMENT
+	
 	# Function to draw the CIE chromaticity diagram
 	# showing the region of interest to the user
 	
@@ -9,35 +11,10 @@ plotCIEselection <- function(vertices, ff = 1.0, ...) {
 	# Part of the photoSpec package
 	# Derived from plotCIEchrom() - more comments there
 	
-	data("CIExyz", environ = environment())
+	data("CIExyz", envir = environment())
 	Lxyz <- subset(CIExyz, CIExyz$wavelength <= 650)
-	message("I'm painting a beautiful gradient, please give me a moment...")
-		
-	xx <- seq(-0.1, 0.9, 0.002) 
-	yy <- seq(0.9, -0.1, -0.002)
-	xyz <- expand.grid(xx,yy)
-	names(xyz) <- c("x", "y")
-
-	grad <- vertices
-	insideL <- inout(xyz, grad, bound = TRUE) # TRUE = inside
-	outsideL <-!insideL # TRUE = outside now
-	xyz$z <- 1 - xyz$x - xyz$y
-	xyzrgb <- convertColor(xyz, from = "XYZ", to = "sRGB")
-	xyzrgb <- xyzrgb*ff
-	xyzrgb[xyzrgb > 1] <- 1.0
-	xyzrgb[outsideL,] <- 1.0 # Set the color outside to white
-
-	fin <- array(dim = c(length(xx), length(yy), 3))
-	names(fin) <- c("x", "y", "rgb")
-	
-	mr <- matrix(data = xyzrgb[,1], ncol = length(xx), byrow = FALSE)
-	mg <- matrix(data = xyzrgb[,2], ncol = length(xx), byrow = FALSE)
-	mb <- matrix(data = xyzrgb[,3], ncol = length(xx), byrow = FALSE)
-	fin[,,1] <- mr
-	fin[,,2] <- mg
-	fin[,,3] <- mb
-	fin <- aperm(fin, c(2,1,3)) # This is needed to position the fin correctly
-	finras <- as.raster(fin)
+	rgb <- prepCIEgradient(vertices, "sRGB", ff)
+	finras <- as.raster(rgb)
 	
 ##### Create the plot using grid graphics
 
@@ -45,6 +22,7 @@ plotCIEselection <- function(vertices, ff = 1.0, ...) {
 	Lxyz$x <- Lxyz$x + off
 	Lxyz$y <- Lxyz$y + off
 
+	grid.newpage()
 	grid.text("Colors Selected", x = 0.5, y = 0.9,
 		gp = gpar(fontface = "bold", cex = 1.2))
 	grid.text(expression(italic(x)), x = 0.5, y = 0.05)
@@ -78,5 +56,6 @@ plotCIEselection <- function(vertices, ff = 1.0, ...) {
 
 	grid.polygon(vertices$x, vertices$y, default.units = "native")
 
+	invisible(rgb)
 
 	}
