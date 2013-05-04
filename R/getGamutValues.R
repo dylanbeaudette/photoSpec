@@ -6,7 +6,7 @@ getGamutValues <- function(gamut) {
 	# CIE is the theoretical primaries from CIE
 	# sRGB is the standard for computer monitors and HDTV
 	# Apple is the standard for Apple monitors based upon Trinitron phosphors
-	#       which is no longer in use. Same as SGI
+	#       which is no longer in use. Same as SGI.
 	# NTSC is the 1953 CRT TV standard
 	
 	if (gamut == "Apple") { # relative to D65
