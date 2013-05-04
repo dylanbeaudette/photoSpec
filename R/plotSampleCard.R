@@ -3,6 +3,9 @@
 plotSampleCard <- function(calCols = NULL, size = c(6, 4), wavelength = NULL,
 	ruler = c(3.5, 2.5), chips = "random", chip.rep = 3, ff = 1.0, guide = FALSE) {
 
+	# Bryan Hanson, DePauw University, March 2013 hanson@depauw.edu
+	# Part of the photoSpec package
+
 	# Main viewport
 	
 	grid.newpage()

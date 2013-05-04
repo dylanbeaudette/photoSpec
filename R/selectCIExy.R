@@ -1,6 +1,9 @@
 
 
-selectCIExy <- function(L1 = NULL, L2 = NULL) {
+selectCIExy <- function(L1 = NULL, L2 = NULL, colSpace = "sRGB", ff = 1.0, ...) {
+
+	# Bryan Hanson, DePauw University, March 2013 hanson@depauw.edu
+	# Part of the photoSpec package
 
 ##### Helper Functions #####
 # See gist.github.com/bryanhanson/5471173
@@ -198,7 +201,8 @@ selectCIExy <- function(L1 = NULL, L2 = NULL) {
 
  	# Now that the proper vertices have been selected, do the plot
  	
-	bgr <- plotCIEselection(verts) # NEED colSpace and ff ARGUMENTS, but...
+	bgr <- plotCIEchrom(gradient = verts, colSpace, ff, opts = c())
+	grid.polygon(verts$x, verts$y, default.units = "native")
 	grid.segments(x0 = in.segs[1:2,1], y0 = in.segs[1:2,2], # these are the dotted lines
 		x1 = in.segs[c(3,3),1], y1 = in.segs[c(3,3),2], # from L1 and L2
 		default.units = "native", gp = gpar(lty = 2))
@@ -206,6 +210,7 @@ selectCIExy <- function(L1 = NULL, L2 = NULL) {
 	# Prepare the enclosed colors to serve as the calibration colors
 	# Convert the raster into a list of calibration colors;
 	# Eliminate the pure whites which are outside the vertices
+
 	bgr <- as.raster(bgr)
 	bgr <- as.vector(bgr)
 	bgr <- bgr[bgr != "#FFFFFF"]

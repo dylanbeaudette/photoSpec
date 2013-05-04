@@ -1,6 +1,9 @@
 
 prepCIEgradient <- function(vertices, colSpace, ff) {
 
+	# Bryan Hanson, DePauw University, March 2013 hanson@depauw.edu
+	# Part of the photoSpec package
+
 	message("I'm painting a beautiful gradient, please give me a moment...")
 	
 	xx <- seq(-0.1, 0.9, 0.002) # The raster that will be created must cover the entire plotting region
@@ -34,6 +37,5 @@ prepCIEgradient <- function(vertices, colSpace, ff) {
 	fin[,,1] <- mr
 	fin[,,2] <- mg
 	fin[,,3] <- mb
-	str(fin)
 	fin <- aperm(fin, c(2,1,3)) # This is needed to position the fin correctly
 	}

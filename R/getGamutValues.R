@@ -8,6 +8,9 @@ getGamutValues <- function(gamut) {
 	# Apple is the standard for Apple monitors based upon Trinitron phosphors
 	#       which is no longer in use. Same as SGI.
 	# NTSC is the 1953 CRT TV standard
+
+	# Bryan Hanson, DePauw University, March 2013 hanson@depauw.edu
+	# Part of the photoSpec package
 	
 	if (gamut == "Apple") { # relative to D65
 		x <- c(0.640, 0.300, 0.150)

@@ -2,6 +2,12 @@
 showCalColSpace <- function(calCols, sampCol = NULL, sampName = "Demo",
 	ellipsoid = TRUE) {
 
+	# Function to make a 3D plot of a color sample in rgb space,
+	# along with a set of calibration colors.
+	
+	# Bryan Hanson, DePauw University, March 2013 hanson@depauw.edu
+	# Part of the photoSpec package
+
 	rgb <- col2rgb(calCols)
 	rgb <- t(rgb/255)
 	rgb <- as.data.frame(rgb)
