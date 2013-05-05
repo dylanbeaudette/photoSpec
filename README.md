@@ -10,13 +10,11 @@ At this time, `photoSpec is a WORK IN PROGRESS`.  Do not trust anything in it.  
 The functions which mostly work, _but may still change a lot_ are:
 
 + plotCIEchrom
-+ selectCIExy (coming soon)
-+ plotCIEselection
++ selectCIExy
 + plotSampleCard
 + showCalColSpace
 + getGamutValues (not user facing)
 + getWhiteValues (not user facing)
-+ plotCIEselection (not user facing)
 + computeSampleAbs (not user facing)
 
 ### To install from Github using R:

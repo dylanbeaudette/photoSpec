@@ -4,6 +4,7 @@ selectCIExy <- function(L1 = NULL, L2 = NULL, colSpace = "sRGB", ff = 1.0, ...) 
 
 	# Bryan Hanson, DePauw University, March 2013 hanson@depauw.edu
 	# Part of the photoSpec package
+	# Major contributions from Matthew Kukurugya
 
 ##### Helper Functions #####
 # See gist.github.com/bryanhanson/5471173
@@ -215,7 +216,6 @@ selectCIExy <- function(L1 = NULL, L2 = NULL, colSpace = "sRGB", ff = 1.0, ...) 
 	bgr <- as.vector(bgr)
 	bgr <- bgr[bgr != "#FFFFFF"]
 
-	bgr <- unique(bgr)
 	cat("Total colors selected:", length(bgr), "\n")
 	
 	invisible(bgr)

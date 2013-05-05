@@ -9,7 +9,6 @@ This function computes a gradient for display in a CIE chromaticity diagram.
 \usage{
 prepCIEgradient(vertices, colSpace, ff)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{vertices}{
 A data frame containing the xy coordinates of the vertices.

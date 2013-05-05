@@ -161,5 +161,7 @@ plotCIEchrom <- function(gradient = NULL, colSpace = "sRGB", ff = 1.0,
 
 		}
 
-	invisible(finras)
+	if (is.null(gradient)) ans <- NULL
+	if (!is.null(gradient)) ans <- finras
+	invisible(ans)
 	}
