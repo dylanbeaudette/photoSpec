@@ -4,8 +4,13 @@ photoSpec: A photographic spectrophotometer
 Bryan A. Hanson DePauw University, Greencastle Indiana USA
 
 
-##### Version 0.1-4
+##### Version 0.1-5
 Date: 2013-05-
+>> selectCIEchrom now returns a list of values which will be passed to a new function generateCalCols.  This list includes the midpoint between L1 and L2.
+>> Added function generateCalCols.
+
+##### Version 0.1-4
+Date: 2013-05-04
 >> Fixed selectCIExy to handle any wavelength combination.
 >> Removed plotCIEselection and gave its job to plotCIEchrom.  This is more compact and will be easier to maintain.
 >> selectCIExy now returns all the colors in the space delimited by L1 and L2.  We'll need to determine how to handle this: a 1 nm band is roughly 100-200 colors, which is too many for the calibration process.

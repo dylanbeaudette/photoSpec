@@ -8,7 +8,6 @@ selectCIExy <- function(L1 = NULL, L2 = NULL, colSpace = "sRGB", ff = 1.0, ...) 
 
 ##### Helper Functions #####
 # See gist.github.com/bryanhanson/5471173
-# These are placed here so they are available to this function only
 
 	getBoundingBox <- function(P0, P1) {
 	
@@ -95,11 +94,25 @@ selectCIExy <- function(L1 = NULL, L2 = NULL, colSpace = "sRGB", ff = 1.0, ...) 
 		return(c(Px, Py))
 		}
 
+angBetween2Segments <- function(segment1, segment2) {
+	# segments each given as c(x1, y1, x2, y2)
+	# translate both segments to origin
+	seg1 <- c(segment1[3]-segment1[1], segment1[4]-segment1[2])
+	seg2 <- c(segment2[3]-segment2[1], segment2[3]-segment2[1])
+	d1 <- sqrt((segment1[3]-segment1[1])^2 + (segment1[4]-segment1[2])^2)
+	d2 <- sqrt((segment2[3]-segment2[1])^2 + (segment2[3]-segment2[1])^2)
+	dp <- seg1[1]*seg2[1] - seg1[2]*seg2[2] # dot prod
+	theta <- acos(dp/(d1*d2)) # in radians
+	}
+
 ##### End of Helper Functions #####
 
 	if (is.null(L1)) stop("You must give a wavelength for L1")
 	if (is.null(L2)) stop("You must give a wavelength for L2")
 	if (L1 > L2) stop("L1 must be less than L2")
+	# Re-order things so that L1 < L2 < L3 in what comes later
+	L3 <- L2	
+	L2 <- L1 + 0.5*(L2-L1) # This will be the mid point
 	
 	# load data (shark fin)
 	data(CIExyz)
@@ -111,101 +124,148 @@ selectCIExy <- function(L1 = NULL, L2 = NULL, colSpace = "sRGB", ff = 1.0, ...) 
 	ans1 <-ans1[1] # this is an index/row number
 	ans2 <- grep(L2, CIExyz$wavelength)
 	ans2 <-ans2[1]
+	ans3 <- grep(L3, CIExyz$wavelength)
+	ans3 <-ans3[1]
 
 	D65 <- getWhiteValues("D65")
-	# Put all the needed data in one place: p0 from L1, p1 from L2
+	# Put all the needed data in one place: p1 from L1, p2 from L2, p3 from L3
 	segs <- data.frame(
-		x = c(xy[ans1,1], xy[ans2,1], D65[1,1]),
-		y = c(xy[ans1,2], xy[ans2,2], D65[1,2]))
-	row.names(segs) <- c("p0", "p1", "D65")
+		x = c(xy[ans1,1], xy[ans2,1], xy[ans3,1], D65[1,1]),
+		y = c(xy[ans1,2], xy[ans2,2], xy[ans3,2], D65[1,2]))
+	row.names(segs) <- c("p1", "p2", "p3", "D65")
 	in.segs <- segs # save a copy for later
 	
 	###### Flip the line segments 180 degrees and extend to ensure intersection
 		
-	# segs[1,1] = segs[3,1] - (segs[1,1] - segs[3,1]) 
-	# segs[1,2] = segs[3,2] + (segs[1,2] - segs[3,2])
-	# segs[2,1] = segs[3,1] - (segs[2,1] - segs[3,1]) 
-	# segs[2,2] = segs[3,2] + (segs[2,2] - segs[3,2])
-	# print(segs)
 	ang <- pi
 	fac <- 2.0 # this ensures that the line segment is long enough to reach
 	# the far side of the shark fin or line of purples
-	segs[1,1] = segs[3,1] + (cos(ang) * (segs[1,1] - segs[3,1]) + sin(ang) * (segs[1,2] - segs[3,2]))*fac
-	segs[1,2] = segs[3,2] + (-sin(ang) * (segs[1,2] - segs[3,2]) + cos(ang) * (segs[1,2] - segs[3,2]))*fac
+	segs[1,1] = segs[4,1] + (cos(ang) * (segs[1,1] - segs[4,1]) + sin(ang) * (segs[1,2] - segs[4,2]))*fac
+	segs[1,2] = segs[4,2] + (-sin(ang) * (segs[1,2] - segs[4,2]) + cos(ang) * (segs[1,2] - segs[4,2]))*fac
 	
-	segs[2,1] = segs[3,1] + (cos(ang) * (segs[2,1] - segs[3,1]) + sin(ang) * (segs[2,2] - segs[3,2]))*fac
-	segs[2,2] = segs[3,2] + (-sin(ang) * (segs[2,2] - segs[3,2]) + cos(ang) * (segs[2,2] - segs[3,2]))*fac
+	segs[2,1] = segs[4,1] + (cos(ang) * (segs[2,1] - segs[4,1]) + sin(ang) * (segs[2,2] - segs[4,2]))*fac
+	segs[2,2] = segs[4,2] + (-sin(ang) * (segs[2,2] - segs[4,2]) + cos(ang) * (segs[2,2] - segs[4,2]))*fac
+
+	segs[3,1] = segs[4,1] + (cos(ang) * (segs[3,1] - segs[4,1]) + sin(ang) * (segs[3,2] - segs[4,2]))*fac
+	segs[3,2] = segs[4,2] + (-sin(ang) * (segs[3,2] - segs[4,2]) + cos(ang) * (segs[3,2] - segs[4,2]))*fac
+	row.names(segs) <- c("p4", "p5", "p6", "D65")
 	# print(segs)
 	
 	# Now loop over shark fin and check for intersections	
 
-	keep <- c() # keep will always be length 2
+	keep <- c() # keep will always be length 3
 
-	for (i in 1:2) { # loop over both line segments
+	for (i in 1:3) { # loop over the 3 line segments
 		its <- nrow(xy)-1
 	
 		# Check to see if the line segments intersect
 			
 		for (n in 1:its) { # loop over shark fin	
 			inter <- doSegmentsIntersect(
-		        segment1 = c(segs[i,1], segs[i,2], segs[3,1], segs[3,2]),
+		        segment1 = c(segs[i,1], segs[i,2], segs[4,1], segs[4,2]),
 		        segment2 = c(xy[n,1], xy[n,2], xy[n+1,1], xy[n+1,2]))
 		    if (inter) keep <- c(keep, n)
 			}
  		} # end of loop that checks each line segment
 
-	# There are 4 cases to be considered next:
-	# 1.  neither line segment intersects the line of purples.
-	# 2.  the 1st line segments hits the l of p, the 2nd the shark fin
-	# 3.  the 1st line segment hits the shark fin, the 2nd the l of p
-	# 4.  both segments intersect the l of p
-	# 5.  neither line segment intersects l of p, but one originates
-	#     on the right side, the other on the left side
+	# Here are the cases to be considered next.
+	# Segments are in wavelenght order.
+	# 1.  no line segment intersects the line of purples.
+	# 2.  segment 1 hits the l of p, segments 2 & 3 the shark fin
+	# 3.  segments 1 & 2 hit the l of p, segment 3 the shark fin
+	# 4.  all segments intersect the l of p
+	# 5.  only the middle segments hits the l of p
+	# 6.  segment 1 hits the shark fin, the other two l of p
+	# 7.  segments 1 & 2 hit shark fin, segment 3 the l of p
 	# The line of purples is segment xy[c(4400,4401),]
+
+	# We are also going to store the intersection points p4, p5 & p6:
+	# L1/p1 -> D65 -> p4; L2/p2 -> D65 -> p5; L3/p3 -> D65 -> p6
 	
-#	print(keep) #
- 	 	
-	if (!4400 %in% keep) { # Case 1
-	 	verts <- rbind(CIExyz[min(keep):max(keep),], CIExyz[max(keep)+1,], c(NA, segs[3,1], segs[3,2], NA))
+	Case1 <- Case2 <- Case3 <- Case4 <- Case5 <- Case6 <- Case7 <- FALSE
+	if (!4400 %in% keep) Case1 <- TRUE
+	if ((keep[1] == 4400) && (!keep[2] == 4400) && (!keep[3] == 4400)) Case2 <- TRUE 	
+	if ((keep[1] == 4400) && (keep[2] == 4400) && (!keep[3] == 4400)) Case3 <- TRUE 	
+	if ((keep[1] == 4400) && (keep[2] == 4400) && (keep[3] == 4400)) Case4 <- TRUE
+	if ((!keep[1] == 4400) && (keep[2] == 4400) && (!keep[3] == 4400)) Case5 <- TRUE 	
+	if ((!keep[1] == 4400) && (keep[2] == 4400) && (keep[3] == 4400)) Case6 <- TRUE 	
+	if ((!keep[1] == 4400) && (!keep[2] == 4400) && (keep[3] == 4400)) Case7 <- TRUE 	
+	
+	if (Case1) { # Case 1 (OK)
+	 	verts <- rbind(CIExyz[keep[1]:keep[3],], CIExyz[keep[3]+1,], c(NA, segs[4,1], segs[4,2], NA))
 	 	verts <- verts[,2:3]
+	 	p4 <- CIExyz[keep[1],2:3]
+	 	p5 <- CIExyz[keep[2],2:3]
+	 	p6 <- CIExyz[keep[3],2:3]	 	
  	 	}
 		
-	if ((keep[1] == 4400) && !(length(unique(keep)) == 1L)) { # Case 2
-		keep <- keep[-1]
-		P3 <- lineIntersection(in.segs[1,1], in.segs[1,2], in.segs[3,1],
-			in.segs[3,2], xy[4400,1], xy[4400,2], xy[4401,1], xy[4401,2])
-	 	verts <- rbind(c(NA, segs[3,1], segs[3,2], NA), c(NA, P3[1], P3[2], NA), CIExyz[1:max(keep),])
+	if (Case2) { # Case 2 (OK)
+		p4 <- lineIntersection(in.segs[1,1], in.segs[1,2], in.segs[4,1],
+			in.segs[4,2], xy[4400,1], xy[4400,2], xy[4401,1], xy[4401,2])
+	 	p5 <- CIExyz[keep[2],2:3]
+	 	p6 <- CIExyz[keep[3],2:3]	 	
+	 	verts <- rbind(c(NA, segs[4,1], segs[4,2], NA),
+	 		c(NA, p4[1], p4[2], NA), CIExyz[1:keep[3],])
 	 	verts <- verts[,2:3]
 		}
 		
-	if (keep[length(keep)] == 4400 && !(length(unique(keep)) == 1L)) { # Case 3
-		P4 <- lineIntersection(in.segs[2,1], in.segs[2,2], in.segs[3,1],
-			in.segs[3,2], xy[4400,1], xy[4400,2], xy[4401,1], xy[4401,2])
-	 	verts <- rbind(CIExyz[min(keep):max(keep),], c(NA, P4[1], P4[2], NA), c(NA, segs[3,1], segs[3,2], NA))
+	if (Case3) { # Case 3 (OK)
+		p4 <- lineIntersection(in.segs[1,1], in.segs[1,2], in.segs[4,1],
+			in.segs[4,2], xy[4400,1], xy[4400,2], xy[4401,1], xy[4401,2])
+		p5 <- lineIntersection(in.segs[2,1], in.segs[2,2], in.segs[4,1],
+			in.segs[4,2], xy[4400,1], xy[4400,2], xy[4401,1], xy[4401,2])
+	 	p6 <- CIExyz[keep[3],2:3]	 	
+	 	verts <- rbind(c(NA, segs[4,1], segs[4,2], NA),
+	 		c(NA, p4[1], p4[2], NA), CIExyz[1:keep[3],])
 	 	verts <- verts[,2:3]
 		}
 
-	if (unique(keep) == 4400 && (length(unique(keep)) == 1L)) { # Case 4, both segments hit the l of p
-		# Go back to in.segs and see where they hit the l of p
-		P3 <- lineIntersection(in.segs[1,1], in.segs[1,2], in.segs[3,1],
-			in.segs[3,2], xy[4400,1], xy[4400,2], xy[4401,1], xy[4401,2])
-		P4 <- lineIntersection(in.segs[2,1], in.segs[2,2], in.segs[3,1],
-			in.segs[3,2], xy[4400,1], xy[4400,2], xy[4401,1], xy[4401,2])
-		verts <- rbind(segs[3,], P3, P4)
+	if (Case4) { # Case 4 (OK)
+		p4 <- lineIntersection(in.segs[1,1], in.segs[1,2], in.segs[4,1],
+			in.segs[4,2], xy[4400,1], xy[4400,2], xy[4401,1], xy[4401,2])
+		p5 <- lineIntersection(in.segs[2,1], in.segs[2,2], in.segs[4,1],
+			in.segs[4,2], xy[4400,1], xy[4400,2], xy[4401,1], xy[4401,2])
+		p6 <- lineIntersection(in.segs[3,1], in.segs[3,2], in.segs[4,1],
+			in.segs[4,2], xy[4400,1], xy[4400,2], xy[4401,1], xy[4401,2])
+		verts <- rbind(segs[4,], p4, p6)
 		colnames(verts) <- c("x", "y")
 		}
 
-	if ((!4400 %in% keep) && (keep[1] > keep[2])) { # Case 5
-	 	verts <- rbind(CIExyz[max(keep):4400,], CIExyz[1:min(keep),], c(NA, segs[3,1], segs[3,2], NA))
+	if (Case5) { # Case 5 (OK)
+	 	p4 <- CIExyz[keep[1],2:3]
+		p5 <- lineIntersection(in.segs[2,1], in.segs[2,2], in.segs[4,1],
+			in.segs[4,2], xy[4400,1], xy[4400,2], xy[4401,1], xy[4401,2])
+	 	p6 <- CIExyz[keep[3],2:3]
+	 	verts <- rbind(CIExyz[keep[3]:4400,], CIExyz[1:keep[1],], c(NA, segs[4,1], segs[4,2], NA))
+	 	verts <- verts[,2:3]
+ 	 	}
+
+	if (Case6) { # Case 6 (OK)
+	 	p4 <- CIExyz[keep[1],2:3]
+		p5 <- lineIntersection(in.segs[2,1], in.segs[2,2], in.segs[4,1],
+			in.segs[4,2], xy[4400,1], xy[4400,2], xy[4401,1], xy[4401,2])
+		p6 <- lineIntersection(in.segs[3,1], in.segs[3,2], in.segs[4,1],
+			in.segs[4,2], xy[4400,1], xy[4400,2], xy[4401,1], xy[4401,2])
+	 	verts <- rbind(CIExyz[keep[1]:4400,], c(NA, p5[1], p5[2], NA),
+	 		c(NA, p6[1], p6[2], NA), c(NA, segs[4,1], segs[4,2], NA))
+	 	verts <- verts[,2:3]
+ 	 	}
+
+	if (Case7) { # Case 7 (OK)
+	 	p4 <- CIExyz[keep[1],2:3]
+	 	p5 <- CIExyz[keep[2],2:3]
+		p6 <- lineIntersection(in.segs[3,1], in.segs[3,2], in.segs[4,1],
+			in.segs[4,2], xy[4400,1], xy[4400,2], xy[4401,1], xy[4401,2])
+	 	verts <- rbind(CIExyz[keep[1]:4400,],
+	 		c(NA, p6[1], p6[2], NA), c(NA, segs[4,1], segs[4,2], NA))
 	 	verts <- verts[,2:3]
  	 	}
 
  	# Now that the proper vertices have been selected, do the plot
- 	
 	bgr <- plotCIEchrom(gradient = verts, colSpace, ff, opts = c())
 	grid.polygon(verts$x, verts$y, default.units = "native")
-	grid.segments(x0 = in.segs[1:2,1], y0 = in.segs[1:2,2], # these are the dotted lines
-		x1 = in.segs[c(3,3),1], y1 = in.segs[c(3,3),2], # from L1 and L2
+	grid.segments(x0 = in.segs[c(1,3),1], y0 = in.segs[c(1,3),2], # these are the dotted lines
+		x1 = in.segs[c(4,4),1], y1 = in.segs[c(4,4),2], # from L1 and L2
 		default.units = "native", gp = gpar(lty = 2))
 
 	# Prepare the enclosed colors to serve as the calibration colors
@@ -216,8 +276,27 @@ selectCIExy <- function(L1 = NULL, L2 = NULL, colSpace = "sRGB", ff = 1.0, ...) 
 	bgr <- as.vector(bgr)
 	bgr <- bgr[bgr != "#FFFFFF"]
 
-	cat("Total colors selected:", length(bgr), "\n")
+	message("Total colors selected:", length(bgr))
 	
-	invisible(bgr)
+	# Assemble a list for return
+	wedge <- vector("list")
+	wedge$CIEcols <- bgr
+	wedge$verts <- verts
+	wedge$wavelength <- c(L1, L2)
+	wedge$p4 <- p4
+	wedge$p5 <- p5
+	wedge$p6 <- p6
+	wedge$colSpace <- colSpace
+	wedge$ff <- ff
+	
+	grid.points(x = p4[1], y = p4[2], default.units = "native",
+		gp = gpar(col = "red"), size = unit(0.5, "char"))
+	grid.points(x = p5[1], y = p5[2], default.units = "native",
+		gp = gpar(col = "red"), size = unit(0.5, "char"))
+	grid.points(x = p6[1], y = p6[2], default.units = "native",
+		gp = gpar(col = "red"), size = unit(0.5, "char"))
+	grid.points(x = segs[4,1], y =segs[4,2], default.units = "native",
+		gp = gpar(col = "red"), size = unit(0.5, "char"))
+	invisible(wedge)
 
 	} # end of function
