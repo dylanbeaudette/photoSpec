@@ -94,17 +94,6 @@ selectCIExy <- function(L1 = NULL, L2 = NULL, colSpace = "sRGB", ff = 1.0, ...) 
 		return(c(Px, Py))
 		}
 
-angBetween2Segments <- function(segment1, segment2) {
-	# segments each given as c(x1, y1, x2, y2)
-	# translate both segments to origin
-	seg1 <- c(segment1[3]-segment1[1], segment1[4]-segment1[2])
-	seg2 <- c(segment2[3]-segment2[1], segment2[3]-segment2[1])
-	d1 <- sqrt((segment1[3]-segment1[1])^2 + (segment1[4]-segment1[2])^2)
-	d2 <- sqrt((segment2[3]-segment2[1])^2 + (segment2[3]-segment2[1])^2)
-	dp <- seg1[1]*seg2[1] - seg1[2]*seg2[2] # dot prod
-	theta <- acos(dp/(d1*d2)) # in radians
-	}
-
 ##### End of Helper Functions #####
 
 	if (is.null(L1)) stop("You must give a wavelength for L1")

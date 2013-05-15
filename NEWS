@@ -6,8 +6,8 @@ Bryan A. Hanson DePauw University, Greencastle Indiana USA
 
 ##### Version 0.1-5
 Date: 2013-05-
->> selectCIEchrom now returns a list of values which will be passed to a new function generateCalCols.  This list includes the midpoint between L1 and L2.
->> Added function generateCalCols.
+>> selectCIEchrom now returns a list of values which will be passed to a new function selectCalCols.  This list includes the midpoint between L1 and L2.
+>> Added function selectCalCols.
 
 ##### Version 0.1-4
 Date: 2013-05-04
