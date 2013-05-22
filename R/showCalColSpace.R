@@ -2,6 +2,12 @@
 showCalColSpace <- function(calCols, sampCol = NULL, sampName = "Demo",
 	ellipsoid = TRUE) {
 
+	if (is.null(sampCol)) {
+		demo <- data.frame(x = runif(1), y = runif(1), z = runif(1))
+		dc <- paste("#", as.hexmode(floor(demo$x*255)),
+			as.hexmode(floor(demo$y*255)), as.hexmode(floor(demo$z*255)), sep = "")
+		}
+		
 	# Function to make a 3D plot of a color sample in rgb space,
 	# along with a set of calibration colors.
 	
@@ -33,6 +39,7 @@ showCalColSpace <- function(calCols, sampCol = NULL, sampName = "Demo",
 	# Plot pure white & pure black as reference points (but hide them)
 	# also serves to establish the overall scale/space
 	
+	rgl.open()
 	points3d(x = 0.0, y = 0.0, z = 0.0, col = "transparent",
 		size = 8, alpha = 0.0, smooth = FALSE)
 	points3d(x = 1.0, y = 1.0, z = 1.0, col = "transparent",

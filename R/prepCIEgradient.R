@@ -6,16 +6,16 @@ prepCIEgradient <- function(vertices, colSpace, ff) {
 
 	message("I'm painting a beautiful gradient, please give me a moment...")
 	
-	xx <- seq(-0.1, 0.9, 0.002) # The raster that will be created must cover the entire plotting region
-	yy <- seq(0.9, -0.1, -0.002) # The descending order here is important, but not intuitive
+	xx <- seq(-0.1, 0.9, 0.02) # The raster that will be created must cover the entire plotting region
+	yy <- seq(0.9, -0.1, -0.02) # The descending order here is important, but not intuitive
 	xyz <- expand.grid(xx,yy)
 	names(xyz) <- c("x", "y")
+	xyz$z <- 1 - xyz$x - xyz$y
 
 	# Find the points inside & outside the requested polygon
 		
-	insideL <- inout(xyz, vertices, bound = TRUE) # TRUE = inside
+	insideL <- inout(xyz, vertices, bound = FALSE) # TRUE = inside
 	outsideL <-!insideL # TRUE = outside now
-	xyz$z <- 1 - xyz$x - xyz$y
 
 	# Convert the color scheme
 	

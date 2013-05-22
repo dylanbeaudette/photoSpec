@@ -277,7 +277,6 @@ selectCIExy <- function(L1 = NULL, L2 = NULL, colSpace = "sRGB", ff = 1.0, ...) 
 	 	l <- c(d4, d5, d6)
 	 	xPt <- which.max(l) # FIX: something is up here
 	 	if (length(xPt) > 1) xPt <- xPt[1]
-	 	str(xPt)
 	 	if (xPt == 1) xPt <- p4
 	 	if (xPt == 2) xPt <- p5
 	 	if (xPt == 3) xPt <- p6
@@ -372,24 +371,24 @@ selectCIExy <- function(L1 = NULL, L2 = NULL, colSpace = "sRGB", ff = 1.0, ...) 
 	# Convert the raster into a list of calibration colors;
 	# Eliminate the pure whites which are outside the vertices
 
-	bgr <- as.raster(bgr)
-	bgr <- as.vector(bgr)
-	bgr <- bgr[bgr != "#FFFFFF"]
+	bgr2 <- as.raster(bgr)
+	bgr2 <- as.vector(bgr2)
+	bgr2 <- bgr2[bgr2 != "#FFFFFF"]
 
-	message("Total colors to choose from:", length(bgr))
+	message("Total colors to choose from:", length(bgr2))
 	
 	# Assemble a list for return
 	wedge <- vector("list")
 	wedge$wavelength <- c(L1, L2) # input wavelengths
 	wedge$Case <- Case
 	wedge$verts <- verts # vertices of wedge
-	wedge$CIEcols <- bgr # colors in wedge
+	wedge$raster <- bgr # colors in wedge
 	wedge$colSpace <- colSpace
 	wedge$ff <- ff
-	wedge$p4 <- p4 # see above for defs of these pts
-	wedge$p5 <- p5
-	wedge$p6 <- p6
-	wedge$xPt <- xPt
+	wedge$p4 <- as.numeric(p4) # see above for defs of these pts
+	wedge$p5 <- as.numeric(p5)
+	wedge$p6 <- as.numeric(p6)
+	wedge$xPt <- as.numeric(xPt)
 	
 	if (diagnostics) {
 		grid.points(x = p4[1], y = p4[2], default.units = "native",

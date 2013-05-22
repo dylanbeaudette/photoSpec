@@ -1,6 +1,6 @@
 
 
-selectCalCols <- function(wedge, nDiv = 10, pcpd = 1, divMode = "linear") {
+selectCalCols <- function(wedge, nDiv = 10, pcpd = 1, divMode = "linear", ...) {
 	
 	# Bryan Hanson, DePauw University, May 2013 hanson@depauw.edu
 	# Part of the photoSpec package
@@ -17,6 +17,10 @@ selectCalCols <- function(wedge, nDiv = 10, pcpd = 1, divMode = "linear") {
 	
 	# consider adding a plot showing the results
 
+	diagnostics <- TRUE
+	colSpace <- wedge$colSpace
+	ff <- wedge$ff
+	
 ##### Helper functions
 
 	ang0to2pi <- function(segment) {
@@ -37,24 +41,12 @@ selectCalCols <- function(wedge, nDiv = 10, pcpd = 1, divMode = "linear") {
 
 ##### End of helper functions
 
-	# wedge <- vector("list")
-	# wedge$wavelength <- c(L1, L2) # input wavelengths
-	# wedge$Case <- Case
-	# wedge$verts <- verts # vertices of wedge
-	# wedge$CIEcols <- bgr # colors in wedge
-	# wedge$colSpace <- colSpace
-	# wedge$ff <- ff
-	# wedge$p4 <- p4 # see above for defs of these pts
-	# wedge$p5 <- p5
-	# wedge$p6 <- p6
-	# wedge$xPt <- xPt
-
 	### Prepare the starting data
-	D65 <- unlist(getWhiteValues("D65"))
-	p4 <- unlist(wedge$p4)
-	p5 <- unlist(wedge$p5)
-	p6 <- unlist(wedge$p6)
-	xPt <- unlist(wedge$xPt)
+	D65 <- as.numeric(getWhiteValues("D65"))
+	p4 <- wedge$p4
+	p5 <- wedge$p5
+	p6 <- wedge$p6
+	xPt <- wedge$xPt
 	
 	### Divide the wedge up into nDiv bands using divMode
 	
@@ -73,7 +65,6 @@ selectCalCols <- function(wedge, nDiv = 10, pcpd = 1, divMode = "linear") {
 	angs <- sort(c(ang1, ang2))
 	myby <- 2*pi/360	
 	if ((ang2-ang1) > pi) {
-		cat("weird\n")
 		angs[2] <- -1*(2*pi - angs[2])
 		myby <- -1*myby
 		}
@@ -96,8 +87,26 @@ selectCalCols <- function(wedge, nDiv = 10, pcpd = 1, divMode = "linear") {
 	bands[[1]]$x <- c(bands[[1]]$x, D65[1]) # fix 1st band
 	bands[[1]]$y <- c(bands[[1]]$y, D65[2])
 	
-	bands
-
+	if (diagnostics) {
+		for (i in 1:length(bands)) {
+			grid.polygon(bands[[i]]$x, bands[[i]]$y, default.units = "native")	
+			}
+		}
+		
 	### Next: Sample colors within each band
-
+	# Loop through bands, getting all colors within, and then sampling
+	
+	calCols <- vector("character")
+	for (i in 1:nDiv) {
+		ac <- prepCIEgradient(bands[[i]], colSpace, ff)
+		ac <- as.raster(ac)
+		ac <- as.vector(ac)
+		ac <- ac[ac != "#FFFFFF"]
+		ac <- sample(ac, pcpd)
+		calCols <- c(calCols, ac)
+		}
+		
+	wedge$bands <- bands
+	return(calCols)
+	
 	} # end of function
