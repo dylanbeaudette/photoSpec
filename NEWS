@@ -5,9 +5,11 @@ Bryan A. Hanson DePauw University, Greencastle Indiana USA
 
 
 ##### Version 0.1-5
-Date: 2013-05-
->> selectCIEchrom now returns a list of values which will be passed to a new function selectCalCols.  This list includes the midpoint between L1 and L2.
->> Added function selectCalCols.
+Date: 2013-05-22
+>> selectCIEchrom now returns a list of values which will be passed to a new function selectCalCols.  All wavelength combinations are properly handled AFAICS.
+>> Added function selectCalCols.  This generates a series of calibration colors.
+>> Added function genCalCols, a wrapper to drive the previous two functions.
+>> Switched to ByteCompile as there are speed problems with prepCIEgradient.
 
 ##### Version 0.1-4
 Date: 2013-05-04

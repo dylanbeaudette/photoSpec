@@ -207,11 +207,10 @@ selectCIExy <- function(L1 = NULL, L2 = NULL, colSpace = "sRGB", ff = 1.0, ...) 
 	 	d5 <- dAB(D65, p5)
 	 	d6 <- dAB(D65, p6)
 	 	l <- c(d4, d5, d6)
-	 	xPt <- which.max(l) # FIX: something is up here
-	 	if (length(xPt) > 1) xPt <- xPt[1]
-	 	if (xPt == 1) xPt <- p4
-	 	if (xPt == 2) xPt <- p5
-	 	if (xPt == 3) xPt <- p6
+	 	dm <- which.max(l)
+	 	if (dm == 1) xPt <- p4
+	 	if (dm == 2) xPt <- p5
+	 	if (dm == 3) xPt <- p6
  	 	}
 		
 	if (Case2) { # Case 2 (OK)
@@ -229,12 +228,11 @@ selectCIExy <- function(L1 = NULL, L2 = NULL, colSpace = "sRGB", ff = 1.0, ...) 
 	 	d6 <- dAB(D65, p6)
 	 	xy1 <- dAB(D65, CIExyz[1,2:3])
 	 	l <- c(d4, d5, d6, xy1)
-	 	xPt <- which.max(l)
-	 	if (length(xPt) > 1) xPt <- xPt[1]
-	 	if (xPt == 1) xPt <- p4
-	 	if (xPt == 2) xPt <- p5
-	 	if (xPt == 3) xPt <- p6
-	 	if (xPt == 4) xPt <- CIExyz[1,2:3]
+	 	dm <- which.max(l)
+	 	if (dm == 1) xPt <- p4
+	 	if (dm == 2) xPt <- p5
+	 	if (dm == 3) xPt <- p6
+	 	if (dm == 4) xPt <- CIExyz[1,2:3]
 		}
 		
 	if (Case3) { # Case 3 (OK)
@@ -253,11 +251,10 @@ selectCIExy <- function(L1 = NULL, L2 = NULL, colSpace = "sRGB", ff = 1.0, ...) 
 	 	d6 <- dAB(D65, p6)
 	 	xy1 <- dAB(D65, CIExyz[1,2:3])
 	 	l <- c(d4, d5, d6, xy1)
-	 	xPt <- which.max(l)
-	 	if (length(xPt) > 1) xPt <- xPt[1]
-	 	if (xPt == 2) xPt <- p5
-	 	if (xPt == 3) xPt <- p6
-	 	if (xPt == 4) xPt <- CIExyz[1,2:3]
+	 	dm <- which.max(l)
+	 	if (dm == 2) xPt <- p5
+	 	if (dm == 3) xPt <- p6
+	 	if (dm == 4) xPt <- CIExyz[1,2:3]
 		}
 
 	if (Case4) { # Case 4 (OK)
@@ -275,11 +272,10 @@ selectCIExy <- function(L1 = NULL, L2 = NULL, colSpace = "sRGB", ff = 1.0, ...) 
 	 	d5 <- dAB(D65, p5)
 	 	d6 <- dAB(D65, p6)
 	 	l <- c(d4, d5, d6)
-	 	xPt <- which.max(l) # FIX: something is up here
-	 	if (length(xPt) > 1) xPt <- xPt[1]
-	 	if (xPt == 1) xPt <- p4
-	 	if (xPt == 2) xPt <- p5
-	 	if (xPt == 3) xPt <- p6
+	 	dm <- which.max(l)
+	 	if (dm == 1) xPt <- p4
+	 	if (dm == 2) xPt <- p5
+	 	if (dm == 3) xPt <- p6
 		}
 
 	if (Case5) { # Case 5 (OK)
@@ -299,13 +295,12 @@ selectCIExy <- function(L1 = NULL, L2 = NULL, colSpace = "sRGB", ff = 1.0, ...) 
 	 	dxy1 <- dAB(D65, xy1)
 	 	dxy4400 <- dAB(D65, xy4400)
 	 	l <- c(d4, d5, d6, dxy1, dxy4400)
-	 	xPt <- which.max(l)
-	 	if (length(xPt) > 1) xPt <- xPt[1]
-	 	if (xPt == 1) xPt <- p4
-	 	if (xPt == 2) xPt <- p5
-	 	if (xPt == 3) xPt <- p6
-	 	if (xPt == 4) xPt <- xy1
-	 	if (xPt == 5) xPt <- xy4400
+	 	dm <- which.max(l)
+	 	if (dm == 1) xPt <- p4
+	 	if (dm == 2) xPt <- p5
+	 	if (dm == 3) xPt <- p6
+	 	if (dm == 4) xPt <- xy1
+	 	if (dm == 5) xPt <- xy4400
 	 	}
 
 	if (Case6) { # Case 6 (OK)
@@ -327,13 +322,13 @@ selectCIExy <- function(L1 = NULL, L2 = NULL, colSpace = "sRGB", ff = 1.0, ...) 
 	 	dxy1 <- dAB(D65, xy1)
 	 	dxy4400 <- dAB(D65, xy4400)
 	 	l <- c(d4, d5, d6, dxy1, dxy4400)
-	 	xPt <- which.max(l)
-	 	if (length(xPt) > 1) xPt <- xPt[1]
-	 	if (xPt == 1) xPt <- p4
-	 	if (xPt == 2) xPt <- p5
-	 	if (xPt == 3) xPt <- p6
-	 	if (xPt == 4) xPt <- xy1
-	 	if (xPt == 5) xPt <- xy4400
+	 	dm <- which.max(l)
+	 	if (length(xPt) > 1) xPt <- xPt[1] # In the event of a tie
+	 	if (dm == 1) xPt <- p4
+	 	if (dm == 2) xPt <- p5
+	 	if (dm == 3) xPt <- p6
+	 	if (dm == 4) xPt <- xy1
+	 	if (dm == 5) xPt <- xy4400
  	 	}
 
 	if (Case7) { # Case 7 (OK)
@@ -352,15 +347,16 @@ selectCIExy <- function(L1 = NULL, L2 = NULL, colSpace = "sRGB", ff = 1.0, ...) 
 	 	xy4400 <- as.numeric(CIExyz[4400,2:3])
 	 	dxy4400 <- dAB(D65, xy4400)
 	 	l <- c(d4, d5, d6, dxy4400)
-	 	xPt <- which.max(l)
-	 	if (length(xPt) > 1) xPt <- xPt[1]
-	 	if (xPt == 1) xPt <- p4
-	 	if (xPt == 2) xPt <- p5
-	 	if (xPt == 3) xPt <- p6
-	 	if (xPt == 4) xPt <- xy4400
+	 	dm <- which.max(l)
+	 	if (length(xPt) > 1) xPt <- xPt[1] # In the event of a tie
+	 	if (dm == 1) xPt <- p4
+	 	if (dm == 2) xPt <- p5
+	 	if (dm == 3) xPt <- p6
+	 	if (dm == 4) xPt <- xy4400
 	 	}
 
  	# Now that the proper vertices have been selected, do the plot
+	message("I'm painting a beautiful gradient, please give me a moment...")
 	bgr <- plotCIEchrom(gradient = verts, colSpace, ff, opts = c())
 	grid.polygon(verts$x, verts$y, default.units = "native")
 	grid.segments(x0 = in.segs[c(1,3),1], y0 = in.segs[c(1,3),2], # these are the dotted lines

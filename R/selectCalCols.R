@@ -98,6 +98,8 @@ selectCalCols <- function(wedge, nDiv = 10, pcpd = 1, divMode = "linear", ...) {
 	
 	calCols <- vector("character")
 	for (i in 1:nDiv) {
+		msg <- paste("Processing band", i, "...", sep = " ")
+		message(msg)
 		ac <- prepCIEgradient(bands[[i]], colSpace, ff)
 		ac <- as.raster(ac)
 		ac <- as.vector(ac)
