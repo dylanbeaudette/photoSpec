@@ -2,6 +2,7 @@
 showCalColSpace <- function(calCols, sampCol = NULL, sampName = "Demo",
 	ellipsoid = TRUE) {
 
+	require("rgl")
 	if (is.null(sampCol)) {
 		demo <- data.frame(x = runif(1), y = runif(1), z = runif(1))
 		dc <- paste("#", as.hexmode(floor(demo$x*255)),
