@@ -1,59 +1,67 @@
 
 
-computeSampleAbs <- function(calCols, sampCol, sampName) {
+computeSampleAbs <- function(calCols, sampCol, PC1, calVals) {
 	
 	# Function to interpolate a sample color on the paint chip scale
 
 	# Bryan Hanson, DePauw University, March 2013 hanson@depauw.edu
 	# Part of the photoSpec package
 
-	# Version 0.1 Approach:
-	# Of all the calibration paint chips, find the two that
-	# are closest to the sample color, and then interpolate
-	# between these two points.
+##### Helper Functions
+
+pointOnLineNearestPoint <- function(P1, P2, P3) {
 	
-	# Find the distances between the calCols and sampCol
+	# This works in any dimension/space
+	# Based on
+	# stackoverflow.com/questions/9368960/perpendicular-point-on-line-from-3d-point?lq=1
+	
+	# P1, P2 are two points on the line.  P3 is the other point.
+	# P4 will be the answer; all points given as c(x, y, z, ...)
+	
+	a <- (P2 - P3) %*% (P2 - P1)
+	b <- -1 * (P1 - P3) %*% (P2 - P1)
+	P4 <- a*P1 + b*P2
+	P4
+	}
+
+dAB <- function(A, B) { # distance between pts A & B in 3d
+	# A, B each as c(x, y, z)
+	dAB <- sqrt((B[3] - A[3])^2 + (B[2]-A[2])^2 + (B[1]-A[1])^2)
+	}
+
+##### End of Helper Functions
+
+	# Version 0.2 Approach:
+	# Sort the calCols, then map the 1st and last colors
+	# onto PC1, then interpolate the sampCol
+		
+	# Find the distances between the calCols and pure white
 	# Based upon color.id {plotrix}
     sc <- col2rgb(sampCol)
-    coltab <- col2rgb(calCols)
-    # distances between each paint chip and the sample:
-    cdist <- apply(coltab, 2, function(z) {sqrt(sum((z - sc)^2))})
-	cdist2 <- data.frame(entry = 1:ncol(coltab), dist = cdist,
-		red = coltab[1,], green = coltab[2,], blue = coltab[3,])
-	# sorted from closest to furthest:
-	cdist2 <- arrange(cdist2, dist) # 
-	# Now some trigonometry
+    cc <- col2rgb(calCols)
+    whdist <- apply(cc, 2, function(z) {sqrt(sum((z - 255)^2))})
+	whdist <- data.frame(dist = whdist,
+		red = cc[1,], green = cc[2,], blue = cc[3,])
+	# Sort from lightest to darkest:
+	whdist <- arrange(whdist, dist)
+	whdist[,2:4] <- whdist[,2:4]/255
+	# Everything is in 0...1 units
 	
-	# P1, P2, the two closest paint chips; Ps the sample point
-	# A is the distance between P1 & Ps
-	# B is the distance between P2 & Ps
-	# C is the distance between P1 & P2
-	A <- cdist2[1,2]
-	B <- cdist2[2,2]
-	cdist3 <- cdist2[c(1,2),c(3,4,5)] # just the two closest points
-	C <- sqrt((cdist3[1,1] - cdist3[2,1])^2 + (cdist3[1,2] - cdist3[2,2])^2
-		+ (cdist3[1,3] - cdist3[2,3])^2)
-		
-	# a will be cos of the angle Ps P2 P1
-	# b will be cos of the angle Ps P1 P2
-	a <- (A^2 - B^2 - C^2)/(-2*B*C)
-	b <- (B^2 - A^2 - C^2)/(-2*A*C)
+	# Find the projection of the lightest & darkest points
+	#  as well as the sampCol onto PC1:
+	ncc <- nrow(whdist)
+	whtpt <- as.numeric(whdist[1,2:4])
+	dkpt <- as.numeric(whdist[ncc,2:4])
+	sampt <- as.numeric(sc/255)
+	lite <- pointOnLineNearestPoint(PC1[1,], PC1[2,], whtpt)
+	dark <- pointOnLineNearestPoint(PC1[1,], PC1[2,], dkpt)
+	samp <- pointOnLineNearestPoint(PC1[1,], PC1[2,], sampt)
+	# Because PCs are abstract, the coord of lite & dark
+	# might be out of the rgb color space (?)
 
-	# C1 & C2 will be the two pieces of C where the normal dropped from Ps hits
-	C1 <- A*b
-	C2 <- B*a
-
-	# Compute some measures of the quality of the fit
-	# sin of angle a should be between 0 and 1 with smaller numbers being
-	# better fit
-	s <- sin(acos(a))
-	# Length of D from the P1-P2 line
-	# This is based upon a cube with sides 255; diagonal is 1.73*255
-	D <- s*B*100/(1.73*255)
-	message("Smaller is better (%):")
-	print(D)
-
-
-	res <- getInterRGB(C1/C, calCols[cdist2[1,1]], calCols[cdist2[1,2]])
-	res # returns hex code, need to put answer into some kind of quantitative form 
-}
+	distld <- dAB(dark, lite)
+	distls <- dAB(samp, lite)
+	D <- diff(calVals)*distls/distld
+	return(D)
+	
+	}
