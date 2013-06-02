@@ -1,6 +1,6 @@
 
 
-selectCalCols <- function(wedge, nDiv = 10, pcpd = 1, divMode = "linear", ...) {
+selectCalCols <- function(wedge, nDiv = 10, pcpd = 1, divMode = "linear", pMode = "snow", ...) {
 	
 	# Bryan Hanson, DePauw University, May 2013 hanson@depauw.edu
 	# Part of the photoSpec package
@@ -17,7 +17,7 @@ selectCalCols <- function(wedge, nDiv = 10, pcpd = 1, divMode = "linear", ...) {
 	
 	# consider adding a plot showing the results
 
-	diagnostics <- TRUE
+	diagnostics <- FALSE
 	colSpace <- wedge$colSpace
 	ff <- wedge$ff
 	
@@ -94,20 +94,43 @@ selectCalCols <- function(wedge, nDiv = 10, pcpd = 1, divMode = "linear", ...) {
 		}
 		
 	### Next: Sample colors within each band
-	# Loop through bands, getting all colors within, and then sampling
 	
-	calCols <- vector("character")
-	for (i in 1:nDiv) {
-		msg <- paste("Processing band", i, "...", sep = " ")
-		message(msg)
-		ac <- prepCIEgradient(bands[[i]], colSpace, ff)
-		ac <- as.raster(ac)
-		ac <- as.vector(ac)
-		ac <- ac[ac != "#FFFFFF"]
-		ac <- sample(ac, pcpd)
-		calCols <- c(calCols, ac)
+	if (!pMode == "snow") { # simple loop, VERY slow
+		calCols <- vector("character")
+		for (i in 1:nDiv) {
+			msg <- paste("Processing band", i, "...", sep = " ")
+			message(msg)
+			ac <- prepCIEgradient(bands[[i]], colSpace, ff)
+			ac <- as.raster(ac)
+			ac <- as.vector(ac)
+			ac <- ac[ac != "#FFFFFF"]
+			ac <- sample(ac, pcpd)
+			calCols <- c(calCols, ac)
+			}
 		}
-		
+
+	if (pMode == "snow") { # snow approach much faster
+		#require("snow")
+		msg1 <- paste("Launching", length(bands), "parallel instances of R", sep = " ")
+		msg2 <- paste("to process the bands")
+		message(msg1)
+		message(msg2)
+		calCols <- vector("character")
+	 	cl <- makeCluster(length(bands), type = "SOCK")
+	 	calCols <-parLapply(cl, bands, FUN = prepCIEgradient, colSpace, ff)
+	 	stopCluster(cl)
+	 	# these next items could be gathering into the parallel processing
+		calCols <- lapply(calCols, FUN = as.raster)
+		calCols <- lapply(calCols, FUN = as.vector)
+		calCols <- lapply(calCols, FUN = function(x) x[x != "#FFFFFF"])
+		calCols <- lapply(calCols, FUN = sample, size = pcpd)
+		calCols <- unlist(calCols)
+		}
+
+	# multicore only works from command line R! and not on Windows
+	# can't have an open graphics window either
+#	calCols2 <- mclapply(bands, FUN = prepCIEgradient, colSpace, ff)
+	
 	wedge$bands <- bands
 	wedge$calCols <- calCols
 	return(wedge)

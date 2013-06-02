@@ -3,6 +3,11 @@ NEWS file for package photoSpec
 photoSpec: A photographic spectrophotometer
 Bryan A. Hanson DePauw University, Greencastle Indiana USA
 
+##### Version 0.2-1
+Date: 2013-06-02
+>> Improvements to documentation, though more are needed.
+>> Added parallel processing as the default when determining which colors are in which bands in selectCalCols.
+
 ##### Version 0.2-0
 Date: 2013-06-01
 >> Many significant changes in design and operation.  There are still numerous issues to be fixed but this is much more mature.  There are some real problems with speed to be addressed as well.

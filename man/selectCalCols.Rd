@@ -7,7 +7,7 @@ Select colors for calibration
 This function takes the wedge in the \code{\link{CIEwedge}} object and divides it into a series of \code{nDiv} bands.  From each band, \code{pcpd} coordinates are selected and returned as a series of calibration colors.
 }
 \usage{
-selectCalCols(wedge, nDiv = 10, pcpd = 1, divMode = "linear", ...)
+selectCalCols(wedge, nDiv = 10, pcpd = 1, divMode = "linear", pMode = "snow", ...)
 }
 \arguments{
   \item{wedge}{
@@ -22,6 +22,10 @@ Integer.  "Paint chips per division".  The number of colors to be selected from 
   \item{divMode}{
 Character.  The mode used to divide up the wedge into bands.  Currently only \code{"linear"} is available.
 }
+  \item{pMode}{
+Character.  The parallel processing mode to use.  Currently one of \code{c("none", "snow")}.
+}
+
   \item{\dots}{
 Other parameters to be passed to downstream functions.
 }
