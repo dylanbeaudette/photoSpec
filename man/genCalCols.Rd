@@ -4,21 +4,21 @@
 Generate a set of calibration colors
 }
 \description{
-This function generates a set of calibration colors corresponding to the complement of the input wavelengths.  It is the starting point for the use of \code{photoSpec}.
+This function generates a set of calibration colors corresponding to the complement of the input wavelengths.  It is the starting point for the use of \code{photoSpec}.  A plot of the 1931 CIE chromaticity diagram is drawn highlighting the wedge of CIE xy values selected.
 }
 \usage{
-genCalCols(L1 = NULL, L2 = NULL, colSpace = "sRGB", ff = 1, nDiv = 10, pcpd = 1L, divMode = "linear", ...)
+genCalCols(L1 = NULL, L2 = NULL, colSpace = "sRGB", ff = 1,
+nDiv = 10, pcpd = 1L, divMode = "linear", ...)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{L1}{
-Numeric, giving the wavelength at one edge of the region to be analyzed.
+Numeric, giving the lower wavelength at the edge of the region to be analyzed.
 }
   \item{L2}{
-Numeric, giving the wavelength at one edge of the region to be analyzed.
+Numeric, giving the upper wavelength at the edge of the region to be analyzed.
 }
   \item{colSpace}{
-Character string giving the color space to use for drawing the gradient.  One of \code{c("sRGB", "Apple RGB")}.
+Character string giving the color space to use for drawing the gradient.  One of \code{c("sRGB", "Apple RGB")}.  \code{Apple RGB} is mainly of historical interest; no physical devices use it at this time.
 }
   \item{ff}{
 Numeric.  The 'fudge factor' to use.  NEED TO EXPLAIN AND SHOW IN EXAMPLES.
@@ -37,10 +37,10 @@ Other parameters to be passed to downstream functions.
 }
 }
 \details{
-This function uses \code{selectCIExy} and \code{selectCalCols} which would generally not be called by the user.
+This function uses \code{\link{selectCIExy}} and \code{\link{selectCalCols}} which would generally not be called by the user.
 }
 \value{
-A list of calibration colors in hexadecimal mode.  The number of colors will be \code{nDiv} * \code{pcpd}.
+An object of class \code{\link{CIEwedge}}.  The number of colors will be \code{nDiv} * \code{pcpd}.
 }
 \references{
 NEED A REFERENCE
@@ -53,9 +53,6 @@ Bryan A. Hanson, DePauw University. \email{hanson@depauw.edu}
 The appearance of the color gradient will vary with the device, surface and incident light used to view it and is not likely correct anywhere.
 }
 \examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
+# NEED AN EXAMPLE
 }
 \keyword{ plot }
-\keyword{ utilities }

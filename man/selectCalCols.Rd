@@ -4,14 +4,14 @@
 Select colors for calibration
 }
 \description{
-Selects some colors FINISH
+This function takes the wedge in the \code{\link{CIEwedge}} object and divides it into a series of \code{nDiv} bands.  From each band, \code{pcpd} coordinates are selected and returned as a series of calibration colors.
 }
 \usage{
 selectCalCols(wedge, nDiv = 10, pcpd = 1, divMode = "linear", ...)
 }
 \arguments{
   \item{wedge}{
-List.  Passed from \code{selectCIExy}.
+A \code{\link{CIEwedge}} passed from \code{\link{selectCIExy}}.
 }
   \item{nDiv}{
 Integer.  The number of bands to be created within the wedge.
@@ -27,7 +27,7 @@ Other parameters to be passed to downstream functions.
 }
 }
 \value{
-A list of calibration colors in hexadecimal mode.  The number of colors will be \code{nDiv} * \code{pcpd}.
+A list of calibration colors in hexadecimal mode is added to the \code{\link{CIEwedge}} object CHECK THIS.  The number of colors will be \code{nDiv} * \code{pcpd}.
 }
 \references{
 NEED A REFERENCE
@@ -41,4 +41,4 @@ Bryan A. Hanson, DePauw University. \email{hanson@depauw.edu}
 ##--	or do  help(data=index)  for the standard data sets.
 
 }
-\keyword{ utilities? }
+\keyword{ utilities }

@@ -1,12 +1,16 @@
 
 
-plotSampleCard <- function(calCols = NULL, size = c(6, 4), wavelength = NULL,
-	ruler = c(3.5, 2.5), chips = "random", chip.rep = 3, ff = 1.0, guide = FALSE) {
+plotSampleCard <- function(wedge, size = c(6, 4), ruler = c(3.5, 2.5),
+	chips = "random", chip.rep = 3, guide = FALSE) {
 
 	# Bryan Hanson, DePauw University, March 2013 hanson@depauw.edu
 	# Part of the photoSpec package
 
 	# Main viewport
+	
+	calCols <- wedge$calCols
+	wavelength <- wedge$wavelengths
+	ff <- wedge$ff
 	
 	grid.newpage()
 	pushViewport(viewport(width = size[1], height = size[2], default.units = "in"))

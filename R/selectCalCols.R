@@ -109,6 +109,7 @@ selectCalCols <- function(wedge, nDiv = 10, pcpd = 1, divMode = "linear", ...) {
 		}
 		
 	wedge$bands <- bands
-	return(calCols)
+	wedge$calCols <- calCols
+	return(wedge)
 	
 	} # end of function

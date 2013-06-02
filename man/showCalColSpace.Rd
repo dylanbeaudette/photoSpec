@@ -4,14 +4,14 @@
 Use rgl to draw a plot of calibration colors in the rgb space.
 }
 \description{
-This function takes a vector of colors used for calibration and plots them in the rgb color space using package \code{rgl}.  A sample color can also be plotted, along with an ellipsoid showing the 95 percent confidence region around the calibration colors.  The position of the sample relative to the calibration colors and the ellipsoid can be used to determine if the sample is sufficiently close to the calibration colors.  In addition, some measures of the fit of the sample color to the calibration colors are printed at the console.
+This function takes a vector of colors used for calibration and plots them in the rgb color space using package \code{rgl}.  A sample color is also plotted, along with an optional ellipsoid showing the 95 percent confidence region around the calibration colors.  The position of the sample relative to the calibration colors and the ellipsoid can be inspected to determine if the sample is sufficiently close to the calibration colors.  In addition, some measures of the fit of the sample color to the calibration colors are printed at the console.
 }
 \usage{
-showCalColSpace(calCols, sampCol = NULL, sampName = "Demo", ellipsoid = TRUE)
+showCalColSpace(wedge, sampCol = NULL, sampName = "Demo", calVals = c(1,10), ellipsoid = TRUE, space = "rgb")
 }
 \arguments{
-  \item{calCols}{
-A vector of colors as hexadecimal strings to be used as the calibration colors.
+  \item{wedge}{
+An object of class \code{CIEwedge}.
 }
   \item{sampCol}{
 A single color as a hexadecimal string to be plotted for comparison.
@@ -22,6 +22,13 @@ A character vector giving the name of the sample.
   \item{ellipsoid}{
 Logical: shall a 95 percent confidence ellipsoid be drawn around the calibration points?
 }
+  \item{calVals}{
+A length 2 numeric vector giving an upper and lower value for the calibration curve.  POSSIBLY NOT USED CORRECTLY.  CHECK!
+}
+  \item{space}{
+A character vector giving the space in which to display the calibration.  One of \code{c("rgb", "pca")}.  The \code{"rgb"} option shows the results in the rgb space in which it is conceptually easy to evaluate the goodness of the fit visually.
+}
+
 }
 \details{
 The confidence ellipsoid is drawn using \code{makeEllipsoid} from package \code{ChemoSpec}.

@@ -11,20 +11,17 @@ prepCIEgradient(vertices, colSpace, ff)
 }
 \arguments{
   \item{vertices}{
-A data frame containing the xy coordinates of the vertices.
+A data frame containing the x & y coordinates of the vertices.
 }
   \item{colSpace}{
-The color space to use.
+Character string giving the color space to use for drawing the gradient.  One of \code{c("sRGB", "Apple RGB")}.  \code{Apple RGB} is mainly of historical interest; no physical devices use it at this time.
 }
   \item{ff}{
 The fudge factor to use
 }
 }
-\details{
-DOCUMENTATION NEEDS WORK!
-}
 \value{
-A raster object as an x,y matrix of colors.
+A raster object as an x,y matrix of colors given in hexadecimal.  NEED TO CHECK
 }
 \references{
 NEED A REFERENCE

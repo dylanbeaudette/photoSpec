@@ -1,5 +1,5 @@
 
-showCalColSpace <- function(calCols, sampCol, sampName = "Demo",
+showCalColSpace <- function(wedge, sampCol = NULL, sampName = "Demo",
 	calVals = c(1, 10), ellipsoid = TRUE, space = "rgb") {
 		
 	# Function to make a 3D plot of a color sample,
@@ -8,8 +8,8 @@ showCalColSpace <- function(calCols, sampCol, sampName = "Demo",
 	# Bryan Hanson, DePauw University, March 2013 hanson@depauw.edu
 	# Part of the photoSpec package
 
-	require("rgl")
-	
+	calCols <- wedge$calCols
+		
 	rgb <- col2rgb(calCols)
 	rgb <- t(rgb/255)
 	rgb <- as.matrix(rgb)

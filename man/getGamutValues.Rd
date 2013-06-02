@@ -31,4 +31,4 @@ NEED A REFERENCE
 Bryan A. Hanson, DePauw University. \email{hanson@depauw.edu}
 }
 
-\keyword{ utility }
+\keyword{ utilities }

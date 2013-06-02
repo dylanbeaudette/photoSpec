@@ -9,7 +9,7 @@ This data set gives wavelengths every 0.1 nm, along with the associated CIE xyz 
 }
 \usage{data(CIExyz)}
 \format{
-  A data frame with 4400 observations on the following 4 variables.
+  A data frame with 4400 observations each with the following 4 variables.
   \describe{
     \item{\code{wavelength}}{a numeric vector; units are nanometers (nm)}
     \item{\code{x}}{a numeric vector}
@@ -17,7 +17,7 @@ This data set gives wavelengths every 0.1 nm, along with the associated CIE xyz 
     \item{\code{z}}{a numeric vector}
   }
 }
-\source{Color Vision Research Lab.  http://cvrl.ioo.ucl.ac.uk/index.htm  Go to this URL, then choose 'NEW CIE XYZ...' In the new page that opens, go to 'Chromaticity coordinates' and get the 2-deg coordinates at 0.1 nm resolution
+\source{Color Vision Research Lab.  cvrl.ioo.ucl.ac.uk/index.htm  Go to this URL, then choose 'NEW CIE XYZ...' In the new page that opens, go to 'Chromaticity coordinates' and get the 2-deg coordinates at 0.1 nm resolution
 }
 \references{
 NEED REFERENCE
