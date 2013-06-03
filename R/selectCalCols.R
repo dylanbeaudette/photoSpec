@@ -17,7 +17,7 @@ selectCalCols <- function(wedge, nDiv = 10, pcpd = 1, divMode = "linear", pMode 
 	
 	# consider adding a plot showing the results
 
-	diagnostics <- FALSE
+	diagnostics <- TRUE
 	colSpace <- wedge$colSpace
 	ff <- wedge$ff
 	
