@@ -1,5 +1,5 @@
 
-prepCIEgradient <- function(vertices, colSpace, ff) {
+prepCIEgradient <- function(vertices, colSpace, ff, ...) {
 
 	# Bryan Hanson, DePauw University, March 2013 hanson@depauw.edu
 	# Part of the photoSpec package
