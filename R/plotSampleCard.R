@@ -1,7 +1,7 @@
 
 
 plotSampleCard <- function(wedge, size = c(6, 4), ruler = c(3.5, 2.5),
-	chips = "random", chip.rep = 3, guide = FALSE) {
+	chips = "random", chip.rep = 3, guide = FALSE, ...) {
 
 	# Bryan Hanson, DePauw University, March 2013 hanson@depauw.edu
 	# Part of the photoSpec package
@@ -12,7 +12,7 @@ plotSampleCard <- function(wedge, size = c(6, 4), ruler = c(3.5, 2.5),
 	wavelength <- wedge$wavelengths
 	ff <- wedge$ff # not used anywhere?
 	
-	grid.newpage()
+	#grid.newpage()
 	pushViewport(viewport(width = size[1], height = size[2], default.units = "in"))
 #	grid.rect() # just for reference while troubleshooting
 	msg <- bquote("photoSpec sample card for " ~lambda[max] ~.(wedge$wavelength[1]) - .(wedge$wavelength[2]) ~ "nm")

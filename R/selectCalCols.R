@@ -110,8 +110,6 @@ selectCalCols <- function(wedge, nDiv = 10, pcpd = 1, divMode = "linear", pMode 
 		}
 
 	if (pMode == "snow") { # snow approach much faster
-		#require("snow")
-		require("splancs")
 		msg1 <- paste("Launching", length(bands), "parallel instances of R", sep = " ")
 		msg2 <- paste("to process the bands")
 		message(msg1)
