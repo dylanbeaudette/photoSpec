@@ -8,7 +8,7 @@ This function generates a set of calibration colors corresponding to the complem
 }
 \usage{
 genCalCols(L1 = NULL, L2 = NULL, colSpace = "sRGB", ff = 1,
-nDiv = 10, pcpd = 1L, divMode = "linear", ...)
+nDiv = 10, pcpd = 1L, divMode = "linear", pMode = "snow", ...)
 }
 \arguments{
   \item{L1}{
@@ -32,6 +32,10 @@ Integer.  "Paint chips per division".  The number of colors to be selected from 
   \item{divMode}{
 Character.  The mode used to divide up the wedge into bands.  Currently only \code{"linear"} is available.
 }
+  \item{pMode}{
+Character.  The parallel processing mode to use.  Currently one of \code{c("none", "snow")}.
+}
+
   \item{\dots}{
 Other parameters to be passed to downstream functions.
 }

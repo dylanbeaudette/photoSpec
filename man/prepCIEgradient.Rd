@@ -7,7 +7,7 @@ Compute a gradient for display in a CIE chromaticity diagram
 This function computes a gradient for display in a CIE chromaticity diagram.
 }
 \usage{
-prepCIEgradient(vertices, colSpace, ff)
+prepCIEgradient(vertices, colSpace, ff, ...)
 }
 \arguments{
   \item{vertices}{
@@ -18,6 +18,9 @@ Character string giving the color space to use for drawing the gradient.  One of
 }
   \item{ff}{
 The fudge factor to use
+}
+  \item{...}{
+Arguments to be passed to ???
 }
 }
 \value{

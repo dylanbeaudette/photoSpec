@@ -8,7 +8,8 @@ genCalCols <- function(L1 = NULL, L2 = NULL, colSpace = "sRGB", ff = 1.0,
 	
 	# A wrapper to get it all done.
 	
-	w1 <- selectCIExy(L1, L2, colSpace, ff, ...)
-	w2 <- selectCalCols(wedge = w1, nDiv, pcpd, divMode, ff, pMode, ...)
+	w1 <- selectCIExy(L1 = L1, L2 = L2, colSpace = colSpace, ff = ff, ...)
+	w2 <- selectCalCols(wedge = w1, nDiv = nDiv, pcpd = pcpd,
+		divMode = divMode, pMode = pMode, ...)
 	return(w2)	
 	}

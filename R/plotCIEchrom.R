@@ -22,8 +22,15 @@ plotCIEchrom <- function(gradient = NULL, colSpace = "sRGB", ff = 1.0,
 	
 	if (!is.null(gradient)) {
 		if (!(colSpace == "sRGB") || (colSpace == "Apple RGB")) stop("colSpace must be sRGB or Apple RGB")
-		if (is.character(gradient)) finras <- as.raster(prepCIEgradient(Lxyz, colSpace, ff))
-		if (is.data.frame(gradient)) finras <- as.raster(prepCIEgradient(gradient, colSpace, ff))
+		if (is.character(gradient)) {
+			finras <- as.raster(prepCIEgradient(vertices = Lxyz,
+				colSpace = colSpace, ff = ff, ...))
+			}
+			
+		if (is.data.frame(gradient)) {
+			finras <- as.raster(prepCIEgradient(vertices = gradient,
+				colSpace = colSpace, ff = ff, ...))
+			}
 		}
 	
 ##### Create the plot using grid graphics

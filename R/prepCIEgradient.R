@@ -1,5 +1,5 @@
 
-prepCIEgradient <- function(vertices, colSpace, ff, ...) {
+prepCIEgradient <- function(vertices = NULL, colSpace = "sRGB", ff = 1.0, ...) {
 
 	# Bryan Hanson, DePauw University, March 2013 hanson@depauw.edu
 	# Part of the photoSpec package
@@ -8,7 +8,8 @@ prepCIEgradient <- function(vertices, colSpace, ff, ...) {
 	yy <- seq(0.9, -0.1, -0.002) # The descending order here is important, but not intuitive
 	xyz <- expand.grid(xx,yy)
 	names(xyz) <- c("x", "y")
-	xyz$z <- ff*(1 - xyz$x - xyz$y)
+#	xyz$z <- ff*(1 - xyz$x - xyz$y)
+	xyz$z <- (1 - xyz$x - xyz$y)
 
 	# Find the points inside & outside the requested polygon
 		
@@ -18,8 +19,8 @@ prepCIEgradient <- function(vertices, colSpace, ff, ...) {
 	# Convert the color scheme
 	
 	xyzrgb <- convertColor(xyz, from = "XYZ", to = colSpace)
-#	xyzrgb <- xyzrgb*ff
-	xyzrgb[xyzrgb > 1] <- 1.0
+	xyzrgb <- xyzrgb*ff
+	xyzrgb[xyzrgb > 1] <- 1.0 # probably not necessary as convertColor clips by default
 	xyzrgb[outsideL,] <- 1.0 # Set the color outside the spectral locus to white
 	
 	# The actual drawing of the gradient will be done with a rasterGrob
