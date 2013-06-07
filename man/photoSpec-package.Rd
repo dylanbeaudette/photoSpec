@@ -6,14 +6,14 @@
 photoSpec: A photographic spectrophotometer
 }
 \description{
-photoSpec allows one to use a photograph as a spectrophotometer, much in the manner that one might match the color of an object to a paint color at a hardware store.  Functions are provided to plot the CIE chromaticity diagram, select calibration colors, print a sample card containing calibration colors and a space for a sample to be photographed, and to analyze the results.  The motivating idea is to apply Beer's Law to objects that cannot be chemically analyzed.
+photoSpec allows one to use a photograph as a spectrophotometer, much in the manner that one might match the color of an object to a paint color at a hardware store.  Functions are provided to plot the CIE chromaticity diagram, select calibration colors, print a sample card containing calibration colors and a space for a sample to be photographed, and to analyze the results.  The motivating idea is to apply the concepts of Beer's Law to objects that cannot be chemically analyzed.
 }
 \details{
 \tabular{ll}{
 Package: \tab photoSpec\cr
 Type: \tab Package\cr
-Version: \tab 0.2-3\cr
-Date: \tab 2013-06-04\cr
+Version: \tab 0.2-4\cr
+Date: \tab 2013-06-07\cr
 License: \tab GPL-3\cr
 LazyLoad: \tab yes\cr
 }

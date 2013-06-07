@@ -101,7 +101,7 @@ selectCalCols <- function(wedge, nDiv = 10, pcpd = 1, divMode = "linear", pMode 
 			msg <- paste("Processing band", i, "...", sep = " ")
 			message(msg)
 			ac <- prepCIEgradient(bands[[i]], colSpace, ff)
-			ac <- as.raster(ac)
+			ac <- as.raster(ac) ### need to trap for NULL ac
 			ac <- as.vector(ac)
 			ac <- ac[ac != "#FFFFFF"]
 			ac <- sample(ac, pcpd)
