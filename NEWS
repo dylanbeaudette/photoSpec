@@ -6,6 +6,8 @@ Bryan A. Hanson DePauw University, Greencastle Indiana USA
 ##### Version 0.2-4
 Date: 2013-06-07
 >> Significant improvements to plotSampleCard.
+>> plotCIEchrom now displays ff and colSpace settings in corner.
+>> Improvements to the documentation.
 
 ##### Version 0.2-3
 Date: 2013-06-04

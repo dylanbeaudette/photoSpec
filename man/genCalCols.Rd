@@ -21,7 +21,7 @@ Numeric, giving the upper wavelength at the edge of the region to be analyzed.
 Character string giving the color space to use for drawing the gradient.  One of \code{c("sRGB", "Apple RGB")}.  \code{Apple RGB} is mainly of historical interest; no physical devices use it at this time.
 }
   \item{ff}{
-Numeric.  The 'fudge factor' to use.  NEED TO EXPLAIN AND SHOW IN EXAMPLES.
+Numeric.  The 'fudge factor' to use.  The fudge factor must be used with \strong{extreme care}.  Larger values of \code{ff} make the white point whiter in the plot, and lightens colors near the spectral locus.  One purpose of \code{ff} is to alter the aesthetics of the plot - that is, to make the white "whiter" for the visual effect (perhaps in teaching CIE concepts).  It also has \strong{significant effects} on the sample card and calibration curve which must be used with care and competence!
 }
   \item{nDiv}{
 Integer.  The number of bands to be created within the wedge.
@@ -33,7 +33,7 @@ Integer.  "Paint chips per division".  The number of colors to be selected from 
 Character.  The mode used to divide up the wedge into bands.  Currently only \code{"linear"} is available.
 }
   \item{pMode}{
-Character.  The parallel processing mode to use.  Currently one of \code{c("none", "snow")}.
+Character.  The parallel processing mode to use.  Currently one of \code{c("none", "snow")}.  This is useful to speed up the processing of the bands.
 }
 
   \item{\dots}{
@@ -54,7 +54,7 @@ Bryan A. Hanson, DePauw University. \email{hanson@depauw.edu}
 }
 
 \section{Warning }{
-The appearance of the color gradient will vary with the device, surface and incident light used to view it and is not likely correct anywhere.
+The appearance of the color gradient will vary with the device, surface and incident light used to view it and is not likely correct anywhere.  \strong{It also varies with ff}.
 }
 \examples{
 # NEED AN EXAMPLE

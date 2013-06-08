@@ -165,8 +165,11 @@ plotCIEchrom <- function(gradient = NULL, colSpace = "sRGB", ff = 1.0,
 		grid.segments(0.63, 0.07, 0.5, 0.17, default.units = "native",
 			arrow = arrow(ends = "last", length = unit(0.025, "npc"),
 			angle = 15, type = "closed"))
-
 		}
+
+	msg <- paste("ff =", ff, "    color space =", colSpace, sep = " ")
+	grid.text(msg, x = 0.98, y = 0.02, gp = gpar(cex = 0.5),
+		just = "right")
 
 	if (is.null(gradient)) ans <- NULL
 	if (!is.null(gradient)) ans <- finras

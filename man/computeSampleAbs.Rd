@@ -17,7 +17,7 @@ A vector of colors as hexadecimal strings to be used as the calibration points. 
 A single color as a hexadecimal string to be interpolated by projection onto the calibration curve.
 }
   \item{PC1}{
-A matrix giving two points on PC1 (the first eigenvector).
+A matrix giving two points on the first principal component (the first eigenvector).
 }
   \item{calVals}{
 A length 2 numeric vector giving an upper and lower values for the calibration curve.
@@ -25,10 +25,10 @@ A length 2 numeric vector giving an upper and lower values for the calibration c
 
 }
 \details{
-\code{calCols} are converted to 3D space as their rgb values.  Principal components analysis is then used to fit a line of best fit (the first principal component).  Finally, \code{sampCol} is projected onto the 1st PC and converted to an 'absorbance' value by interpolating along \code{calVals}.  NOTE: the current implementation only uses the most extreme calibration colors to compute the 'absorbance' CHECK THIS.
+\code{calCols} are converted to 3D space as their rgb values.  Principal components analysis is then used to fit a line of best fit (the first principal component).  Finally, \code{sampCol} is projected onto the 1st PC and converted to an 'absorbance' value by interpolating along \code{calVals}.  NOTE: the current version uses the most extreme calibration colors to compute the 'absorbance' and this will be changing.
 }
 \value{
-Diagnostic information and the 'answer' are printed at the console.
+Information about the goodness of fit and the 'answer' are printed at the console.
 }
 \references{
 NEED A REFERENCE

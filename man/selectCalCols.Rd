@@ -39,10 +39,7 @@ NEED A REFERENCE
 \author{
 Bryan A. Hanson, DePauw University. \email{hanson@depauw.edu}
 }
-\examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
-
+\seealso{
+See \code{\link{genCalCols}} for an example.
 }
 \keyword{ utilities }

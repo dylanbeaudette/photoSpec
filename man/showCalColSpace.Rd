@@ -44,22 +44,21 @@ Bryan A. Hanson, DePauw University. \email{hanson@depauw.edu}
 }
 
 \examples{
-# demo data
+# some data
 good.cal <- c("#FF00FF", "#FF48FF", "#FF69FF", "#FF83FF", "#FF9AFF",
 	"#FFB0FF", "#FFC4FF", "#FFD8FF", "#FFECFF", "#FEFFFF")
 bad.cal <- c("#a52a2a", "#ff4040", "#8b0000", "#ff1493", "#cd1076",
 	"#B22222", "#ff69b4", "#8b3a62", "#ff00ff", "#ff34b3")
 tp1 <- "#E17DFF" # close to the good.cal calibration line
 tp2 <- "#FF34B3" # maroon1; well off the calibration line
-\dontrun{
 #
-# A good calibration set, but sample is far off:
-showCalColSpace(calCols = good.cal, sampCol = tp2)
-# A good calibration set, and sample is close:
-showCalColSpace(calCols = good.cal, sampCol = tp1)
-# A really poor calibration set; location of the sample doesn't much matter
-showCalColSpace(calCols = bad.cal, sampCol = tp2)
-}
+# create a minimal wedge structure
+demo <- vector("list", 1L)
+demo$calCols <- bad.cal
+#
+# A bad calibration set, where the sample is doesn't much matter:
+showCalColSpace(wedge = demo, sampCol = tp2)
+# Now try the others yourself!
 }
 \keyword{ multivariate }
 \keyword{ plot }

@@ -121,6 +121,8 @@ opts_chunk$set(out.width = "0.8\\textwidth", fig.align = "center", fig.width = 7
 
 \section{Status}
 
+THIS VIGNETTE IS VERY OUT OF DATE.  DON'T BOTHER!
+
 \texttt{photoSpec} is a WORK IN PROGRESS and some parts are in pretty crude shape.  This DRAFT manual relates to \Sexpr{vers}.  \texttt{photoSpec} code and installation instructions can be found at \footnote{\href{http://github.com/bryanhanson/photoSpec}{github.com/bryanhanson/photoSpec}}  For bugs and feature requests, please use the issue tracker at github.
 
 \section{What photoSpec Does}
