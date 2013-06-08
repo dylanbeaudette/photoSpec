@@ -44,6 +44,7 @@ Bryan A. Hanson, DePauw University. \email{hanson@depauw.edu}
 }
 
 \examples{
+require("rgl")
 # some data
 good.cal <- c("#FF00FF", "#FF48FF", "#FF69FF", "#FF83FF", "#FF9AFF",
 	"#FFB0FF", "#FFC4FF", "#FFD8FF", "#FFECFF", "#FEFFFF")

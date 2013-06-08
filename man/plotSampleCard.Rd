@@ -8,7 +8,7 @@ This function plots a 'card' containing a series of calibration colors (paint ch
 }
 \usage{
 plotSampleCard(wedge, size = c(6, 4), ruler = c(3.5, 2.5),
-chips = "random", chip.rep = 3, guide = FALSE)
+chips = "random", chip.rep = 3, guide = FALSE, ...)
 }
 \arguments{
   \item{wedge}{
@@ -29,11 +29,14 @@ Integer; the number of replicates of \code{"wedge$calCols"} to use.
   \item{guide}{
 Logical.  If TRUE, annotate the card colors to show which ones are unique, and which are duplicates.  This is useful to determine if the colors you have selected are in fact suitable for use in a calibration curve.
 }
+  \item{...}{
+Arguments to be passed downstream, likely to \code{grid} drawing functions.
+}
 }
 \details{
 Pure black and pure white are appended at the ends of \code{calCols} to serve as references when analyzing.
 }
-\warning{
+\section{Warning}{
 Be sure when printing that scaling is set to 100% or the grid will not be accurate.  Low ink supplies could lead to poor reproduction.
 }
 
@@ -55,5 +58,6 @@ demo$calCols <- cm.colors(10)
 plotSampleCard(wedge = demo, chips = "random", chip.rep = 1)
 plotSampleCard(wedge = demo, chips = "as.given", chip.rep = 1)
 plotSampleCard(wedge = demo, chips = "pale2dark", chip.rep = 1)
-plotSampleCard(wedge = demo, chips = "fill", chip.rep = 1)}
+plotSampleCard(wedge = demo, chips = "fill", chip.rep = 1)
+}
 \keyword{ plot }
