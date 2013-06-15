@@ -8,7 +8,7 @@ This function draws the 1931 CIE chromaticity diagram with various decorations a
 }
 \usage{
 plotCIEchrom(gradient = NULL, colSpace = "sRGB", ff = 1.0,
-	opts = c("D65", "specLocus", "purples"), ...)
+	opts = c("D65", "specLocus", "purples"), title = NULL,  ...)
 
 }
 \arguments{
@@ -23,6 +23,9 @@ Numeric.  The 'fudge factor' to use.  The fudge factor must be used with \strong
 }
   \item{opts}{
 A character vector of options to be employed.  One or more of c("D65", "D50", "C", "E", "specLocus", "purples", "sRGB", "SWOP", "Apple", "NTSC", "Adobe", "CIE").  The first few of these are reference white points.  \code{"specLocus"} and \code{"purples"} cause the spectral locus and line of purples to be labeled.  The last few options cause the requested gamut to be outlined AND FILLED?
+}
+  \item{title}{
+A character string to be plotted at the top of the diagram.  If NULL, the title defaults to "1931 CIE Chromaticity Diagram".  If no title is desired, set it to an empty string.
 }
   \item{\dots}{
 Additional arguments to be passed downstream, to \code{grid} functions.

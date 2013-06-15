@@ -1,2 +1,10 @@
-exportPattern("^[^.]")
-import(grid, splancs, rgl, ChemoSpec, colorspace, patchPlot, plyr, knitr, snow)
+export(computeSampleAbs,
+	genCalCols,
+	getGamutValues,
+	getWhiteValues,
+	plotCIEchrom,
+	plotSampleCard,
+	prepCIEgradient,
+	selectCIExy,
+	showCalColSpace)
+import(munsell, princurve, grid, splancs, rgl, knitr, plyr, aqp)

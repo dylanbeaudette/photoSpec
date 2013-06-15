@@ -8,8 +8,9 @@ prepCIEgradient <- function(vertices = NULL, colSpace = "sRGB", ff = 1.0, ...) {
 	yy <- seq(0.9, -0.1, -0.002) # The descending order here is important, but not intuitive
 	xyz <- expand.grid(xx,yy)
 	names(xyz) <- c("x", "y")
-#	xyz$z <- ff*(1 - xyz$x - xyz$y)
+#	xyz$z <- (1 - xyz$x - xyz$y)*ff # only alter the luminosity
 	xyz$z <- (1 - xyz$x - xyz$y)
+	xyz <- xyz*ff # push the whole color space
 
 	# Find the points inside & outside the requested polygon
 		
@@ -17,10 +18,15 @@ prepCIEgradient <- function(vertices = NULL, colSpace = "sRGB", ff = 1.0, ...) {
 	outsideL <-!insideL # TRUE = outside now
 
 	# Convert the color scheme
-	
-	xyzrgb <- convertColor(xyz, from = "XYZ", to = colSpace)
-	xyzrgb <- xyzrgb*ff
-	xyzrgb[xyzrgb > 1] <- 1.0 # probably not necessary as convertColor clips by default
+	# xyz are chromaticity coordinates.  Convert to XYZ, tristimulus values
+	# X <- xyz$x*xyz$z/xyz$y
+	# Y <- xyz$z
+	# Z <- (1 - xyz$x - xyz$y)*xyz$z/xyz$y
+	# XYZ <- as.data.frame(X, Y, Z)
+	XYZ <- 100*xyz
+	xyzrgb <- convertColor(XYZ, from = "XYZ", to = colSpace)
+	# xyzrgb <- xyzrgb*ff
+	# xyzrgb[xyzrgb > 1] <- 1.0 # probably not necessary as convertColor clips by default
 	xyzrgb[outsideL,] <- 1.0 # Set the color outside the spectral locus to white
 	
 	# The actual drawing of the gradient will be done with a rasterGrob

@@ -7,7 +7,7 @@ Fit a sample color to a color calibration curve
 Using a vector of calibration colors and a single sample color, this function maps the sample color onto a calibration curve created from the calibration colors.  Called by \code{showCalColSpace} and not generally by the user.
 }
 \usage{
-computeSampleAbs(calCols, sampCol, PC1, calVals)
+computeSampleAbs(calCols, sampCol)
 }
 \arguments{
   \item{calCols}{
@@ -16,19 +16,13 @@ A vector of colors as hexadecimal strings to be used as the calibration points. 
   \item{sampCol}{
 A single color as a hexadecimal string to be interpolated by projection onto the calibration curve.
 }
-  \item{PC1}{
-A matrix giving two points on the first principal component (the first eigenvector).
-}
-  \item{calVals}{
-A length 2 numeric vector giving an upper and lower values for the calibration curve.
-}
 
 }
 \details{
-\code{calCols} are converted to 3D space as their rgb values.  Principal components analysis is then used to fit a line of best fit (the first principal component).  Finally, \code{sampCol} is projected onto the 1st PC and converted to an 'absorbance' value by interpolating along \code{calVals}.  NOTE: the current version uses the most extreme calibration colors to compute the 'absorbance' and this will be changing.
+The principal curve through the calibration colors in rgb space is computed (this is analogous to finding a principal component).  The sample color is then projected onto this curve.  It's position along the curve as a percentage of the total length is reported as a value analogous to absorbance.
 }
 \value{
-Information about the goodness of fit and the 'answer' are printed at the console.
+NEEDS TO BE UPDATED
 }
 \references{
 NEED A REFERENCE

@@ -6,25 +6,6 @@ plotSampleCard <- function(wedge, size = c(6, 4), ruler = c(3.5, 2.5),
 	# Bryan Hanson, DePauw University, March 2013 hanson@depauw.edu
 	# Part of the photoSpec package
 
-### Helper Function
-
-	sortFromWhite <- function(Cols) {
-		# Cols should be a vector of hexadecimal colors
-		# Cols will be compared to pure white
-		oCols <- Cols # Save the original
-		Cols <- col2rgb(Cols) # now in rgb
-	    whdist <- apply(Cols, 2, function(z) {sqrt(sum((z - 255)^2))})
-		whdist <- 100*whdist/(1.73*255) # gives answer a percentage of max dist
-		# max distance is from pure white to complete black
-		# return Cols sorted by distance from white (pale to dark)
-		# Needs package plyr
-		df <- data.frame(cols = oCols, dist = whdist)
-		df <- arrange(df, dist)
-		return(as.character(df$cols))
-		}
-
-### End of Helper Function
-
 	if (ruler[1] > size[1]*2.54) stop("Grid width is larger than the width of the card")
 	if (ruler[2] > size[2]*2.54) stop("Grid height is larger than the height of the card")
 	calCols <- wedge$calCols
@@ -66,8 +47,7 @@ plotSampleCard <- function(wedge, size = c(6, 4), ruler = c(3.5, 2.5),
 	pcy <- seq(1L, round(cy -1))
 	xy <- expand.grid(x = pcx, y = pcy) # grid over whole card on 1 cm centers
 	
-	# Now figure out which of xy would overlap the grid
-	# and drop them
+	# Now figure out which of xy would overlap the grid and drop them
 	minx <- floor(0.5*cx - 0.5*ruler[1])-1
 	maxx <- ceiling(0.5*cx + 0.5*ruler[1])+1
 	miny <- floor(0.5*cy - 0.5*ruler[2])-1
@@ -75,6 +55,7 @@ plotSampleCard <- function(wedge, size = c(6, 4), ruler = c(3.5, 2.5),
 	nox <- (xy$x > minx) & (xy$x < maxx)
 	noy <- (xy$y > miny) & (xy$y < maxy)
 	xy <- subset(xy, !(nox & noy))
+
 	# plot(xy, asp = cx/cy) # proof of concept
 	# rect(minx, miny, maxx, maxy, col = "red")
 	

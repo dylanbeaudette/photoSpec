@@ -3,6 +3,15 @@ NEWS file for package photoSpec
 photoSpec: A photographic spectrophotometer
 Bryan A. Hanson DePauw University, Greencastle Indiana USA
 
+##### Version 0.4-0
+Date: 2013-06-14
+>> An entirely different approach to generating calibration colors was implemented.  The new approach is based upon the Munsell system rather than the CIE system.  The fitting to the calibration colors is now uses principal curves.  All aspects are much more straight-forward.
+
+##### Version 0.3-0
+Date: 2013-06-12
+>> The 'band' approach to selecting colors has been abandoned for a 'grid' approach which is faster (no more parallel processing) and completely reproducible (no more sampling).  These changes apply to selectCalCols.  The band approach is relegated to the 0.2 series archive.
+>> Internal functions now properly organized.
+
 ##### Version 0.2-4
 Date: 2013-06-07
 >> Significant improvements to plotSampleCard.

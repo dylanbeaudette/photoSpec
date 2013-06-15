@@ -1,6 +1,6 @@
 
 plotCIEchrom <- function(gradient = NULL, colSpace = "sRGB", ff = 1.0,
-	opts = c("D65", "specLocus", "purples"), ...) {
+	opts = c("D65", "specLocus", "purples"), title = NULL, ...) {
 
 	# Function to draw the CIE chromaticity diagram
 	# with various decorations
@@ -41,8 +41,9 @@ plotCIEchrom <- function(gradient = NULL, colSpace = "sRGB", ff = 1.0,
 
 	# First plot titles & labels in the vp of the entire device
 
+	if (is.null(title)) title <- "1931 CIE Chromaticity Diagram"
 	grid.newpage()
-	grid.text("1931 CIE Chromaticity Diagram", x = 0.5, y = 0.9,
+	grid.text(title, x = 0.5, y = 0.9,
 		gp = gpar(fontface = "bold", cex = 1.2))
 	grid.text(expression(italic(x)), x = 0.5, y = 0.05)
 	grid.text(expression(italic(y)), x = 0.05, y = 0.5, rot = 90)

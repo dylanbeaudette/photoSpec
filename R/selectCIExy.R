@@ -6,104 +6,8 @@ selectCIExy <- function(L1 = NULL, L2 = NULL, colSpace = "sRGB", ff = 1.0, ...) 
 	# Part of the photoSpec package
 	# Major contributions from Matthew Kukurugya
 
-	diagnostics <- TRUE # maybe make this an argument
+	diagnostics <- FALSE # maybe make this an argument
 	
-##### Helper Functions #####
-
-	dAB <- function(A, B) { # distance between pts A & B
-		# A, B each as c(x, y)
-		dAB <- sqrt((B[2]-A[2])^2 + (B[1]-A[1])^2)
-		}
-		
-# gist.github.com/bryanhanson/5471173 has more info on these next ones
-
-	getBoundingBox <- function(P0, P1) {
-	
-	    # P0, P1 each have c(x,y)
-	    # ll = lower left
-	    # ur = upper right
-	
-	    llx <- min(P0[1], P1[1])
-	    lly <- min(P0[2], P1[2])
-	    urx <- max(P0[1], P1[1])
-	    ury <- max(P0[2], P1[2])
-	
-	    bb <- c(llx, lly, urx, ury)
-	    }
-	
-	doBoxesIntersect <- function(box1, box2) {
-	    
-	    ans <- FALSE
-	    chk1 <- box1[1] <= box2[3]
-	    chk2 <- box1[3] >= box2[1]
-	    chk3 <- box1[2] <= box2[4]
-	    chk4 <- box1[4] >= box2[2]
-	    if (chk1 && chk2 && chk3 && chk4) ans <- TRUE
-	    ans
-	    }
-	
-	isPointOnLine <- function(segment, point) {
-		# segment is c(x1, y1, x2, y2)
-		# translate segment to origin
-		newseg <- c(0.0, 0.0, segment[3] - segment[1], segment[4] - segment[2])
-		newpt <- c(point[1] - segment[1], point[2] - segment[2])
-		# calc a modified cross product:
-		# a.x * b.y - b.x * a.y
-		# if zero, point is on segment
-		# basically, you have two vectors sharing 0,0 as one end
-		ans <- newseg[3]*newpt[2] - newpt[1]*newseg[4]
-		return(isTRUE(all.equal(abs(ans), 0)))
-		}
-	
-	isPointRightOfLine <- function(segment, point) {
-		# see notes in isPointOnLine
-		newseg <- c(0.0, 0.0, segment[3] - segment[1], segment[4] - segment[2])
-		newpt <- c(point[1] - segment[1], point[2] - segment[2])
-		ans <- newseg[3]*newpt[2] - newpt[1]*newseg[4]
-		return(ans < 0)
-		}
-	
-	lineSegmentTouchesOrCrossesLine <- function(segment1, segment2) {
-		# segments given as c(x1, y1, x2, y2)
-		ans <- 	(isPointOnLine(segment1, segment2[1:2]) ||
-				isPointOnLine(segment1, segment2[3:4]) ||
-				xor(isPointRightOfLine(segment1, segment2[1:2]),
-				isPointRightOfLine(segment1, segment2[3:4])))
-		return(ans)
-		}
-	
-	doSegmentsIntersect <- function(segment1, segment2) {
-		# segments given as c(x1, y1, x2, y2)
-		box1 <- getBoundingBox(segment1[1:2], segment1[3:4])
-		box2 <- getBoundingBox(segment2[1:2], segment2[3:4])
-		return(doBoxesIntersect(box1, box2) &&
-			lineSegmentTouchesOrCrossesLine(segment1, segment2) &&
-			lineSegmentTouchesOrCrossesLine(segment2, segment1))
-		}
-
-	lineIntersection <- function(x1, y1, x2, y2, x3, y3, x4, y4) {
-		
-		# Finds the intersection of two lines
-		# specified as two line segments
-		# Based on code initially written by M. Kukurugya
-		
-		den <- (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4)
-		if (den == 0) stop("No intersection found")
-		numA <- ((x1 * y2) - (y1 * x2))
-		numB <- ((x3 * y4) - (y3 * x4))
-		num1 <-  numA * (x3 - x4)
-		num2 <- (x1 - x2) * numB
-		num3 <- numA * (y3 -y4)
-		num4 <- (y1 - y2) * numB 
-		Px = (num1 - num2)/den
-		Py = (num3 - num4)/den
-		# cat("Px is", Px, "\n")
-		# cat("Py is", Py, "\n")
-		return(c(Px, Py))
-		}
-
-##### End of Helper Functions #####
-
 	# Check input data
 	if (is.null(L1)) stop("You must give a wavelength for L1")
 	if (is.null(L2)) stop("You must give a wavelength for L2")
@@ -117,15 +21,12 @@ selectCIExy <- function(L1 = NULL, L2 = NULL, colSpace = "sRGB", ff = 1.0, ...) 
 	data(CIExyz)
 	xy <- CIExyz[,c(2,3)] # 4400 rows
 	xy <- rbind(xy, xy[1,]) # repeat row so that polygon can close
-
-	# Find the coordinates of the input wavelengths
-	ans1 <- grep(L1, CIExyz$wavelength)
-	ans1 <-ans1[1] # this is an index/row number
-	ans2 <- grep(L2, CIExyz$wavelength)
-	ans2 <-ans2[1]
-	ans3 <- grep(L3, CIExyz$wavelength)
-	ans3 <-ans3[1]
 	D65 <- getWhiteValues("D65")
+	
+	# Find the coordinates of the input wavelengths
+	ans1 <- findCIEindex(L1)
+	ans2 <- findCIEindex(L2)
+	ans3 <- findCIEindex(L3)
 
 	# Put all the needed data in one place: p1 from L1, p2 from L2, p3 from L3
 	segs <- data.frame(
@@ -134,38 +35,13 @@ selectCIExy <- function(L1 = NULL, L2 = NULL, colSpace = "sRGB", ff = 1.0, ...) 
 	row.names(segs) <- c("p1", "p2", "p3", "D65")
 	in.segs <- segs # save a copy for later
 	
-	# Flip the line segments 180 degrees and extend to ensure intersection
-	# FIX: some of these terms are zero and can be dropped
-	
-	ang <- pi
-	fac <- 2.0 # Ensures that the line segment is long enough to reach
-	# the far side of the shark fin or line of purples
-	segs[1,1] = segs[4,1] + (cos(ang) * (segs[1,1] - segs[4,1]) + sin(ang) * (segs[1,2] - segs[4,2]))*fac
-	segs[1,2] = segs[4,2] + (-sin(ang) * (segs[1,2] - segs[4,2]) + cos(ang) * (segs[1,2] - segs[4,2]))*fac
-	
-	segs[2,1] = segs[4,1] + (cos(ang) * (segs[2,1] - segs[4,1]) + sin(ang) * (segs[2,2] - segs[4,2]))*fac
-	segs[2,2] = segs[4,2] + (-sin(ang) * (segs[2,2] - segs[4,2]) + cos(ang) * (segs[2,2] - segs[4,2]))*fac
-
-	segs[3,1] = segs[4,1] + (cos(ang) * (segs[3,1] - segs[4,1]) + sin(ang) * (segs[3,2] - segs[4,2]))*fac
-	segs[3,2] = segs[4,2] + (-sin(ang) * (segs[3,2] - segs[4,2]) + cos(ang) * (segs[3,2] - segs[4,2]))*fac
-	row.names(segs) <- c("p4", "p5", "p6", "D65")
+	segs[1,] <- rot180aroundD65(segs[1,]) # flip the segments
+	segs[2,] <- rot180aroundD65(segs[2,])
+	segs[3,] <- rot180aroundD65(segs[3,])
 	
 	# Now loop over shark fin and check for intersections	
 
-	keep <- c() # keep will always be length 3
-
-	for (i in 1:3) { # Loop over the 3 line segments
-		its <- nrow(xy)-1
-	
-		# Check to see if the line segments intersect
-			
-		for (n in 1:its) { # loop over shark fin	
-			inter <- doSegmentsIntersect(
-		        segment1 = c(segs[i,1], segs[i,2], segs[4,1], segs[4,2]),
-		        segment2 = c(xy[n,1], xy[n,2], xy[n+1,1], xy[n+1,2]))
-		    if (inter) keep <- c(keep, n)
-			}
- 		} # end of loop that checks each line segment
+	keep <- findPolygonIntersection(XY = segs, xy = xy)
 
 	# Here are the cases to be considered next.
 	# Segments are in wavelength order.
@@ -386,7 +262,7 @@ selectCIExy <- function(L1 = NULL, L2 = NULL, colSpace = "sRGB", ff = 1.0, ...) 
 	wedge$p6 <- as.numeric(p6)
 	wedge$xPt <- as.numeric(xPt)
 	
-	if (diagnostics) {
+	if (diagnostics) { # mark some of the relevent points
 		grid.points(x = p4[1], y = p4[2], default.units = "native",
 			gp = gpar(col = "red"), size = unit(0.5, "char"))
 		grid.points(x = p5[1], y = p5[2], default.units = "native",
