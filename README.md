@@ -1,7 +1,7 @@
 
 *photoSpec is a WORK IN PROGRESS*
 
-### photoSpec: A photographic spectrophotometer [v 0.3 series]
+### photoSpec: A photographic spectrophotometer
 
 At this time, `photoSpec is a WORK IN PROGRESS`.  Do not trust anything in it.  The documentation is quite possibly incorrect and out of sync and we won't perfect it just yet, too much is changing.
 

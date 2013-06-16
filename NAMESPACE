@@ -7,4 +7,4 @@ export(computeSampleAbs,
 	prepCIEgradient,
 	selectCIExy,
 	showCalColSpace)
-import(munsell, princurve, grid, splancs, rgl, knitr, plyr, aqp)
+import(munsell, princurve, grid, splancs, rgl, knitr, plyr, aqp, digest)

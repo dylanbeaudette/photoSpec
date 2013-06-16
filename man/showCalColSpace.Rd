@@ -1,17 +1,17 @@
 \name{showCalColSpace}
 \alias{showCalColSpace}
 \title{
-Use rgl to draw a plot of calibration colors in the rgb space.
+Use rgl to draw a plot of calibration colors in the rgb space.  Optionally show a sample color.
 }
 \description{
-This function takes a vector of colors used for calibration and plots them in the rgb color space using package \code{rgl}.  The position of the sample relative to the calibration colors can be inspected to determine if the sample is sufficiently close to the calibration colors.  In addition, some measures of the fit of the sample color to the calibration colors are printed at the console.
+This function takes a vector of colors used for calibration and plots them in the rgb color space using package \code{rgl}.  If a sample color is provided, the position of the sample relative to the calibration colors can be inspected to determine if the sample is sufficiently close to the calibration colors.  In addition, some measures of the fit of the sample color to the calibration colors are printed at the console.
 }
 \usage{
 showCalColSpace(calCols, sampCol = NULL, sampName = "Demo")
 }
 \arguments{
   \item{calCols}{
-An list with elements rgb and hexcol. ELABORATE
+An list with elements \code{rgb} and \code{hexcol}.
 }
   \item{sampCol}{
 A single color as a hexadecimal string to be plotted for comparison.

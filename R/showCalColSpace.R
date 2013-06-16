@@ -21,5 +21,13 @@ showCalColSpace <- function(calCols, sampCol = NULL, sampName = "Demo") {
 	# Compute and show the principal curve
 	fitpts <- computeSampleAbs(calCols, sampCol)
 	lines3d(fitpts$s[fitpts$tag,], col = "white", lwd = 3)
+	
+	if (!is.null(sampCol)) {
+		# Add the sampCol to the plot if available	
+		rgb <- as.vector(col2rgb(sampCol)/255)
+		points3d(rgb[1], rgb[2], rgb[3], col = sampCol, size = 10)
+		}
+
 	invisible(fitpts)
+
 	}

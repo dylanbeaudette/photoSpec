@@ -2,14 +2,15 @@ Package: photoSpec
 Type: Package
 Title: photoSpec: A photographic spectrophotometer
 Version: 0.4-0
-Date: 2013-06-14
+Date: 2013-06-15
 Author: Bryan A. Hanson DePauw University, Greencastle Indiana USA
 Maintainer: Bryan A. Hanson <hanson@depauw.edu>
 Authors@R:	c(person("Bryan", "Hanson", role = c("aut", "cre"), email = "hanson@depauw.edu"),
-		person("Matthew", "Kukurugya", role = "ctb"))
-Description: photoSpec allows one to use a photograph as a spectrophotometer, much in the manner that one might match the color of an object to a paint color at a hardware store.  Functions are provided to plot the CIE chromaticity diagram, select calibration colors, print a sample card containing calibration colors and a space for a sample to be photographed, and to analyze the results.  The motivating idea is to apply Beer's Law to objects that cannot be chemically analyzed.
+		person("Matthew", "Kukurugya", role = "ctb"),
+		person("Kristina", "Mulry", role = "ctb"))
+Description: photoSpec allows one to apply Beer's Law to a photograph containing color swatches/paint chips.  The motivation is to provide a method for "spectrophotometry" of objects that cannot be chemically analyzed because of their fragility, value or non-extractability.  Functions are provided to understand color concepts, to select calibration colors, to print a sample card containing calibration colors and a space for a sample to be photographed, and to analyze the results.  
 License: GPL-3
 VignetteBuilder: knitr
 LazyData: yes
-Imports: munsell, princurve, grid, splancs, rgl, knitr, plyr, aqp
+Imports: munsell, princurve, grid, splancs, rgl, knitr, plyr, aqp, digest
 ByteCompile: TRUE

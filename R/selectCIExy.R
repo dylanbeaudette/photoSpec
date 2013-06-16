@@ -1,6 +1,6 @@
 
 
-selectCIExy <- function(L1 = NULL, L2 = NULL, colSpace = "sRGB", ff = 1.0, ...) {
+selectCIExy <- function(L1 = NULL, L2 = NULL, colSpace = "sRGB", ex = 1.0, ...) {
 
 	# Bryan Hanson, DePauw University, March 2013 hanson@depauw.edu
 	# Part of the photoSpec package
@@ -233,7 +233,7 @@ selectCIExy <- function(L1 = NULL, L2 = NULL, colSpace = "sRGB", ff = 1.0, ...) 
 
  	# Now that the proper vertices have been selected, do the plot
 	message("I'm painting a beautiful gradient, please give me a moment...")
-	bgr <- plotCIEchrom(gradient = verts, colSpace = colSpace, ff = ff, opts = c())
+	bgr <- plotCIEchrom(gradient = verts, colSpace = colSpace, ex = ex, opts = c())
 	grid.polygon(verts$x, verts$y, default.units = "native")
 	grid.segments(x0 = in.segs[c(1,3),1], y0 = in.segs[c(1,3),2], # these are the dotted lines
 		x1 = in.segs[c(4,4),1], y1 = in.segs[c(4,4),2], # from L1 and L2 to D65
@@ -256,7 +256,7 @@ selectCIExy <- function(L1 = NULL, L2 = NULL, colSpace = "sRGB", ff = 1.0, ...) 
 	wedge$verts <- verts # vertices of wedge
 	wedge$raster <- bgr # colors in wedge
 	wedge$colSpace <- colSpace
-	wedge$ff <- ff
+	wedge$ex <- ex
 	wedge$p4 <- as.numeric(p4) # see above for defs of these pts
 	wedge$p5 <- as.numeric(p5)
 	wedge$p6 <- as.numeric(p6)

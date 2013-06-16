@@ -1,5 +1,5 @@
 
-plotCIEchrom <- function(gradient = NULL, colSpace = "sRGB", ff = 1.0,
+plotCIEchrom <- function(gradient = NULL, colSpace = "sRGB", ex = 1.0,
 	opts = c("D65", "specLocus", "purples"), title = NULL, ...) {
 
 	# Function to draw the CIE chromaticity diagram
@@ -24,12 +24,12 @@ plotCIEchrom <- function(gradient = NULL, colSpace = "sRGB", ff = 1.0,
 		if (!(colSpace == "sRGB") || (colSpace == "Apple RGB")) stop("colSpace must be sRGB or Apple RGB")
 		if (is.character(gradient)) {
 			finras <- as.raster(prepCIEgradient(vertices = Lxyz,
-				colSpace = colSpace, ff = ff, ...))
+				colSpace = colSpace, ex = ex, ...))
 			}
 			
 		if (is.data.frame(gradient)) {
 			finras <- as.raster(prepCIEgradient(vertices = gradient,
-				colSpace = colSpace, ff = ff, ...))
+				colSpace = colSpace, ex = ex, ...))
 			}
 		}
 	
@@ -168,7 +168,7 @@ plotCIEchrom <- function(gradient = NULL, colSpace = "sRGB", ff = 1.0,
 			angle = 15, type = "closed"))
 		}
 
-	msg <- paste("ff =", ff, "    color space =", colSpace, sep = " ")
+	msg <- paste("ex =", ex, "    color space =", colSpace, sep = " ")
 	grid.text(msg, x = 0.98, y = 0.02, gp = gpar(cex = 0.5),
 		just = "right")
 

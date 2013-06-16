@@ -52,7 +52,7 @@ genCalCols <- function(minHue = "2.5R", maxHue = "10R",
 	
 	# Send out for 3D view if requested
 	
-	if (showCal) showCalColSpace(calCols, ...)
+	if (showCal) showCalColSpace(calCols)
 	
 	invisible(calCols)
 	}
