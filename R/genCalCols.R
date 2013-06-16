@@ -22,8 +22,8 @@ genCalCols <- function(minHue = "2.5R", maxHue = "10R",
 		length(m) - length(bad), " were usable", sep = " ")
 	message(msg)
 	mh <- mh[-bad]
-	
-	if (plotPC) plot_hex(mh) # draws paint chips & labels them
+
+	if (plotPC) print(plot_hex(mh)) # draws paint chips & labels them
 	
 	# Convert colors to rgb for plotting in rgl
 	hvC <- strsplit(m[-bad], " ")
