@@ -4,15 +4,15 @@
 Plot a sample card containing calibration colors (paint chips)
 }
 \description{
-This function plots a 'card' containing a series of calibration colors (paint chips) and a simple grid calibrated in cm.  A sample is placed on the grid and photographed.  The photo is saved as a jpeg file, which is then analyzed.
+This function plots a 'card' containing a series of calibration colors (paint chips) and a simple grid calibrated in cm.  A sample is placed on the grid and photographed.  The photo is then analyzed.
 }
 \usage{
 plotSampleCard(calCols, size = c(6, 4), ruler = c(3.5, 2.5),
-chips = "pale2dark", chip.rep = 1, guide = FALSE, ...)
+chips = "pale2dark", chip.rep = 1, guide = FALSE)
 }
 \arguments{
   \item{calCols}{
-An list with elements \code{rgb} and \code{hexcol}.
+An list with elements \code{rgb} and \code{hexcol}.  See \code{\link{genCalCols}} for details.
 }
   \item{size}{
 The \code{c(width, height)} of the printed card in inches.
@@ -24,7 +24,7 @@ The \code{c(width, height)} of the sample scale to be drawn, in cm.
 String.  Determines how the colors will be positioned on the card.  One of \code{c("random", "as.given", "pale2dark", "fill")}.  See the examples.
 }
   \item{chip.rep}{
-Numeric; the number of replicates of \code{calCols} to use.  If \code{chip.rep >= 1} it is taken as an integer and the calibration colors are replicated accordingly (this gives copies of the same color which can be checked for consistency). If \code{chip.rep < 1} \code{chip.rep} must be in \code{c(0.5, 0.33, 0.25, 0.2)} and 1/2, 1/3, 1/4 or 1/5 of the calibration colors will be used.
+Numeric; the number of replicates of \code{calCols} to use.  If \code{chip.rep >= 1} it is taken as an integer and the calibration colors are replicated accordingly (this gives copies of the same color which can be checked for consistency in a possibly unevenly lit photograph). If \code{chip.rep < 1} \code{chip.rep} must be in \code{c(0.5, 0.33, 0.25, 0.2)} and 1/2, 1/3, 1/4 or 1/5 of the calibration colors will be used.
 }
   \item{guide}{
 Logical.  If TRUE, annotate the card colors to show which ones are unique, and which are duplicates.  This is useful to determine if the colors you have selected are in fact suitable for use in a calibration curve.
@@ -34,10 +34,10 @@ Arguments to be passed downstream, likely to \code{grid} drawing functions.
 }
 }
 \details{
-Pure black and pure white are appended at the ends of \code{calCols} to serve as references when analyzing.
+Pure black, 18 percent gray and pure white are appended at the ends of \code{calCols} to serve as references when analyzing.
 }
 \section{Warning}{
-Be sure when printing that scaling is set to 100% or the grid will not be accurate.  Low ink supplies could lead to poor reproduction.
+Be sure when printing that scaling is set to 100% or the scale will not be accurate.  Low ink supplies could lead to poor reproduction.
 }
 
 \value{
@@ -50,6 +50,25 @@ NEED A REFERENCE
 Bryan A. Hanson, DePauw University. \email{hanson@depauw.edu}
 }
 \examples{
-# NEED EXAMPLE
+# Generate some calibration colors:
+#
+green1 <- genCalCols(minHue = "5G", maxHue = "5G",
+	minVal = 1, maxVal = 9, minChroma = 2, maxChroma = 12,
+	plotPC = FALSE, showCal = FALSE)
+#
+# Plot the card:
+#
+card1 <- plotSampleCard(calCols = green1, size = c(6, 4), ruler = c(3.5, 2.5),
+chips = "pale2dark", chip.rep = 3, guide = FALSE)
+#
+# A larger set of red calibration colors, so use every 2nd color:
+#
+red1 <- genCalCols(minHue = "2.5R", maxHue = "10R",
+	minVal = 1, maxVal = 10, minChroma = 2, maxChroma = 12,
+	plotPC = FALSE, showCal = FALSE)
+#
+card2 <- plotSampleCard(calCols = red1, size = c(6, 4), ruler = c(3.5, 2.5),
+chips = "pale2dark", chip.rep = 0.5, guide = FALSE)
+
 }
 \keyword{ plot }

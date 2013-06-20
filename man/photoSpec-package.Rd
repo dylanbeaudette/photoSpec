@@ -12,8 +12,8 @@ photoSpec allows one to use a photograph as a spectrophotometer, much in the man
 \tabular{ll}{
 Package: \tab photoSpec\cr
 Type: \tab Package\cr
-Version: \tab 0.4-0\cr
-Date: \tab 2013-06-15\cr
+Version: \tab 0.4-1\cr
+Date: \tab 2013-06-19\cr
 License: \tab GPL-3\cr
 LazyLoad: \tab yes\cr
 }

@@ -17,7 +17,6 @@ computeSampleAbs <- function(calCols, sampCol = NULL) {
 		rgb <- col2rgb(sampCol)/255
 		tm <- matrix(c(0.0, 0.0, 0.0, rgb, 1.0, 1.0, 1.0), ncol = 3, byrow = TRUE)
 		fit2 <- get.lam(tm, fit$s, tag = fit$tag)
-		print(str(fit2))
 		abs <- round(fit2$lambda[2]/fit2$lambda[3], 2)
 		# fs <- fit$s
 		# fs <- rbind(fit$s, rgb)	

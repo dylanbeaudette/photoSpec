@@ -3,6 +3,11 @@ NEWS file for package photoSpec
 photoSpec: A photographic spectrophotometer
 Bryan A. Hanson DePauw University, Greencastle Indiana USA
 
+##### Version 0.4-1
+Date: 2013-06-19
+>> Added examples to documentation.
+>> plotSampleCard now also shows an 18% gray for more calibration options.
+
 ##### Version 0.4-0
 Date: 2013-06-15
 >> An entirely different approach to generating calibration colors was implemented.  The new approach is based upon the Munsell system rather than the CIE system.  The fitting to the calibration colors is now uses principal curves.  All aspects are much more straight-forward.

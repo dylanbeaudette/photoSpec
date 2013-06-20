@@ -53,11 +53,11 @@ plotSampleCard <- function(calCols, size = c(6, 4), ruler = c(3.5, 2.5),
 	# rect(minx, miny, maxx, maxy, col = "red")
 	
 	# Get the paint chips ready
-	# Add pure black and pure white as references
+	# Add pure black, 18% gray and pure white as references
 	# White will always have a guide square
 	
 	if (chips == "pale2dark") hexcol <- sortFromWhite(hexcol)
-	hexcol <- c("#FFFFFF", hexcol, "#000000")
+	hexcol <- c("#FFFFFF", hexcol, "#C7C7C7", "#000000")
 	
 	if (chip.rep >= 1) { # simply repeat the chips
 		rpc <- as.integer(chip.rep) # repeat the color chips
@@ -102,10 +102,12 @@ plotSampleCard <- function(calCols, size = c(6, 4), ruler = c(3.5, 2.5),
 		labs <- hexcol
 		}
 
-	# Now mark the white & black
+	# Now mark the white, 18% gray and black
 	wht <- which(hexcol == "#FFFFFF")
 	blk <- which(hexcol == "#000000")
+	gry <- which(hexcol == "#C7C7C7")
 	grid.rect(x = xy$x[wht], y = xy$y[wht], width = 0.6, height = 0.6, default.units = "cm")
+	grid.rect(x = xy$x[gry], y = xy$y[gry], width = 0.6, height = 0.6, default.units = "cm")
 	grid.rect(x = xy$x[blk], y = xy$y[blk], width = 0.6, height = 0.6, default.units = "cm")
 
 	if (guide) {
