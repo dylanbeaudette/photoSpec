@@ -14,7 +14,7 @@ genCalCols <- function(minHue = "2.5R", maxHue = "10R",
 	hvc <- expand.grid(hue = hues, value = minVal:maxVal,
 		chroma = seq(minChroma, maxChroma, by = 2)) # defaults give 216 colors
 	m <- paste(hvc$hue, " ", hvc$value, "/", hvc$chroma, sep = "")
-
+	
 	# Convert colors to hexadecimals for plotting
 	mh <- mnsl(m) # out of gamut will be NA
 	bad <- which(is.na(mh))

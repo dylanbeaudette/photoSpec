@@ -32,12 +32,13 @@ Bryan A. Hanson, DePauw University. \email{hanson@depauw.edu}
 
 \examples{
 require("rgl")
+require("munsell")
 #
 # Let's illustrate the general idea with some examples.
 # First, generate some calibration colors:
 #
 blue1 <- genCalCols(minHue = "2.5B", maxHue = "10B",
-	minVal = 1, maxVal = 10, minChroma = 2, maxChroma = 12,
+	minVal = 1, maxVal = 10, minChroma = 2, maxChroma = 22,
 	plotPC = FALSE, showCal = FALSE)
 #
 # And some sample colors for experimentation:
@@ -51,9 +52,18 @@ corn <- "#6495ED" # cornflower; has a little red mixed in
 #
 showCalColSpace(calCols = blue1, sampCol = bad, sampName = "Bad Choice")
 #
-# A closer color.  Note that this good old blue is out of gamut for Munsell. CHECK!
+# A closer color, good old blue.  Note that this good old blue isn't 
+# in the calibration space:
 #
 showCalColSpace(calCols = blue1, sampCol = better, sampName = "Better Choice")
+#
+# Why? Compare good old blue with the nearest Munsell color.  Notice that
+# good old blue is a PB in the Munsell system (purple-blue):
+#
+x11()
+plot_mnsl(rgb2mnsl(R = 0.0, G = 0.0, B = 1.0))
+x11() # open new window
+plot_hex("#0000FF")
 #
 # Now a close color:
 #
@@ -69,6 +79,14 @@ purblu <- genCalCols(minHue = "2.5PB", maxHue = "10PB",
 
 showCalColSpace(calCols = purblu, sampCol = corn, sampName = "Best Choice")
 #
+# Let's go back to that good old blue.  Expand the chroma range, and the
+# calibration colors are much closer, but not close enough.
+#
+purblu <- genCalCols(minHue = "2.5PB", maxHue = "10PB",
+	minVal = 2, maxVal = 9, minChroma = 2, maxChroma = 24,
+	plotPC = FALSE, showCal = FALSE)
+
+showCalColSpace(calCols = purblu, sampCol = "#0000FF", sampName = "Blue isn't Blue")
 
 }
 \keyword{ multivariate }
