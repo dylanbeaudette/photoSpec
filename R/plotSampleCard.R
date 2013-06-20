@@ -1,7 +1,7 @@
 
 
 plotSampleCard <- function(calCols, size = c(6, 4), ruler = c(3.5, 2.5),
-	chips = "pale2dark", chip.rep = 1, guide = FALSE, ...) {
+	chips = "pale2dark", chip.rep = 1, guide = FALSE) {
 
 	# Bryan Hanson, DePauw University, March 2013 hanson@depauw.edu
 	# Part of the photoSpec package
@@ -54,13 +54,13 @@ plotSampleCard <- function(calCols, size = c(6, 4), ruler = c(3.5, 2.5),
 	
 	# Get the paint chips ready
 	# Add pure black, 18% gray and pure white as references
-	# White will always have a guide square
+	# These always have a guide square
 	
 	if (chips == "pale2dark") hexcol <- sortFromWhite(hexcol)
-	hexcol <- c("#FFFFFF", hexcol, "#C7C7C7", "#000000")
 	
 	if (chip.rep >= 1) { # simply repeat the chips
 		rpc <- as.integer(chip.rep) # repeat the color chips
+		hexcol <- c(hexcol, "#FFFFFF", "#C7C7C7", "#000000")
 		hexcol <- rep(hexcol, rpc) # this is now the proper length for use
 		}
 
@@ -71,6 +71,7 @@ plotSampleCard <- function(calCols, size = c(6, 4), ruler = c(3.5, 2.5),
 		if (chip.rep == 0.25) keep <- rep(c(TRUE, FALSE, FALSE, FALSE), length.out = length(hexcol))
 		if (chip.rep == 0.2) keep <- rep(c(TRUE, FALSE, FALSE, FALSE, FALSE), length.out = length(hexcol))
 		hexcol <- hexcol[keep] # this is now the proper length for use
+		hexcol <- c(hexcol, "#FFFFFF", "#C7C7C7", "#000000")
 		}
 
 	ncc <- length(hexcol)

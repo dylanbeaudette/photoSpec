@@ -61,6 +61,8 @@ Bryan A. Hanson, DePauw University. \email{hanson@depauw.edu}
 }
 
 \examples{
+require("munsell")
+require("rgl")
 # Let's play with greens; both 2D and 3D views open
 #
 # The center greens (note that 3D view is a surface):

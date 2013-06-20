@@ -50,6 +50,7 @@ NEED A REFERENCE
 Bryan A. Hanson, DePauw University. \email{hanson@depauw.edu}
 }
 \examples{
+require("grid")
 # Generate some calibration colors:
 #
 green1 <- genCalCols(minHue = "5G", maxHue = "5G",

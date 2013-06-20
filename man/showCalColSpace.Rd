@@ -36,7 +36,7 @@ require("rgl")
 # Let's illustrate the general idea with some examples.
 # First, generate some calibration colors:
 #
-blu <- genCalCols(minHue = "2.5B", maxHue = "10B",
+blue1 <- genCalCols(minHue = "2.5B", maxHue = "10B",
 	minVal = 1, maxVal = 10, minChroma = 2, maxChroma = 12,
 	plotPC = FALSE, showCal = FALSE)
 #
@@ -53,7 +53,7 @@ showCalColSpace(calCols = blue1, sampCol = bad, sampName = "Bad Choice")
 #
 # A closer color.  Note that this good old blue is out of gamut for Munsell. CHECK!
 #
-showCalColSpace(calCols = blue1, sampCol = good, sampName = "Better Choice")
+showCalColSpace(calCols = blue1, sampCol = better, sampName = "Better Choice")
 #
 # Now a close color:
 #
