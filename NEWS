@@ -3,6 +3,12 @@ NEWS file for package photoSpec
 photoSpec: A photographic spectrophotometer
 Bryan A. Hanson DePauw University, Greencastle Indiana USA
 
+##### Version 0.4-2
+Date: 2013-06-22
+>> Vectorized sampCol in showCalColSpace.  sampCol must now be a data frame with cols containing the hexadecimal code, and id which is the sample name.  Argument sampName is now called title.  The function now returns the answers identified by id.
+>> Corresponding changes were made in computeSampleAbs, which was also renamed to computeSampleConc.
+>> Documentation corrections & udpates, naturally.
+
 ##### Version 0.4-1
 Date: 2013-06-19
 >> Added examples to documentation.

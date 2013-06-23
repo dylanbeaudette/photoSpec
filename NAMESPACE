@@ -1,4 +1,4 @@
-export(computeSampleAbs,
+export(computeSampleConc,
 	genCalCols,
 	getGamutValues,
 	getWhiteValues,
@@ -7,4 +7,4 @@ export(computeSampleAbs,
 	prepCIEgradient,
 	selectCIExy,
 	showCalColSpace)
-import(munsell, princurve, grid, splancs, rgl, knitr, plyr, aqp, digest)
+import(munsell, princurve, grid, splancs, rgl, knitr, plyr, aqp, digest, colorspace)

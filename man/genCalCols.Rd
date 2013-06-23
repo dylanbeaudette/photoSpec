@@ -13,22 +13,22 @@ genCalCols(minHue = "2.5R", maxHue = "10R",
 }
 \arguments{
   \item{minHue}{
-Character.
+Character.  The minimum Munsell hue.
 }
   \item{maxHue}{
-Character.
+Character.  The maximum Munsell hue.
 }
   \item{minVal}{
-Integer.
+Integer.  The minimum Munsell value.
 }
   \item{maxVal}{
-Integer.
+Integer.  The maximum Munsell value.
 }
   \item{minChroma}{
-Integer
+Integer.  The minimum Munsell chroma.
 }
   \item{maxChroma}{
-Integer.
+Integer.  The minimum Munsell chroma.
 }
   \item{plotPC}{
 Logical. Shall a plot of the generated colors be drawn as paint chips?
@@ -42,15 +42,15 @@ Other parameters to be passed to downstream functions.
 }
 }
 \value{
-A list of 2:
+A list of 2 (rgb values are in [0...1]):
 
 \tabular{llll}{
 \emph{element} \tab \emph{type} \tab \emph{description} \tab \cr
-$hexcol \tab char \tab A vector giving the chosen colors. \tab \cr
+$hexcol \tab char \tab A vector giving the chosen colors as hexadecimals. \tab \cr
 $rgb \tab data frame \tab Data frame containing the rgb coordinates of the chosen colors. \tab \cr
-\tab $rgb$r  \tab num \tab Values for red channel. \cr
-\tab $rgb$g  \tab num \tab Values for green channel. \cr
-\tab $rgb$b  \tab num \tab Values for blue channel. \cr
+\tab $r  \tab num \tab Values for red channel. \cr
+\tab $g  \tab num \tab Values for green channel. \cr
+\tab $b  \tab num \tab Values for blue channel. \cr
 }
 }
 \references{

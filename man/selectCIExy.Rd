@@ -27,11 +27,8 @@ Arguments to be passed to \code{\link{plotCIEchrom}}, typically one of the \code
 }
 
 }
-\details{
-MAY NEED DETAILS
-}
 \value{
-An object of class \code{\link{CIEwedge}}.
+An object of ~class \code{\link{CIEwedge}}.
 }
 \references{
 NEED A REFERENCE

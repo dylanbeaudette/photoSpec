@@ -4,24 +4,24 @@
 Use rgl to draw a plot of calibration colors in the rgb space.  Optionally show a sample color.
 }
 \description{
-This function takes a vector of colors used for calibration and plots them in the rgb color space using package \code{rgl}.  If a sample color is provided, the position of the sample relative to the calibration colors can be inspected to determine if the sample is sufficiently close to the calibration colors.  In addition, some measures of the fit of the sample color to the calibration colors are printed at the console. ELABORATE
+This function takes a vector of colors used for calibration and plots them in the rgb color space using package \code{rgl}.  If sample colors are provided, the position of the samples relative to the calibration colors can be inspected to determine if the samples are sufficiently close to the calibration colors.  In addition, some measures of the fit of the sample color to the calibration colors are printed at the console and returned in the assigned value.
 }
 \usage{
-showCalColSpace(calCols, sampCol = NULL, sampName = "Demo")
+showCalColSpace(calCols, sampCol = NULL, title = NULL)
 }
 \arguments{
   \item{calCols}{
 An list with elements \code{rgb} and \code{hexcol}.  See \code{\link{genCalCols}} for details.
 }
   \item{sampCol}{
-A single color as a hexadecimal string to be plotted for evaluation.
+A data frame with columns \code{cols} which contains hexadecimal strings, and \code{id} which has the sample names.
 }
-  \item{sampName}{
-A character vector giving the name of the sample.
+  \item{title}{
+A character vector giving a title for the plot.
 }
 }
 \value{
-A plot is drawn using \code{rgl} graphics, and information about the fit is printed at the console.
+A plot is drawn using \code{rgl} graphics, and information about the fit is returned as a data frame.
 }
 \references{
 NEED A REFERENCE
@@ -37,37 +37,28 @@ require("munsell")
 # Let's illustrate the general idea with some examples.
 # First, generate some calibration colors:
 #
-blue1 <- genCalCols(minHue = "2.5B", maxHue = "10B",
+bluehues <- genCalCols(minHue = "2.5B", maxHue = "10B",
 	minVal = 1, maxVal = 10, minChroma = 2, maxChroma = 22,
 	plotPC = FALSE, showCal = FALSE)
 #
 # And some sample colors for experimentation:
 #
-bad <- "#FF0000" # red, obviously not a blue!
-better <- "#0000FF" # good old blue
-best <- "#98F5FF" # cadetblue1, right in range
-corn <- "#6495ED" # cornflower; has a little red mixed in
+sc <- data.frame(cols = c("#FF0000", "#0000FF", "#98F5FF", "#6495ED"),
+	id = c("red", "blue", "cadetblue1", "cornflower"))
 #
-# Pass red as the sample, not a good fit:
+# Obviously red isn't a shade of blue.  But good old blue isn't necessarily in the blue
+# range either.  Along with the other two shades of blue, let's see what happens:
 #
-showCalColSpace(calCols = blue1, sampCol = bad, sampName = "Bad Choice")
+showCalColSpace(calCols = bluehues, sampCol = sc, title = "Good Bad & Ugly")
 #
-# A closer color, good old blue.  Note that this good old blue isn't 
-# in the calibration space:
-#
-showCalColSpace(calCols = blue1, sampCol = better, sampName = "Better Choice")
-#
-# Why? Compare good old blue with the nearest Munsell color.  Notice that
+# What's going on with good old blue?
+# Compare it with the nearest Munsell color.  Notice that
 # good old blue is a PB in the Munsell system (purple-blue):
 #
 x11()
 plot_mnsl(rgb2mnsl(R = 0.0, G = 0.0, B = 1.0))
-x11() # open new window
+x11()
 plot_hex("#0000FF")
-#
-# Now a close color:
-#
-showCalColSpace(calCols = blue1, sampCol = best, sampName = "Best Choice")
 #
 # More typically, you have some samples and need to select calibration colors
 # that match your expected sample colors.  Imagine your color sample was in the
@@ -76,18 +67,11 @@ showCalColSpace(calCols = blue1, sampCol = best, sampName = "Best Choice")
 purblu <- genCalCols(minHue = "2.5PB", maxHue = "10PB",
 	minVal = 2, maxVal = 9, minChroma = 2, maxChroma = 12,
 	plotPC = FALSE, showCal = FALSE)
-
-showCalColSpace(calCols = purblu, sampCol = corn, sampName = "Best Choice")
 #
-# Let's go back to that good old blue.  Expand the chroma range, and the
-# calibration colors are much closer, but not close enough.
+showCalColSpace(calCols = purblu, sampCol = sc[4,], title = "Good Fit")
 #
-purblu <- genCalCols(minHue = "2.5PB", maxHue = "10PB",
-	minVal = 2, maxVal = 9, minChroma = 2, maxChroma = 24,
-	plotPC = FALSE, showCal = FALSE)
-
-showCalColSpace(calCols = purblu, sampCol = "#0000FF", sampName = "Blue isn't Blue")
-
+# Not too bad of a fit! Even though the dist is about the same, the sample is
+# in the thick of the calibration cloud.
 }
 \keyword{ multivariate }
 \keyword{ plot }

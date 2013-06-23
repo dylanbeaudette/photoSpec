@@ -16,33 +16,32 @@ genCalCols <- function(minHue = "2.5R", maxHue = "10R",
 	m <- paste(hvc$hue, " ", hvc$value, "/", hvc$chroma, sep = "")
 	
 	# Convert colors to hexadecimals for plotting
-	mh <- mnsl(m) # out of gamut will be NA
-	bad <- which(is.na(mh))
+	mh <- unique(mnsl(m, fix = TRUE)) # out of gamut will be NA & warning is issued w/o fix = T
 	msg <- paste("Total colors requested:", length(m), "of which",
-		length(m) - length(bad), " were usable", sep = " ")
+		length(mh), "existed & were in gamut", sep = " ")
 	message(msg)
-	mh <- mh[-bad]
 
 	if (plotPC) print(plot_hex(mh)) # draws paint chips & labels them
 	
 	# Convert colors to rgb for plotting in rgl
-	hvC <- strsplit(m[-bad], " ")
-	h <- c()
-	vC <- c()
-	for (n in 1:length(hvC)) {
-		h <- c(h, hvC[[n]][1])
-		vC <- c(vC, hvC[[n]][2])	
-		}
-	vC <- strsplit(vC, "/")
-	v <- c()
-	C <- c()
-	for (n in 1:length(vC)) {
-		v <- c(v, vC[[n]][1])
-		C <- c(C, vC[[n]][2])	
-		}
+	mrgb <- hex2RGB(mh)@coords
+	# hvC <- strsplit(m[-bad], " ")
+	# h <- c()
+	# vC <- c()
+	# for (n in 1:length(hvC)) {
+		# h <- c(h, hvC[[n]][1])
+		# vC <- c(vC, hvC[[n]][2])	
+		# }
+	# vC <- strsplit(vC, "/")
+	# v <- c()
+	# C <- c()
+	# for (n in 1:length(vC)) {
+		# v <- c(v, vC[[n]][1])
+		# C <- c(C, vC[[n]][2])	
+		# }
 
-	mrgb <- munsell2rgb(h, v, C, alpha = 1, 
-		maxColorValue = 1, return_triplets = TRUE)
+	# mrgb <- munsell2rgb(h, v, C, alpha = 1, 
+		# maxColorValue = 1, return_triplets = TRUE)
 
 	# Assemble list for return
 	
