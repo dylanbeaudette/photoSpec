@@ -3,6 +3,11 @@ NEWS file for package photoSpec
 photoSpec: A photographic spectrophotometer
 Bryan A. Hanson DePauw University, Greencastle Indiana USA
 
+##### Version 0.4-3
+Date: 2013-06-24
+>> rgl moved to Depends rather than Imports, as when it is only in the namespace rglFonts can't be found.  This seems to be an example of the indirect issue discussed on SO.  Same with munsell.
+>> genCalCols will convert minVal = 0 to 1 and maxVal = 10 to 9, as munsell can't handle these.  maxChroma defaults now to 26, which is the maximum value that will be in the sRGB color space.  This way all possible chromas are generated regardless of the hue.
+
 ##### Version 0.4-2
 Date: 2013-06-22
 >> Vectorized sampCol in showCalColSpace.  sampCol must now be a data frame with cols containing the hexadecimal code, and id which is the sample name.  Argument sampName is now called title.  The function now returns the answers identified by id.

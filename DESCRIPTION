@@ -1,8 +1,8 @@
 Package: photoSpec
 Type: Package
 Title: photoSpec: A photographic spectrophotometer
-Version: 0.4-2
-Date: 2013-06-22
+Version: 0.4-3
+Date: 2013-06-24
 Author: Bryan A. Hanson DePauw University, Greencastle Indiana USA
 Maintainer: Bryan A. Hanson <hanson@depauw.edu>
 Authors@R:	c(person("Bryan", "Hanson", role = c("aut", "cre"), email = "hanson@depauw.edu"),
@@ -12,5 +12,6 @@ Description: photoSpec allows one to apply Beer's Law to a photograph containing
 License: GPL-3
 VignetteBuilder: knitr
 LazyData: yes
-Imports: munsell, princurve, grid, splancs, rgl, knitr, plyr, aqp, digest, colorspace
+Imports: princurve, grid, splancs, knitr, plyr, aqp, digest, colorspace
+Depends: rgl, munsell
 ByteCompile: TRUE

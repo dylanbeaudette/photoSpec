@@ -8,7 +8,7 @@ This function generates a set of calibration colors.  It is the starting point f
 }
 \usage{
 genCalCols(minHue = "2.5R", maxHue = "10R",
-	minVal = 1, maxVal = 9, minChroma = 2, maxChroma = 12,
+	minVal = 1, maxVal = 9, minChroma = 2, maxChroma = 26,
 	plotPC = FALSE, showCal = TRUE, ...)
 }
 \arguments{
@@ -19,16 +19,16 @@ Character.  The minimum Munsell hue.
 Character.  The maximum Munsell hue.
 }
   \item{minVal}{
-Integer.  The minimum Munsell value.
+Integer.  The minimum Munsell value, should be >= 1.
 }
   \item{maxVal}{
-Integer.  The maximum Munsell value.
+Integer.  The maximum Munsell value, should be <= 9.
 }
   \item{minChroma}{
 Integer.  The minimum Munsell chroma.
 }
   \item{maxChroma}{
-Integer.  The minimum Munsell chroma.
+Integer.  The minimum Munsell chroma.  The default, 26, is the highest chroma of any hue that is in gamut, that is, can be represented in the sRGB colorspace.
 }
   \item{plotPC}{
 Logical. Shall a plot of the generated colors be drawn as paint chips?
@@ -53,6 +53,9 @@ $rgb \tab data frame \tab Data frame containing the rgb coordinates of the chose
 \tab $b  \tab num \tab Values for blue channel. \cr
 }
 }
+\details{
+If you don't use the maximum range for values ([1...9]) the calibration curve may have an exaggerated hump in it.
+}
 \references{
 NEED A REFERENCE
 }
@@ -68,7 +71,6 @@ require("rgl")
 # The center greens (note that 3D view is a surface):
 #
 green1 <- genCalCols(minHue = "5G", maxHue = "5G",
-	minVal = 1, maxVal = 9, minChroma = 2, maxChroma = 12,
 	plotPC = TRUE, showCal = TRUE)
 #
 # A wider range of greens; but note that by narrowing the
@@ -76,28 +78,27 @@ green1 <- genCalCols(minHue = "5G", maxHue = "5G",
 # In this case the 3D view is a solid:
 #
 green2 <- genCalCols(minHue = "2.5G", maxHue = "10G",
-	minVal = 3, maxVal = 7, minChroma = 2, maxChroma = 12,
+	minVal = 3, maxVal = 7,
 	plotPC = TRUE, showCal = TRUE)
 #
 # All possible greens; 2D paint chip view is too busy so
 # turn that off:
 #
 green3 <- genCalCols(minHue = "2.5G", maxHue = "10G",
-	minVal = 1, maxVal = 10, minChroma = 2, maxChroma = 12,
+	minVal = 1, maxVal = 9,
 	plotPC = FALSE, showCal = TRUE)
 #
 # All possible reds.  Note how the shape of all reds is thicker
 # than all possible greens (the Munsell solid is asymmetric).
 #
 red1 <- genCalCols(minHue = "2.5R", maxHue = "10R",
-	minVal = 1, maxVal = 10, minChroma = 2, maxChroma = 12,
+	minVal = 1, maxVal = 9,
 	plotPC = FALSE, showCal = TRUE)
 #
-# All possible blues. Calibration curve has a noticable hump, 
+# All possible blues. Calibration curve has a bit of a hump, 
 # again a consequence of the asymmetric nature of the Munsell solid.
 #
 blue1 <- genCalCols(minHue = "2.5B", maxHue = "10B",
-	minVal = 1, maxVal = 10, minChroma = 2, maxChroma = 12,
 	plotPC = FALSE, showCal = TRUE)
 #
 # Note on all of these how the orientation of the color wedges
