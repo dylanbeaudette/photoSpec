@@ -17,11 +17,13 @@ computeSampleConc <- function(calCols, sampCol = NULL) {
 		sampCol$conc <- NA
 		sampCol$dist <- NA
 		rgb <- t(col2rgb(sampCol$cols)/255)
-
+		
 		for (i in 1:nrow(rgb)) { # fit each sample separately
+			print(rgb[i,])
 			tm <- matrix(c(0.0, 0.0, 0.0, as.vector(rgb[i,]), 1.0, 1.0, 1.0), ncol = 3, byrow = TRUE)
 			fit2 <- get.lam(tm, fit$s, tag = fit$tag)
-			conc <- round(fit2$lambda[2]/fit2$lambda[3], 2)
+			conc <- 1 - fit2$lambda[2]/fit2$lambda[3]
+			conc <- round(conc, 2)
 			sampCol$conc[i] <- conc
 			sampCol$dist[i] <- fit2$dist
 			message("Sample ", sampCol$id[i], " is ", round(fit2$dist, 2), " from the calibration curve")

@@ -3,6 +3,10 @@ NEWS file for package photoSpec
 photoSpec: A photographic spectrophotometer
 Bryan A. Hanson DePauw University, Greencastle Indiana USA
 
+##### Version 0.4-4
+Date: 2013-06-25
+>> Fixed the scale of computeSampleConc which ran the wrong way (light colors, which are low concentrations, are closer to 1,1,1 which is the larger value).
+
 ##### Version 0.4-3
 Date: 2013-06-24
 >> rgl moved to Depends rather than Imports, as when it is only in the namespace rglFonts can't be found.  This seems to be an example of the indirect issue discussed on SO.  Same with munsell.
