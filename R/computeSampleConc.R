@@ -19,18 +19,19 @@ computeSampleConc <- function(calCols, sampCol = NULL) {
 		rgb <- t(col2rgb(sampCol$cols)/255)
 		
 		for (i in 1:nrow(rgb)) { # fit each sample separately
-			print(rgb[i,])
 			tm <- matrix(c(0.0, 0.0, 0.0, as.vector(rgb[i,]), 1.0, 1.0, 1.0), ncol = 3, byrow = TRUE)
 			fit2 <- get.lam(tm, fit$s, tag = fit$tag)
 			conc <- 1 - fit2$lambda[2]/fit2$lambda[3]
 			conc <- round(conc, 2)
 			sampCol$conc[i] <- conc
 			sampCol$dist[i] <- fit2$dist
-			message("Sample ", sampCol$id[i], " is ", round(fit2$dist, 2), " from the calibration curve")
-			message("Sample ", sampCol$id[i], " has absorbance ", conc, "\n")
+			# message("Sample ", sampCol$id[i], " is ", round(fit2$dist, 2), " from the calibration curve")
+			# message("Sample ", sampCol$id[i], " has absorbance ", conc, "\n")
 			}
 		}
 	
-	if (!is.null(sampCol)) return(sampCol)
-	invisible(fit)
+	# assemble everything that might be useful
+	L <- list(pcfit = fit)
+	if (!is.null(sampCol)) L$sampCol <- sampCol
+	invisible(L)
 	}

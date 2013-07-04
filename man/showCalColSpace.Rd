@@ -21,7 +21,7 @@ A character vector giving a title for the plot.
 }
 }
 \value{
-A plot is drawn using \code{rgl} graphics, and information about the fit is returned as a data frame.
+A plot is drawn using \code{rgl} graphics, and information about the fit is returned as a data frame if \code{sampCols != NULL}.
 }
 \references{
 NEED A REFERENCE

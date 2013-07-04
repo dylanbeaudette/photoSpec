@@ -12,15 +12,15 @@ showCalColSpace <- function(calCols, sampCol = NULL, title = NULL) {
 	
 	axes3d(box = TRUE, expand = 0.9, col = "white", lwd = 3)
 	points3d(x = 0.0, y = 0.0, z = 0.0, col = "white",
-		size = 8, smooth = FALSE)
+		size = 5, smooth = FALSE)
 	points3d(x = 1.0, y = 1.0, z = 1.0, col = "white",
-		size = 8, smooth = FALSE)
+		size = 5, smooth = FALSE)
 	title3d(main = title, xlab = "red", ylab = "green", zlab = "blue", col = "white")
-	points3d(calCols$rgb, col = calCols$hexcol, size = 5, point_antialias = TRUE)
+	points3d(calCols$rgb, col = calCols$hexcol, size = 3, point_antialias = TRUE)
 
 	# Compute and show the principal curve
-	fitpts <- computeSampleConc(calCols, sampCol)
-	lines3d(fitpts$s[fitpts$tag,], col = "white", lwd = 3)
+	pts <- computeSampleConc(calCols, sampCol)
+	lines3d(pts$pcfit$s[pts$pcfit$tag,], col = "white", lwd = 3)
 	
 	if (!is.null(sampCol)) {
 		# Add the sampCol to the plot if available	
@@ -28,6 +28,7 @@ showCalColSpace <- function(calCols, sampCol = NULL, title = NULL) {
 		points3d(rgb[,1], rgb[,2], rgb[,3], col = sampCol$cols, size = 10)
 		}
 
-	invisible(fitpts)
+	if (!is.null(sampCol)) return(pts$sampCol)
+	invisible()
 
 	}

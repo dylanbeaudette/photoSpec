@@ -1,7 +1,7 @@
 
 
 plotSampleCard <- function(calCols, size = c(6, 4), ruler = c(3.5, 2.5),
-	chips = "pale2dark", chip.rep = 1, guide = FALSE) {
+	chip.order = "pale2dark", chip.rep = 1, title = "no title", guide = FALSE) {
 
 	# Bryan Hanson, DePauw University, March 2013 hanson@depauw.edu
 	# Part of the photoSpec package
@@ -12,7 +12,7 @@ plotSampleCard <- function(calCols, size = c(6, 4), ruler = c(3.5, 2.5),
 	
 	# Main viewport
 	
-	grid.newpage()
+	grid.newpage() # increase height to accomodate title, csn
 	pushViewport(viewport(width = size[1], height = size[2], default.units = "in"))
 	
 	# Draw the sample region with calibration grill/grid
@@ -56,11 +56,14 @@ plotSampleCard <- function(calCols, size = c(6, 4), ruler = c(3.5, 2.5),
 	# Add pure black, 18% gray and pure white as references
 	# These always have a guide square
 	
-	if (chips == "pale2dark") hexcol <- sortFromWhite(hexcol)
+	if (chip.order == "pale2dark") hexcol <- sortFromWhite(hexcol)
 	
 	if (chip.rep >= 1) { # simply repeat the chips
-		rpc <- as.integer(chip.rep) # repeat the color chips
-		hexcol <- c(hexcol, "#FFFFFF", "#C7C7C7", "#000000")
+		rpc <- as.integer(chip.rep)
+		# insert references every 25 chips then replicate the whole
+		where <- seq(25, length(hexcol), by = 25)
+		refs <- c("#FFFFFF", "#C7C7C7", "#000000")
+		for (i in 0:(length(where)-1)) hexcol <- append(hexcol, refs, after = (where[i+1]+i))
 		hexcol <- rep(hexcol, rpc) # this is now the proper length for use
 		}
 
@@ -71,7 +74,9 @@ plotSampleCard <- function(calCols, size = c(6, 4), ruler = c(3.5, 2.5),
 		if (chip.rep == 0.25) keep <- rep(c(TRUE, FALSE, FALSE, FALSE), length.out = length(hexcol))
 		if (chip.rep == 0.2) keep <- rep(c(TRUE, FALSE, FALSE, FALSE, FALSE), length.out = length(hexcol))
 		hexcol <- hexcol[keep] # this is now the proper length for use
-		hexcol <- c(hexcol, "#FFFFFF", "#C7C7C7", "#000000")
+		where <- seq(25, length(hexcol), by = 25)
+		refs <- c("#FFFFFF", "#C7C7C7", "#000000")
+		for (i in 0:(length(where)-1)) hexcol <- append(hexcol, refs, after = (where[i+1]+i))
 		}
 
 	ncc <- length(hexcol)
@@ -82,7 +87,7 @@ plotSampleCard <- function(calCols, size = c(6, 4), ruler = c(3.5, 2.5),
 	# Each of the following choices needs to create xy and labs properly
 	# for guide = TRUE which is the next step
 	
-	if (chips == "random") { # not sure this is the most sensible option
+	if (chip.order == "random") { # not sure this is the most sensible option
 		wh <- sample(1:nrow(xy), ncc)
 		xy <- xy[wh,] # these will be the positions to be used
 		grid.rect(x = xy$x, y = xy$y, width = 0.5, height = 0.5, default.units = "cm",
@@ -90,14 +95,18 @@ plotSampleCard <- function(calCols, size = c(6, 4), ruler = c(3.5, 2.5),
 		labs <- hexcol
 		}
 
-	if ((chips == "as.given") | (chips == "pale2dark")) {
+	if ((chip.order == "munsell") | (chip.order == "pale2dark")) {
 		xy <- xy[1:ncc,]
 		grid.rect(x = xy$x, y = xy$y, width = 0.5, height = 0.5, default.units = "cm",
 		gp = gpar(fill = hexcol, col = "transparent"))
 		labs <- hexcol
 		}
 
-	if (chips == "fill") { # fills the page, in order given
+	if (chip.order == "fill") { # fills the page, in order provided
+		nr <- floor(nrow(xy)/ncc)
+		rem <- nrow(xy) %% ncc
+		hexcol <- rep(hexcol, nr)
+		hexcol <- c(hexcol, hexcol[1:rem])
 		grid.rect(x = xy$x, y = xy$y, width = 0.5, height = 0.5, default.units = "cm",
 		gp = gpar(fill = hexcol, col = "transparent"))
 		labs <- hexcol
@@ -120,8 +129,9 @@ plotSampleCard <- function(calCols, size = c(6, 4), ruler = c(3.5, 2.5),
 	# Add a serial number for tracking/reproduction
 	sn <- digest(hexcol)
 	desc <- packageDescription("photoSpec")
-	msg <- paste("photoSpec", desc$Version, Sys.Date(), "s/n:", sn, sep = "   ")
+	msg <- paste("photoSpec", desc$Version, Sys.Date(), title, sep = "   ")
 	grid.text(msg, x = 0.02, y = 0.97, just = "left", gp = gpar(cex = 0.75))
+	grid.text(paste("csn:", sn, sep = " "), x = 0.02, y = 0.01, just = "left", gp = gpar(cex = 0.75))
 
 	invisible() # nothing
 	
