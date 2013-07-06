@@ -57,23 +57,21 @@ require("grid")
 # Generate some calibration colors:
 #
 green1 <- genCalCols(minHue = "5G", maxHue = "5G",
-	minVal = 1, maxVal = 9, minChroma = 2, maxChroma = 12,
 	plotPC = FALSE, showCal = FALSE)
 #
 # Plot the card:
 #
 card1 <- plotSampleCard(calCols = green1, size = c(6, 4), ruler = c(3.5, 2.5),
-chips = "pale2dark", chip.rep = 3, guide = FALSE)
+chip.order = "pale2dark", chip.rep = 3, guide = FALSE)
 #
 # A larger set of red calibration colors, so use every 2nd color.
 # Also, show the guides for fun.
 #
 red1 <- genCalCols(minHue = "2.5R", maxHue = "10R",
-	minVal = 1, maxVal = 10, minChroma = 2, maxChroma = 12,
 	plotPC = FALSE, showCal = FALSE)
 #
 card2 <- plotSampleCard(calCols = red1, size = c(6, 4), ruler = c(3.5, 2.5),
-chips = "pale2dark", chip.rep = 0.5, guide = TRUE)
+chip.order = "munsell", chip.rep = 0.5, guide = TRUE)
 
 }
 \keyword{ plot }

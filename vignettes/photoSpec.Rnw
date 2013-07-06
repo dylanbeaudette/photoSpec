@@ -9,12 +9,13 @@
 
 \documentclass{tufte-handout}
 
-\graphicspath{{./graphics/}} % knitr also uses it's own hook, see later
 \usepackage{graphicx}
 \usepackage{hyperref}
 
 \usepackage[version = 3]{mhchem}
 \usepackage{xtab}
+\usepackage{amssymb}
+\usepackage{amsmath}
 
 %%%%% This next section from SO to abbreviate 2nd occurence of a citation
 
@@ -79,17 +80,17 @@
 # R options & configuration:
 rm(list = ls())
 options(width =  50, show.signif.stars = FALSE)
-#if (!file.exists("graphics")) dir.create("graphics")
 
 desc <- packageDescription("photoSpec")
 vers <- paste("package version ", desc$Version, sep = "")
+library("photoSpec")
+library("knitr")
 
 # Stuff specifically for knitr:
-library("knitr")
-Sys.setenv(PATH = paste('/usr/texbin', Sys.getenv('PATH'), sep = ':'))
 
-#bd <- paste(getwd(), "graphics", sep = "/")
-opts_chunk$set(out.width = "0.8\\textwidth", fig.align = "center", fig.width = 7, fig.height = 7, cache = TRUE)
+#Sys.setenv(PATH = paste('/usr/texbin', Sys.getenv('PATH'), sep = ':'))
+
+opts_chunk$set(out.width = "0.9\\textwidth", fig.align = "center", fig.width = 7, fig.height = 7, cache = TRUE)
 
 # Note: defaults are eval = TRUE, echo = TRUE
 @
@@ -121,75 +122,183 @@ opts_chunk$set(out.width = "0.8\\textwidth", fig.align = "center", fig.width = 7
 
 \section{Status}
 
-THIS VIGNETTE IS VERY OUT OF DATE.  DON'T BOTHER!
-
-\texttt{photoSpec} is a WORK IN PROGRESS and some parts are in pretty crude shape.  This DRAFT manual relates to \Sexpr{vers}.  \texttt{photoSpec} code and installation instructions can be found at \footnote{\href{http://github.com/bryanhanson/photoSpec}{github.com/bryanhanson/photoSpec}}  For bugs and feature requests, please use the issue tracker at github.
+\texttt{photoSpec} is a WORK IN PROGRESS.  This DRAFT manual relates to \Sexpr{vers}.  \texttt{photoSpec} code and installation instructions can be found at Github\footnote{\href{http://github.com/bryanhanson/photoSpec}{github.com/bryanhanson/photoSpec}}  For bugs and feature requests, please use the issue tracker at Github.
 
 \section{What photoSpec Does}
 
-\texttt{photoSpec} is intended to be used as a photographic spectrophotometer.  Explain more \ldots
-
-As an alternative to a spectrophotomer, it is hoped that \texttt{photoSpec} will give decent quantitative results.
-
-\texttt{photoSpec} is especially well-suited for studying specimens which cannot be damaged, or conveniently extracted.  For instance, solid objects that don't dissolve (seeds) or leaves of endangered species.
+\texttt{photoSpec} allows one to apply Beer's Law to a photograph containing color swatches (paint chips) and a sample to be analyzed.  The motivation is to provide a method for 'spectrophotometry' of objects that cannot be chemically analyzed because of their value or insolubility.  Functions in the package cover the entire workflow from generating calibration colors to obtaining a quantitative answer analogous to concentration in Beer's Law.\footnote{Mr. Matt Kukurugya proposed the idea of \texttt{photoSpec} to overcome some extraction difficulties encountered in a research project.  I'm not sure I forgive him for leading me down this path.  Matt also wrote the first generation code for several functions.  Ms. Kristina Mulry did most of the field testing of \texttt{photoSpec} and wrote some test functions.  Their contributions were critical to getting \texttt{photoSpec} off the ground.}
 
 \section{Background \& Caveats}
 
-It is imperative to understand that color is produced by a combination of physical processes coupled with perception in the eyes.  Any attempt to quantify or describe color in a rigorous manner is fraught with difficulties.  The most useful approach for understanding this is the CIE system.\footnote{Wikipedia articles on color are generally useful.}  Function \texttt{plotCIEchrom()} is helpful in understanding color concepts.
+In some ways color is quite simple, for instance you might rate certain colors or color combinations more pleasing than others, and choose them for painting a room.  However, on a technical level, all such aesthetic pleasures are out the window: the production and experience of color is quite complex.  Color results from a combination of physical processes coupled with perception by the eyes and brain.  It is important to understand that the human eye can perceive many more colors than electronic devices can reproduce.  Thus, any attempt to generate, quantify or describe color in a rigorous manner is fraught with difficulties.  These concepts are covered in more detail in the sections that follow.
 
-Keep in mind that monitors, cameras and printing are technologies.  They have real limitations.  You won't see the same thing when you print the same image using an inkjet printer, a photo printer or a laser printer.  Monitors can be CRT or LCD.  Various types of papers and pigments are available.  Further, anytime a computer file recording or representing an image is writen, it can be written in various formats, and information may be lost or altered during the write process.  Changing the format or device can alter the image.
+Monitors, cameras and printing are technologies.  They have real limitations.  You won't see the same thing when you print the same image using an inkjet printer, a photo printer or a laser printer.  Monitors can create and display color in several different ways (CRT or LCD, for example).  Various types of papers and pigments are available for printing.  Further, anytime a computer file representing an image is created, it can be written in various formats, and information may be lost or altered during the write process.  Changing the format or device it is printed on can modify the image.  All these things conspire to make the description and reproduction of color on real devices challenging.
 
-Color specifications in software generally use the rgb colorspace and displays use some form of rgb as their native way to express color.  There are several other colorspaces available, which have pros and cons, but eventually the output has to be in rgb to be displayed via computer.
+\section{Describing Color}
 
-The appearance of a color depends upon the illuminating light or mechanism (reflected light, backlit display), the printing media (think gloss or matte photos), as well as the 'true' color of the object.  The steps by which an object attains its color in a computer image or print is, at least in part:
+The appearance of a color depends upon the illumination or mechanism (e.g sunlight, fluorescent light, a backlit display), the surface (e.g. a smooth wall, a ridged flower petal, gloss vs. matte photos), as well as the 'true' color of the object.  Those, very briefly, are the physical parameters.  But color also depends upon perception via the eyes and brain.  And there is a cultural aspect to color as well.  Zollinger provides a good overall background to color concepts, including cultural aspects.\cite{Zollinger1999}
+
+Humans have attempted to describe color in a quantitative way for hundreds of years.  The outcome of these efforts are color spaces.  Color spaces fall into two main categories: color spaces describing human perception, and color spaces for use by devices such as computers and printers.\footnote{A glossary defining selected terms is at the end of this document.  For further information, Wikipedia articles on color are generally pretty helpful.}
+
+\subsection{Human Color Spaces}
+
+Color spaces which describe human perception attempt to quantify all the colors a human being (non-color blind!) can perceive.  These are the colors that might be found in nature, or created by a painter working with oil or water-based pigments.  There are a very large number of these colors, far more than any device can reproduce.   The two main systems for describing human color perception are the Munsell system and the CIE system.
+
+\emph{The CIE System}  The CIE system presents humanly-observable colors in a chromaticity diagram in which the $x$ and $y$ coordinates describe the color, and embody the hue (wavelength) and intensity (saturation).  The brightness of the color is an implicit 3rd dimension, which is constant in the chromaticity diagram.  Figure~\ref{fig:CIE_1} shows the diagram.  D65 is a standard white point, representing daylight.\footnote{Though it is called a white point, it really means equal amounts of the three primary color, but the total brightness may range from white to grey to black.  A closer term would be the point of equal energy.}  If you draw a line from D65 to a particular wavelength on the spectral locus, colors along that line are all of the same hue (wavelength) but increasingly saturated as you approach the spectral locus.
+
+<< CIE_1, echo = FALSE, eval = TRUE, crop = TRUE, fig.cap = "The 1931 CIE chromaticity diagram" >>=
+plotCIEchrom(gradient = "sl", title = "")
+@
+
+This color system is particularly well-suited to spectrophotometry, because the outer edge, the 'shark fin', 'tongue' or 'horseshoe' is the spectral locus, which is the visible spectrum as seen in a prism.  This represents the most saturated colors possible, and it is calibrated in wavelength.  The 'line of purples' which connects the ends of the spectral locus across the bottom represents the purple hues, which do not exist in the visible spectrum of white light, and hence do not have wavelengths.  
+
+Figure~\ref{fig:CIE_1} is actually a bit of a cheat.  More than half the colors shown are not shown correctly because they are out of gamut.  Figure~\ref{fig:CIE_2} shows the chromaticity diagram restricted to the colors within the sRGB gamut of most display devices.  The odd-shaped polygon outlines the gamut of a typical CMYK printing device.  Printers provide a slightly different range of colors than most displays.\footnote{These diagrams were created using \texttt{plotCIEchrom()}.}
+
+<< CIE_2, echo = FALSE, eval = TRUE, crop = TRUE, fig.cap = "Chromaticity diagram showing the sRGB and CMYK gamuts." >>=
+plotCIEchrom(gradient = getGamutValues("sRGB"), opts = c("SWOP", "sRGB"), title = "")
+@
+
+Figure~\ref{fig:CIE_3} shows how one can specify two wavelengths in the visible spectrum, and then obtain the CIE $x$ and $y$ values for the complementary wavelengths.  These are the colors the obejct would actually appear.  For instance, if the object or solution had a $\lambda_{max}$ of about 490 nm, then the object or solution would appear red.
+
+<< CIE_3, echo = FALSE, eval = TRUE, crop = TRUE, fig.cap = "Chromaticity diagram showing colors complementary to 470 nm." >>=
+selectCIExy(L1 = 489, L2 = 491)
+@
+\emph{The Munsell System}  The Munsell system is also based upon a rigorous study of human color perception.  The Munsell color space is characterized by three parameters: hue, which describes the wavelength of the color, chroma, which describes the intensity or saturation of the color, and value, which describes the brightness of the color.  A typical color description in this system would be '5R 6/10' where 5R designates the mid-red hues.  The 6 is the value, that is, the brightness, on a 0...10 scale where 0 is black and 10 is white.  The 10 is the chroma, the intensity of the red color.  These features will be demonstrated momemtarily.
+
+The Munsell color space is asymmetric because the perception of color is not even across hues or wavelengths.  Like the CIE system, the Munsell system covers more colors than can be represented by real devices.  Hence, the figures included here do not show all the colors, as some are out of gamut.
+
+FIgure~\ref{fig:Munsell_1} shows a horizontal slice through the Munsell solid at value = 5, the middle of the brightness scale.  In this plot, the radius is the chroma, and the angle around the 'circle' is the hue.  The asymmetry of the Munsell system is immediately apparent.  Keep in mind however that many of the Munsell colors are out of gamut, so this diagram does not show all the colors at this value.  The whole set of colors is still asymmetric, but arguably differently asymmetric.
+
+Figure~\ref{fig:Munsell_3} illustrates this asymmetry even better.  It is the same horizontal slice as before, but now at values 1 to 9.  Values 0 and 10 are valid options, but they each consist of a single entry, pure black or pure white, so there is no point in plotting them.  Finally, Figure~\ref{fig:Munsell_2} shows a horizontal slice through the Munsell solid.  On the right side are the red hues, and on the left are the complementary blue-green hues.  The intrinsic asymmetry is also apparent here.
+
+<< Munsell_1, echo = FALSE, eval = TRUE, crop = TRUE, fig.cap = "All in gamut Munsell colors with value = 5" >>=
+library("munsell")
+print(value_slice(5))
+@
+
+<< Munsell_2, echo = FALSE, eval = TRUE, crop = TRUE, fig.cap = "A horizontal slice of the Munsell solid", warning = FALSE >>=
+print(complement_slice("5R"))
+@
+
+<< Munsell_3, echo = FALSE, eval = TRUE, crop = TRUE, fig.cap = "All in gamut Munsell colors with values 1 to 9" >>=
+print(value_slice(1:9))
+@
+
+The Munsell system was originally developed around 1905 and was adopted by the USDA for use by soil scientists in the 1930's.  It is well-suited to thinking about colors and matching colors because it is presented as a series of paint chips which most people have experience using.  \texttt{photoSpec} uses the Munsell system under the hood as it is computationally much more straightforward compared to the CIE system, especially with respect to brightness (values in the Munsell system).  One way of comparing the two systems is to view the CIE chromaticity diagram as equivalent to Figure~\ref{fig:Munsell_1}, as the CIE chromaticity diagram assumes a constant brightness.
+
+\subsection{Device Color Spaces}
+
+Color spaces for use by devices are more numerous.  As new technology becomes available, capability and standards evolve, and manufacturers are always seeking to extend the gamut.  Commonly encountered color spaces for devices are RGB, HSV, HSL and CMYK.  Color specifications in software are usually some form of sRGB which has become the standard of choice for many uses. It is also what most displays use, but printers typically use other color spaces.  All color spaces have pros and cons, and it is possible, within limits, to easily convert between them.
+
+\emph{Munsell colors in the RGB color space}
+
+\section{Capturing An Image}
+
+Keeping in mind the concepts above, a more elaborate description of how an object attains its color in a computer image or print is, at least in part:
 
 \begin{itemize}
-	\item Incident light with particular wavelengths reflect off an object, or light passes through the object.
-	\item The light is captured by a device (in a camera) which has limitations.
-	\item This data is stored in the camera, possibly with some processing, in a chosen format.
-	\item The data may be manipulated purposefully by a program.
+	\item Incident light with particular wavelengths reflects off an object, or light passes through the object, or the object emits light.
+	\item The object absorbs some wavelengths, and reflects others.  Complicating things, the pigments in some objects can absorb at one wavelength and emit light at different wavelength (this is flourescence).
+	\item The light is captured by a device (a CCD detector or film in a camera) which has limitations.  From this point on, the color has been captured by technology much less capable than the human eye, and thus something has been lost.
+	\item This data is stored in the camera, probably with some processing, in a format selected via the camera software.
+	\item The data may be manipulated purposefully by a program such as GIMP, iPhoto or Photoshop.
 	\item The data may be displayed on a monitor, which has a particular gamut and color management system, or
-	\item The data may be printed on some kind of media (plain paper, photo paper) by a printer (inkjet, dye sublimation, laser printer etc).  The device has a driver which likely uses some kind of color management.
-	\item The process repeats: you observe the image of the object under some illumination\ldots
+	\item The data may be printed on some kind of media (plain paper, photo paper) by a printer (inkjet, dye sublimation, laser printer etc).  The device has a driver which uses some kind of color management.
+	\item The process repeats: you then observe the image of the object under some illumination, and your eyes function as the detector.
 \end{itemize}
 
-\texttt{photoSpec} analyses should be run using scripts which call the various functions.  This enables reproducible research which is fully documented.
+The key 'take away' here is that many very technical things happen to the color of the object along the way.  When working with \texttt{photoSpec}, as many of these things as possible will need to be controlled by doing them in a defined, reproducible manner.  You don't necessarily need to understand or know what's going on in the background, you just control the conditions.
 
-\section{Work Flow for photoSpec [v 0.1]}
+\section{Measuring Color: Beer's Law}
 
-These are the steps to use \texttt{photoSpec} as a photographic spectrophotometer.
+Beer's Law is used in spectrophotometry to quantify the color of solutions:
+
+%\begin{equation}
+%A = \epsilon b C = log_{10}T = -log_{10}\frac{I}{I_0}
+%\end{equation}
+
+\begin{equation}
+A = \epsilon b C
+\end{equation}
+
+Where $A$ is the absorbance of the solution, $\epsilon$ is the molar absorbtivity or extinction coefficient, $b$ is the path length through the solution (typically a 1 cm cuvette) and $C$ is the concentration of the absorbing species. When working with Beer's Law, one typically creates a calibration curve using solutions of known concentration.  Then when you measure the absorbance of your samples, you can use the calibration curve to convert absorbance to concentration. Figure~\ref{fig:CalCurve} shows a typical calibration curve.
+
+<< CalCurve, echo = FALSE, eval = TRUE, fig.cap = "A typical calibration curve.", crop = TRUE >>=
+library("HandyStuff")
+
+conc = seq(1, 12, length.out = 8)
+abs = jitter(conc, factor = 2)*0.1
+cc <- data.frame(conc, abs)
+lmEqnL(formula = abs ~ conc, data = cc, leg.loc = c(3, 0.1),
+	xlab = "concentration", ylab = "absorbance")
+
+@
+
+In the case of \texttt{photoSpec}, $A$ corresponds to the hexadecimal code of the colors (either the calibration colors or the sample colors).  $\epsilon$ and $b$ are captured in the 'slope' of the calibration curve.  $C$ is the projection of the color, now expressed in rgb space, onto the calibration curve (details elsewhere).  Thus, a series of calibration colors can be used to find the calibration curve, and then a new color, the sample color, can be projected onto the calibration curve and a quantitative reading obtained, exactly as one does with Beer's Law.  \texttt{photoSpec} expresses its answers on a scale of 0...1, where 0 represents black, with an absorbance of 0, and 1 represents white, the most intense color that can be represented in any device color space.\footnote{In the Munsell system, all hues taper to pure black or pure white as their value changes, so both green and red hues end in pure black and white (which are the extreme corners of the rgb colorspace at 0,0,0 and 1,1,1).}
+
+\section{Work Flow for photoSpec}
+
+\texttt{photoSpec} analyses should always be run using scripts which call the various functions.  This enables fully documented and reproducible research.  Further, the steps that occur outside \texttt{photoSpec} should be standardized and recorded as well.  For instance, the printer, driver settings and type of paper you use to print the sample card should be recorded and used consistently.  The broad steps to use \texttt{photoSpec} are described below.  An detailed example follows in a later section.
 
 \begin{enumerate}
 
-\item Using data from traditional spectrophotometry or the literature, determine the wavelength range of interest. This will correspond to the maximum of the absorbance versus wavelength plot, commonly called $\lambda_{max}$.  Since these peaks generally have a fairly broad plateau, you will want to specify a range of at least 5 nm.  As you increase this range, you are specifying more colors for your calibration curve, and these colors will be less pure.  For example, if you are studying the betacyanin pigments, these generally have a $\lambda_{max}$ near 540 nm.  If you specify a narrow range, say 538-542 nm, you will get a range of fairly pure colors complementary to this wavelength.  If your sample is close to this color this may be satisfactory.  But if you are not sure, you might want to do a preliminary run using a wider range, say 530-550 nm, and see how this performs.  Later, you can optimize your wavelength selection.
+\item Choose the colors you will need for calibration using one of these two methods.  The first method follows naturally from spectroscopic measurements as typically used by chemists and biologists.  The second method is more tangible and straightforward.
 
-\item Use \texttt{selectCIExy()} to determine the CIE xy values which cover the wavelengths complementary to the wavelengths of interest.  This function will call  \texttt{showCIEselection(vertices)} so you can verify your selection visually.
+	\begin{enumerate}
+		\item Using data from traditional spectrophotometry or the literature, determine the wavelength range of interest. This will correspond to the maximum of the absorbance versus wavelength plot, commonly called $\lambda_{max}$.  Since these peaks generally have a fairly broad plateau, and you will be photographing real objects that presumably have some natural variation in color, you will want to specify a range of at least 10 nm.  As you increase the range, you are specifying more colors for your calibration curve, and these colors will be less pure, but that is probably an advantage.  Use \texttt{selectCIExy()} to show the CIE xy values (and colors) which cover the wavelengths complementary to the wavelengths of interest.  These colors will be the colors of the objects.  You can then use this information to select appropriate Munsell hues.
+		\item Use the functions in package \texttt{munsell} to select the hue range which corresponds to your samples.  Don't worry about value and chroma, these default to the full range for the best calibration curve.
+	\end{enumerate}
+
+\item Use \texttt{genCalCols()} to generate a set of calibration colors.  Refine as needed to correspond to the range of sample colors you anticipate.  You can view your calibration colors as paint chips or in 3D.  You may have to iterate over several of these steps to make sure you have the right colors before taking data that matters.
 
 \item Use \texttt{plotSampleCard()} to produce a sample card.  This sample card contains calibration paint chips and a place for the sample.  Print this on the media of your choice (plain paper, photo paper, etc - keep in mind the comments above under Background \& Caveats).
 
-	\begin{enumerate}
-		\item How do you calibrate the sample card?  Adjust ff so that the palest color is white or invisible?
-		\item At least pdf has a color model argument.
-	\end{enumerate}
+\item A sample is placed on the sample card and photographed. Define and control the lighting context for the best result.  Define and record the camera settings.  Some experimentation with both lighting and camera settings is to be expected.  Export the photograph in jpg/jpeg format.
 
-\item A sample is placed on the sample card and photographed. The photograph is transferred to the computer as a jpeg image (other formats may be possible).
+\item Open the jpeg in GIMP and adjust its color so that it is more 'true'.  In spite of your best efforts, the photograph is influenced by lighting conditions and on-camera processing, so the calibration colors are not 'right'.  In this step you try to make them as correct as possible.  See the detailed example below.
 
-\item The jpeg is opened in Inkscape or a similar program.  The hexadecimal code of each paint chip is written down, as is the hexadecimal code for the sample.  Note that the paint chips were put down on real media, photographed by a real CCD, and possibly manipulated by the camera software, and brought into your program before you can record the hexadecimal code. Thus the codes you record at this point are probably not the codes that were originally intended (and can be seen on the card by setting \texttt{guide = TRUE}. Note: this step will be automated in a future version.
+\item Record the hexadecimal code for each sample on the card.
 
-\item Use \texttt{showCalColSpace()} to check the quality and utility of your calibration curve, and get your quantitative information.  This function plots the paint chip values and the sample value in interactive, 3D space.  Determine if the sample value is sufficiently close to the paint chip values.  If not, go back to \texttt{selectCIExy()} and adjust the wavelength range and reprint the card, take a new photograph and repeat the calibration check.  This function calls texttt{computeSampleAbs()} to find the paint chip value closest to the sample value and carries out an interpolation.  This is your final answer and conceptually represents the absorbance of your sample at the given wavelength range.
+\item Use \texttt{showCalColSpace()} to check the quality and utility of your calibration curve, and to get your quantitative information about the sample(s).  This function plots the paint chip values and the sample value in interactive, 3D space.  Determine if the sample value is sufficiently close to the paint chip values.  If not, go back to \texttt{selectCIExy()} or the Munsell chart and adjust the wavelength range and reprint the card, take a new photograph and repeat the calibration check.  This function calls \texttt{computeSampleAbs()} to create a calibration curve.  This is your final answer and conceptually represents the absorbance of your sample at the given wavelength range.
 
 \end{enumerate}
+
+\section{A Detailed Example}
+
+Show both color selection methods.
+
+ For example, if you are studying the betacyanin pigments, these generally have a $\lambda_{max}$ near 540 nm.  If you specify a narrow range, say 538-542 nm, you will get a range of fairly pure colors complementary to this wavelength.  If your sample is close to this color this may be satisfactory.  But if you are not sure, you might want to do a preliminary run using a wider range, say 530-550 nm, and see how this performs.  Later, you can optimize your wavelength selection.  Use \texttt{selectCIExy()} to determine the CIE xy values which cover the wavelengths complementary to the wavelengths of interest.  This function will call  \texttt{showCIEselection(vertices)} so you can verify your selection visually.
+
+\section{Proof of Concept}
+
+Perhaps this should be in a separate vignette.
 
 \section{Glossary}
 
 \begin{description}
+	\item [CCD] definition
+	\item [CIE] definition
+	\item [CMYK] definition
+	\item [color management] definition
+	\item [color space] definition
+	\item [device driver] definition
+	\item [gamut] definition
+	\item [HSL] definition
+	\item [HSV] definition
+	\item [Munsell] definition
+	\item [RGB] definition
+	\item [sRGB] definition
+
+
+	\item [term] definition
+	\item [term] definition
+	\item [term] definition
 	\item [term] definition
 \end{description}
 
 %\begin{flushleft}
-%\bibliographystyle{ieeetr} % Cause refs to be numbered and collected in order used
-%\addcontentsline{toc}{section}{References}
-%\bibliography{image_refs}
+\bibliographystyle{plainnat}
+\bibliography{color}
 %\end{flushleft}
 
 \end{document}

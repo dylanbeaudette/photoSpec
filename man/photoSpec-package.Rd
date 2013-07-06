@@ -6,14 +6,14 @@
 photoSpec: A photographic spectrophotometer
 }
 \description{
-photoSpec allows one to apply Beer's Law to a photograph containing color swatches (paint chips).  The motivation is to provide a method for 'spectrophotometry' of objects that cannot be chemically analyzed because of their value or non-extractability.  Functions in the package cover the entire workflow from generating calibration colors to obtaining a quantitative answer analogous to concentration in Beer's Law.
+photoSpec allows one to apply Beer's Law to a photograph containing color swatches (paint chips) and a sample to be analyzed.  The motivation is to provide a method for 'spectrophotometry' of objects that cannot be chemically analyzed because of their value or non-extractability.  Functions in the package cover the entire workflow from generating calibration colors to obtaining a quantitative answer analogous to concentration in Beer's Law.
 }
 \details{
 \tabular{ll}{
 Package: \tab photoSpec\cr
 Type: \tab Package\cr
-Version: \tab 0.4-5\cr
-Date: \tab 2013-07-03\cr
+Version: \tab 0.4-6\cr
+Date: \tab 2013-07-05\cr
 License: \tab GPL-3\cr
 LazyLoad: \tab yes\cr
 }

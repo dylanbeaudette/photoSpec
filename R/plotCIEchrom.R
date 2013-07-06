@@ -22,7 +22,7 @@ plotCIEchrom <- function(gradient = NULL, colSpace = "sRGB", ex = 1.0,
 	
 	if (!is.null(gradient)) {
 		if (!(colSpace == "sRGB") || (colSpace == "Apple RGB")) stop("colSpace must be sRGB or Apple RGB")
-		if (is.character(gradient)) {
+		if (is.character(gradient)) { # captures, crudely, gradient = "sl"
 			finras <- as.raster(prepCIEgradient(vertices = Lxyz,
 				colSpace = colSpace, ex = ex, ...))
 			}
@@ -48,7 +48,7 @@ plotCIEchrom <- function(gradient = NULL, colSpace = "sRGB", ex = 1.0,
 	grid.text(expression(italic(x)), x = 0.5, y = 0.05)
 	grid.text(expression(italic(y)), x = 0.05, y = 0.5, rot = 90)
 
-	# Now the data in it's own viewport; raster goes underneath
+	# Now the data in it's own viewport; raster goes underneath (first)
 
 	pushViewport(viewport(width = 0.7, height = 0.7,
 		xscale = c(-0.1, 0.9), yscale = c(-0.1, 0.9)))
@@ -68,13 +68,13 @@ plotCIEchrom <- function(gradient = NULL, colSpace = "sRGB", ex = 1.0,
 
 	# Labels for the spectral locus
 	
-	sl <- c(100, 850, 1100, 1350, 1600, 1850, 2100, 2350, 2600)
+	specl <- c(100, 850, 1100, 1350, 1600, 1850, 2100, 2350, 2600)
 	labs <- c("400 nm  ", "475 nm  ", "500 nm  ", "  525 nm", "  550 nm",
 		"  575 nm", "  600 nm", "  625 nm", "  650 nm")
 	
-	grid.points(x = Lxyz$x[sl], y = Lxyz$y[sl], gp = gpar(col = "black"),
+	grid.points(x = Lxyz$x[specl], y = Lxyz$y[specl], gp = gpar(col = "black"),
 		size = unit(0.5, "char"), default.units = "npc")
-	grid.text(label = labs, Lxyz$x[sl], Lxyz$y[sl],
+	grid.text(label = labs, Lxyz$x[specl], Lxyz$y[specl],
 		hjust = c(1, 1, 1, 0, 0, 0, 0, 0, 0),
 		vjust = c(1, 0, 0, 0, 0, 0, 0, 0, 1),
 		gp = gpar(cex = 0.75))
@@ -151,6 +151,19 @@ plotCIEchrom <- function(gradient = NULL, colSpace = "sRGB", ex = 1.0,
 
 	# Misc decorations
 	
+	if ("Munsell" %in% opts) {
+		mun <- c(800, 980, 1110, 1220, 1650, 1900, 2100, 2600)
+		labs <- c("PB  ", "B  ", "BG  ", "G", "  GY",
+			"  Y", "YR", "R")
+		
+		# grid.points(x = Lxyz$x[sl], y = Lxyz$y[sl], gp = gpar(col = "black"),
+			# size = unit(0.5, "char"), default.units = "npc")
+		grid.text(label = labs, Lxyz$x[mun], Lxyz$y[mun],
+			hjust = c(1, 1, 1, 1, 0, 0, 0.5, 0),
+			vjust = c(1, 1, 0, -1, 0, 0, -1.5, 2),
+			gp = gpar(cex = 0.75))
+		}
+
 	if ("specLocus" %in% opts) {
 		grid.text(0.75, 0.55, label = "spectral\nlocus", just = "left",
 			gp = gpar(cex = 0.75), default.units = "native")

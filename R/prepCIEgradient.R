@@ -15,9 +15,10 @@ prepCIEgradient <- function(vertices = NULL, colSpace = "sRGB", ex = 1.0, ...) {
 		
 	insideL <- inout(xyz, vertices, bound = FALSE) # TRUE = inside
 	outsideL <-!insideL # TRUE = outside now
-
-	XYZ <- 100*xyz
-	xyzrgb <- convertColor(XYZ, from = "XYZ", to = colSpace)
+	
+#	XYZ <- 100*xyz
+#	xyzrgb <- convertColor(XYZ, from = "XYZ", to = colSpace)
+	xyzrgb <- convertColor(xyz, from = "XYZ", to = colSpace)
 	xyzrgb[outsideL,] <- 1.0 # Set the color outside the spectral locus to white
 	
 	# The actual drawing of the gradient will be done with a rasterGrob

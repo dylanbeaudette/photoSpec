@@ -3,6 +3,17 @@ NEWS file for package photoSpec
 photoSpec: A photographic spectrophotometer
 Bryan A. Hanson DePauw University, Greencastle Indiana USA
 
+##### Version 0.4-7
+Date: 2013-07-
+>> Continued updates to the vignette.
+>> Previous problem with prepCIEgradient is definitely fixed.  'Twas a tough nut to crack!
+
+##### Version 0.4-6
+Date: 2013-07-05
+>> Major update to the vignette.
+>> Add option "Munsell" to plotCIEchrom which will label the spectral locus with the Munsell hues at approximately the correct wavelength.
+>> Fixed (?) a problem with prepCIEgradient introduced in 0.3-0.
+
 ##### Version 0.4-5
 Date: 2013-07-03
 >> Updated package munsell 0.4.2 after Charlotte made some improvements (that probably don't affect this package).

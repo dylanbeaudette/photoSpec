@@ -22,7 +22,7 @@ Character string giving the color space to use for drawing the gradient.  One of
 Numeric.  The 'exposure' to use.  The exposure must be used with \strong{extreme care}.  Larger values of \code{exposure} make the white point whiter in the plot, and lightens colors near the spectral locus.  The purpose is to alter the aesthetics of the plot - that is, to make the white "whiter" for the visual effect (perhaps in teaching CIE concepts).  It must be used with care and competence!
 }
   \item{opts}{
-A character vector of options to be employed.  One or more of c("D65", "D50", "C", "E", "specLocus", "purples", "sRGB", "SWOP", "Apple", "NTSC", "Adobe", "CIE").  The first few of these are reference white points.  \code{"specLocus"} and \code{"purples"} cause the spectral locus and line of purples to be labeled.  The last few options cause the requested gamut to be outlined AND FILLED?
+A character vector of options to be employed.  One or more of c("D65", "D50", "C", "E", "specLocus", "purples", "Munsell", "sRGB", "SWOP", "Apple", "NTSC", "Adobe", "CIE").  The first few of these are reference white points.  \code{"specLocus"} and \code{"purples"} cause the spectral locus and line of purples to be labeled.  \code{"Munsell"} causes the approximate Munsell hues to be marked along the spectral locus at the appropriate wavelength.  The last few options cause the requested gamut to be outlined.
 }
   \item{title}{
 A character string to be plotted at the top of the diagram.  If NULL, the title defaults to "1931 CIE Chromaticity Diagram".  If no title is desired, set it to an empty string.
