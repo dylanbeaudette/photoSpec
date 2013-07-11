@@ -252,7 +252,7 @@ selectCIExy <- function(L1 = NULL, L2 = NULL, colSpace = "sRGB", ex = 1.0, ...) 
 	# Assemble a list for return
 	wedge <- vector("list")
 	wedge$wavelength <- c(L1, L3) # input wavelengths
-	wedge$Case <- Case
+	wedge$case <- Case
 	wedge$verts <- verts # vertices of wedge
 	wedge$raster <- bgr # colors in wedge
 	wedge$colSpace <- colSpace

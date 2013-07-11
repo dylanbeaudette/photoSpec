@@ -1,8 +1,8 @@
 Package: photoSpec
 Type: Package
 Title: photoSpec: A photographic spectrophotometer
-Version: 0.4-6
-Date: 2013-07-05
+Version: 0.4-7
+Date: 2013-07-11
 Author: Bryan A. Hanson DePauw University, Greencastle Indiana USA
 Maintainer: Bryan A. Hanson <hanson@depauw.edu>
 Authors@R:	c(person("Bryan", "Hanson", role = c("aut", "cre"), email = "hanson@depauw.edu"),
@@ -14,4 +14,5 @@ VignetteBuilder: knitr
 LazyData: yes
 Imports: princurve, grid, splancs, knitr, plyr, aqp, digest, colorspace
 Depends: rgl, munsell
+Suggests: ggplot2
 ByteCompile: TRUE

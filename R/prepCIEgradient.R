@@ -9,16 +9,17 @@ prepCIEgradient <- function(vertices = NULL, colSpace = "sRGB", ex = 1.0, ...) {
 	xyz <- expand.grid(xx,yy)
 	names(xyz) <- c("x", "y")
 	xyz$z <- (1 - xyz$x - xyz$y)
-	xyz <- xyz*ex # push the whole color space
 
 	# Find the points inside & outside the requested polygon
 		
 	insideL <- inout(xyz, vertices, bound = FALSE) # TRUE = inside
 	outsideL <-!insideL # TRUE = outside now
 	
-#	XYZ <- 100*xyz
-#	xyzrgb <- convertColor(XYZ, from = "XYZ", to = colSpace)
+	# Get the colors and size ready
+	
 	xyzrgb <- convertColor(xyz, from = "XYZ", to = colSpace)
+	xyzrgb <- xyzrgb*ex # push the whole color space
+    xyzrgb[xyzrgb > 1] <- 1 # This is critical for ex > 1 and size of tongue
 	xyzrgb[outsideL,] <- 1.0 # Set the color outside the spectral locus to white
 	
 	# The actual drawing of the gradient will be done with a rasterGrob

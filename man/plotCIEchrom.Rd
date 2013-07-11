@@ -35,7 +35,7 @@ Additional arguments to be passed downstream, to \code{grid} functions.
 A plot is drawn (using \code{grid} graphics).
 }
 \references{
-NEED A REFERENCE
+For \code{opts = "Munsell"} the Munsell designation by wavelength are taken from Romney & Indow \url{pnas.org/cgi/doi/10.1073/pnas.162368999}
 }
 \author{
 Bryan A. Hanson, DePauw University. \email{hanson@depauw.edu}

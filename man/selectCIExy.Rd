@@ -1,7 +1,7 @@
 \name{selectCIExy}
 \alias{selectCIExy}
 \title{
-Select a region of the CIE chromaticity diagram.
+Select a region of the CIE chromaticity diagram complementary to input wavelengths.
 }
 \description{
 Select a series of CIE xy values in the wedge defined by the complement of \code{L1} and \code{L2}.
@@ -28,7 +28,21 @@ Arguments to be passed to \code{\link{plotCIEchrom}}, typically one of the \code
 
 }
 \value{
-An object of ~class \code{\link{CIEwedge}}.
+A list as follows:
+
+\tabular{lll}{
+\emph{element} \tab \emph{type} \tab \emph{description}\cr
+$wavelength \tab num \tab A vector giving the two input wavelengths. \cr
+$case \tab chr \tab The manner in which the L1/L2 -> D65 vector hits the spectral locus. \cr
+$verts  \tab data.frame \tab x & y wedge vertices. \cr
+$raster \tab raster \tab A raster object giving the gradient \cr
+$colSpace \tab chr \tab Character string giving the color space in use. \cr
+$ex \tab num \tab The exposure val.ue \cr
+$p4 \tab num \tab The point where L1 -> D65 intersects the spectral locus. \cr
+$p5 \tab num \tab The point where L2 -> D65 intersects the spectral locus. \cr
+$p6 \tab num \tab The point where (L2 - L1) -> D65 intersects the spectral locus. \cr
+$xPt \tab num \tab The point in the wedge farthest from D65. \cr
+}
 }
 \references{
 NEED A REFERENCE

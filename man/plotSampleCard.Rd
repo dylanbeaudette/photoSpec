@@ -37,10 +37,10 @@ Arguments to be passed downstream, likely to \code{grid} drawing functions.
 }
 }
 \details{
-Pure black, 18 percent gray and pure white are added to \code{calCols} to serve as references when analyzing.
+Pure black, 18 percent gray and pure white are added to \code{calCols} every 25 colors to serve as references when analyzing.  These are always outlined to identify them.  If there is a color cast or shadow on the photo, you can choose the reference swatches that are least affected.
 }
 \section{Warning}{
-Be sure when printing that scaling is set to 100% or the scale will not be accurate.  Low ink supplies could lead to poor color reproduction.
+Be sure when printing that scaling is set to 100 percent or the scale will not be accurate.  Low ink supplies could lead to poor color reproduction.
 }
 
 \value{

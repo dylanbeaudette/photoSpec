@@ -4,9 +4,12 @@ photoSpec: A photographic spectrophotometer
 Bryan A. Hanson DePauw University, Greencastle Indiana USA
 
 ##### Version 0.4-7
-Date: 2013-07-
->> Continued updates to the vignette.
+Date: 2013-07-11
+>> Continued significant updates to the vignette.
 >> Previous problem with prepCIEgradient is definitely fixed.  'Twas a tough nut to crack!
+>> Fixed a problem with ex/ff dating back to 0.2-0.  Exposure wasn't being handled correctly, and the raster was shrunk and in the wrong position.
+>> Improvements to the documentation.
+>> Suggests: ggplot2 added for vignette.
 
 ##### Version 0.4-6
 Date: 2013-07-05

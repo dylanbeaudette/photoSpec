@@ -28,7 +28,7 @@ Integer.  The maximum Munsell value, should be <= 9.
 Integer.  The minimum Munsell chroma.
 }
   \item{maxChroma}{
-Integer.  The minimum Munsell chroma.  The default, 26, is the highest chroma of any hue that is in gamut, that is, can be represented in the sRGB colorspace.
+Integer.  The minimum Munsell chroma.  The default, 26, is the highest chroma of any hue that is in gamut, that is, can be represented in the sRGB colorspace (chroma goes as high as 38, which people can distinguish from nearby colors, but computers cannot).
 }
   \item{plotPC}{
 Logical. Shall a plot of the generated colors be drawn as paint chips?
@@ -54,8 +54,12 @@ $rgb \tab data frame \tab Data frame containing the rgb coordinates of the chose
 }
 }
 \details{
-If you don't use the maximum range for values ([1...9]) the calibration curve may have an exaggerated hump in it.
+If you don't use the maximum range for values ([1...9]) the calibration curve may have an exaggerated hump in it.  This is not recommended.
 }
+\section{Warning}{
+Non-contiguous Munsell hues are not properly handled at this time.
+}
+
 \references{
 NEED A REFERENCE
 }
