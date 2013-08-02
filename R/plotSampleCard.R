@@ -1,7 +1,8 @@
 
 
 plotSampleCard <- function(calCols, size = c(6, 4), ruler = c(3.5, 2.5),
-	chip.order = "pale2dark", chip.rep = 1, title = "no title", guide = FALSE) {
+	chip.order = "pale2dark", chip.rep = 1, title = "no title",
+	guide = FALSE) {
 
 	# Bryan Hanson, DePauw University, March 2013 hanson@depauw.edu
 	# Part of the photoSpec package
@@ -12,7 +13,7 @@ plotSampleCard <- function(calCols, size = c(6, 4), ruler = c(3.5, 2.5),
 	
 	# Main viewport
 	
-	grid.newpage() # increase height to accomodate title, csn
+#	if (new.page) grid.newpage() # increase height to accommodate title, csn
 	pushViewport(viewport(width = size[1], height = size[2], default.units = "in"))
 	
 	# Draw the sample region with calibration grill/grid

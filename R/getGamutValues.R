@@ -12,6 +12,8 @@ getGamutValues <- function(gamut) {
 	# Bryan Hanson, DePauw University, March 2013 hanson@depauw.edu
 	# Part of the photoSpec package
 	
+	# Most or all of these gamuts corners are in order of r, g, b (ccw)
+	
 	if (gamut == "Apple") { # relative to D65
 		x <- c(0.640, 0.300, 0.150)
 		y <- c(0.330, 0.600, 0.060)

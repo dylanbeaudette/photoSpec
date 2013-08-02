@@ -2,7 +2,7 @@
 
 genCalCols <- function(minHue = "2.5R", maxHue = "10R",
 	minVal = 1, maxVal = 9, minChroma = 2, maxChroma = 26,
-	plotPC = FALSE, showCal = TRUE, ...) {
+	plotPC = FALSE, showRGB = TRUE, showCIE = FALSE, ...) {
 
 	# Bryan Hanson, DePauw University, June 2013 hanson@depauw.edu
 	# Part of the photoSpec package
@@ -23,7 +23,7 @@ genCalCols <- function(minHue = "2.5R", maxHue = "10R",
 	hueMax <- which(mnsl_hues() == maxHue)
 	hues <- mnsl_hues()[hueMin:hueMax]
 	hvc <- expand.grid(hue = hues, value = minVal:maxVal,
-		chroma = seq(minChroma, maxChroma, by = 2)) # defaults give 216 colors
+		chroma = seq(minChroma, maxChroma, by = 2)) # defaults give 216 colors (? no longer true)
 	m <- paste(hvc$hue, " ", hvc$value, "/", hvc$chroma, sep = "")
 	
 	# Convert colors to hexadecimals for plotting
@@ -45,7 +45,8 @@ genCalCols <- function(minHue = "2.5R", maxHue = "10R",
 	
 	# Send out for 3D view if requested
 	
-	if (showCal) showCalColSpace(calCols)
+	if (showRGB) showRGBcalibration(calCols)
+	if (showCIE) showCIEcalibration(calCols)
 	
 	invisible(calCols)
 	}

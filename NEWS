@@ -3,6 +3,18 @@ NEWS file for package photoSpec
 photoSpec: A photographic spectrophotometer
 Bryan A. Hanson DePauw University, Greencastle Indiana USA
 
+##### Version 0.4-8
+Date: 2013-08-02
+>> Added a 2nd way of computing sample concentration, based upon color purity in the CIE color space (new function calcColorPurity).
+>> computeSampleConc was renamed calcSampleValue to better reflect what it does.
+>> showCalColSpace renamed to showRGBcalibration.
+>> genCalCols argument showCal changed to showRGB.  An additional argument showCIE added to show the calibration colors in the CIE colorspace.
+>> Function showCIEcalibration added; analogous to showRGBcalibration.
+>> Changed several functions to integrate the two ways of obtaining sample concentration and to allow for additional methods to be added in the future.
+>> sampCols cols entry renamed hex to better reflect its nature.
+>> Improvements to the documentation.
+>> Vignette removed for now.
+
 ##### Version 0.4-7
 Date: 2013-07-11
 >> Continued significant updates to the vignette.

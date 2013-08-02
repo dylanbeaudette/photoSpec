@@ -9,7 +9,7 @@ This function generates a set of calibration colors.  It is the starting point f
 \usage{
 genCalCols(minHue = "2.5R", maxHue = "10R",
 	minVal = 1, maxVal = 9, minChroma = 2, maxChroma = 26,
-	plotPC = FALSE, showCal = TRUE, ...)
+	plotPC = FALSE, showRGB = TRUE, showCIE = FALSE, ...)
 }
 \arguments{
   \item{minHue}{
@@ -33,8 +33,11 @@ Integer.  The minimum Munsell chroma.  The default, 26, is the highest chroma of
   \item{plotPC}{
 Logical. Shall a plot of the generated colors be drawn as paint chips?
 }
-  \item{showCal}{
-Logical. Shall the calibration color space be shown in 3D?
+  \item{showRGB}{
+Logical. Shall the calibration color space be shown in 3D using \code{rgl}?
+}
+  \item{showCIE}{
+Logical. Shall the calibration color space be shown in a CIE chromaticity diagram?
 }
 
   \item{\dots}{

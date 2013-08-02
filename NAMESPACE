@@ -1,4 +1,5 @@
-export(computeSampleConc,
+export(calcSampleValue,
+	calcColorPurity,
 	genCalCols,
 	getGamutValues,
 	getWhiteValues,
@@ -6,5 +7,6 @@ export(computeSampleConc,
 	plotSampleCard,
 	prepCIEgradient,
 	selectCIExy,
-	showCalColSpace)
-import(munsell, princurve, grid, splancs, rgl, knitr, plyr, aqp, digest, colorspace)
+	showRGBcalibration,
+	showCIEcalibration)
+import(munsell, princurve, grid, splancs, rgl, plyr, aqp, digest, colorspace)

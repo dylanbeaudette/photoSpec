@@ -47,11 +47,15 @@ The appearance of the color gradient will vary with the device, surface and inci
 
 \examples{
 plotCIEchrom() # no gradient
-# These are a little slow for CRAN checks:
+# These are a too slow for CRAN checks:
 \dontrun{
 plotCIEchrom(gradient = "sl") # basic plot
-# This next one shows a typical gamut for a CMYK printing process
-plotCIEchrom(gradient = getGamutValues("SWOP"), opts = c("D65", "SWOP"))
+# Notice there is not much yellow in that plot.  Increase
+# the exposure to bring in some yellow, at the expense of some blues:
+plotCIEchrom(gradient = "sl", ex = 1.4)
+# This next one shows the gradient for a CMYK printing process
+# and outlines the colors a typical monitor can display.
+plotCIEchrom(gradient = getGamutValues("SWOP"), opts = c("D65", "SWOP", "sRGB"))
 }
 }
 \keyword{ plot }

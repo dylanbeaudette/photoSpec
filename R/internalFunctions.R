@@ -5,22 +5,22 @@
 	# Bryan Hanson, DePauw University, March 2013 hanson@depauw.edu
 	# Part of the photoSpec package
 
-	sortFromWhite <- function(Cols) {
+	sortFromWhite <- function(Cols) { # sort colors based upon distance from white
 		# Cols should be a vector of hexadecimal colors
-		# Cols will be compared to pure white
-		oCols <- Cols # Save the original
+		oCols <- Cols # save the original
 		Cols <- col2rgb(Cols) # now in rgb
 	    whdist <- apply(Cols, 2, function(z) {sqrt(sum((z - 255)^2))})
 		whdist <- 100*whdist/(1.73*255) # gives answer a percentage of max dist
 		# max distance is from pure white to complete black
-		# return Cols sorted by distance from white (pale to dark)
-		# Needs package plyr
+		# namely the major diagonal of a cube, which is 1.73
+		# return Cols as hex sorted by distance from white (pale to dark)
+		# needs package plyr
 		df <- data.frame(cols = oCols, dist = whdist)
 		df <- arrange(df, dist)
 		return(as.character(df$cols))
 		}
 
-	ang0to2pi <- function(segment) {
+	ang0to2pi <- function(segment) { # compute angle rel to horiz axis
 		# segment given as c(x1, y1, x2, y2)
 		# compute angle relative to horiz axis
 		# using the usual unit circle conventions
@@ -31,7 +31,7 @@
 		return(theta)
 		}
 
-	dAB <- function(A, B) { # distance between pts A & B
+	dAB <- function(A, B) { # Euclidian distance between pts A & B
 		# A, B each as c(x, y)
 		dAB <- sqrt((B[2]-A[2])^2 + (B[1]-A[1])^2)
 		}
@@ -39,7 +39,7 @@
 	findCIEindex <- function(x) { # find the index of a wavelength in CIExyz
 		data(CIExyz)
 		i <- grep(x, CIExyz$wavelength)
-		ans <- i[1] # this is an index/row number
+		ans <- i[1] # index/row number of the 1st occurance
 		}
 
 	rot180aroundD65 <- function(pt, ...) {
@@ -58,12 +58,30 @@
 		return(c(x,y))
 		}
 
+
+	extendFromD65 <- function(pt) { # Extend a vector starting on D65
+		# pt input as c(x,y)
+		# This function takes a segment from 'pt' to D65
+		# and lengthens it so that it extends past either the spectral locus or line of purples
+		# Same approach as rot180aroundD65 except the angle is zero
+		# However, here the segments must be made a lot longer because pt might
+		# be close to D65
+		D65 <- as.numeric(getWhiteValues("D65"))	
+		ang <- 0.0
+		fac <- 200.0 # Ensures that the line segment is long enough
+		x = D65[1] + (cos(ang) * (pt[1] - D65[1]) + sin(ang) * (pt[2] - D65[2]))*fac
+		y = D65[2] + (-sin(ang) * (pt[2] - D65[2]) + cos(ang) * (pt[2] - D65[2]))*fac
+		return(c(x,y))
+		}
+
 	findPolygonIntersection <- function(XY, xy) {
 
 		# XY & xy input as 2 column matrices
-		# XY is the points to be tested
-		# xy is the vertices of the polygon
+		# XY are the points to be tested
+		# xy are the vertices of the polygon
+		# treated as true line segments which are not extended
 		# returns indices of intersection
+				
 		D65 <- as.numeric(getWhiteValues("D65"))
 		keep <- c()
 	
@@ -82,7 +100,31 @@
 	
 		return(keep)
 		}
-	
+
+	lineIntersection <- function(x1, y1, x2, y2, x3, y3, x4, y4) {
+		
+		# Finds the intersection of two lines
+		# specified as two line segments (so they are 'extended')
+		# Based on code initially written by M. Kukurugya
+		
+		den <- (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4)
+		if (den == 0) {
+			warning("No intersection found")
+			return(c(NA, NA))
+			}
+		numA <- ((x1 * y2) - (y1 * x2))
+		numB <- ((x3 * y4) - (y3 * x4))
+		num1 <-  numA * (x3 - x4)
+		num2 <- (x1 - x2) * numB
+		num3 <- numA * (y3 -y4)
+		num4 <- (y1 - y2) * numB 
+		Px = (num1 - num2)/den
+		Py = (num3 - num4)/den
+		# cat("Px is", Px, "\n")
+		# cat("Py is", Py, "\n")
+		return(c(Px, Py))
+		}
+
 # gist.github.com/bryanhanson/5471173 has more info on these next ones
 
 	getBoundingBox <- function(P0, P1) {
@@ -148,27 +190,5 @@
 			lineSegmentTouchesOrCrossesLine(segment1, segment2) &&
 			lineSegmentTouchesOrCrossesLine(segment2, segment1))
 		}
-
-	lineIntersection <- function(x1, y1, x2, y2, x3, y3, x4, y4) {
-		
-		# Finds the intersection of two lines
-		# specified as two line segments
-		# Based on code initially written by M. Kukurugya
-		
-		den <- (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4)
-		if (den == 0) stop("No intersection found")
-		numA <- ((x1 * y2) - (y1 * x2))
-		numB <- ((x3 * y4) - (y3 * x4))
-		num1 <-  numA * (x3 - x4)
-		num2 <- (x1 - x2) * numB
-		num3 <- numA * (y3 -y4)
-		num4 <- (y1 - y2) * numB 
-		Px = (num1 - num2)/den
-		Py = (num3 - num4)/den
-		# cat("Px is", Px, "\n")
-		# cat("Py is", Py, "\n")
-		return(c(Px, Py))
-		}
-
 	
 ##### End of helper functions
