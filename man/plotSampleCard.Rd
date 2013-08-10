@@ -8,7 +8,7 @@ This function plots a 'card' containing a series of calibration colors (paint ch
 }
 \usage{
 plotSampleCard(calCols, size = c(6, 4), ruler = c(3.5, 2.5),
-chip.order = "pale2dark", chip.rep = 1, title = "no title", guide = FALSE)
+chip.order = "pale2dark", chip.rep = 1, title = "no title", guide = NULL)
 }
 \arguments{
   \item{calCols}{
@@ -30,7 +30,7 @@ Numeric; the number of replicates of \code{calCols} to use.  If \code{chip.rep >
 String.  A title for the card.
 }
   \item{guide}{
-Logical.  If TRUE, outline the card colors and give the hexadecimal codes for each.
+Character.  If \code{hex}, outline the card colors and give the hexadecimal codes for each.  If \code{Munsell}, use the Munsell nomenclature.
 }
   \item{...}{
 Arguments to be passed downstream, likely to \code{grid} drawing functions.

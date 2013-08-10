@@ -35,9 +35,9 @@ selectCIExy <- function(L1 = NULL, L2 = NULL, colSpace = "sRGB", ex = 1.0, ...) 
 	row.names(segs) <- c("p1", "p2", "p3", "D65")
 	in.segs <- segs # save a copy for later
 	
-	segs[1,] <- rot180aroundD65(segs[1,]) # flip the segments
-	segs[2,] <- rot180aroundD65(segs[2,])
-	segs[3,] <- rot180aroundD65(segs[3,])
+	segs[1,] <- extendAndRotateAroundD65(segs[1,], ang = pi) # flip the segments
+	segs[2,] <- extendAndRotateAroundD65(segs[2,], ang = pi)
+	segs[3,] <- extendAndRotateAroundD65(segs[3,], ang = pi)
 	
 	# Now loop over shark fin and check for intersections	
 
@@ -239,6 +239,14 @@ selectCIExy <- function(L1 = NULL, L2 = NULL, colSpace = "sRGB", ex = 1.0, ...) 
 		x1 = in.segs[c(4,4),1], y1 = in.segs[c(4,4),2], # from L1 and L2 to D65
 		default.units = "native", gp = gpar(lty = 2))
 
+	# Label L1 and L2
+	lab.pos <- in.segs[c(1,3), ]
+	for (i in 1:2) { 
+		lab.pos[i,] <- extendAndRotateAroundD65(pts = lab.pos[i,], ang = 0, fac = 1.1)
+		}
+	grid.text(label = expression(lambda[1]), lab.pos[1,1], lab.pos[1,2], default.units = "native")
+	grid.text(label = expression(lambda[2]), lab.pos[2,1], lab.pos[2,2], default.units = "native")
+	
 	# Prepare the enclosed colors to serve as the calibration colors
 	# Convert the raster into a list of calibration colors;
 	# Eliminate the pure whites which are outside the vertices
@@ -247,7 +255,7 @@ selectCIExy <- function(L1 = NULL, L2 = NULL, colSpace = "sRGB", ex = 1.0, ...) 
 	bgr2 <- as.vector(bgr2)
 	bgr2 <- bgr2[bgr2 != "#FFFFFF"]
 
-	message("Total colors to choose from:", length(bgr2))
+#	message("Total colors to choose from:", length(bgr2))
 	
 	# Assemble a list for return
 	wedge <- vector("list")

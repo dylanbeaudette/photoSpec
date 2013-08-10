@@ -7,7 +7,7 @@ genCalCols <- function(minHue = "2.5R", maxHue = "10R",
 	# Bryan Hanson, DePauw University, June 2013 hanson@depauw.edu
 	# Part of the photoSpec package
 
-	# Process arguments and get all combos
+	# Check input data
 	
 	if (minVal == 0) { # munsell can't handle these
 		minVal <- 1
@@ -19,9 +19,21 @@ genCalCols <- function(minHue = "2.5R", maxHue = "10R",
 		message("Maximum value set to 9")
 		}
 
+	if (maxVal < minVal) stop("minVal should be less than maxVal")
+	if (maxChroma < minChroma) stop("minChroma should be less than maxChroma")
+
+	# Process arguments and get all combos
+	
 	hueMin <- which(mnsl_hues() == minHue)
 	hueMax <- which(mnsl_hues() == maxHue)
-	hues <- mnsl_hues()[hueMin:hueMax]
+	
+	# May need to wrap colors relative to how they are stored in mnsl_hues
+
+	if (hueMax >= hueMin) hues <- mnsl_hues()[hueMin:hueMax]
+	if (hueMax < hueMin) {
+		hues <- c(mnsl_hues()[hueMin:40], mnsl_hues()[1:hueMax])
+		}
+	
 	hvc <- expand.grid(hue = hues, value = minVal:maxVal,
 		chroma = seq(minChroma, maxChroma, by = 2)) # defaults give 216 colors (? no longer true)
 	m <- paste(hvc$hue, " ", hvc$value, "/", hvc$chroma, sep = "")
@@ -37,11 +49,15 @@ genCalCols <- function(minHue = "2.5R", maxHue = "10R",
 	# Convert colors to rgb for plotting in rgl
 	mrgb <- hex2RGB(mh)@coords
 
+	# Convert back to Munsell for labeling
+	mm <- rgb2mnsl(mrgb)
+	
 	# Assemble list for return
 	
 	calCols <- vector("list")
 	calCols$hexcol <- mh
 	calCols$rgb <- mrgb
+	calCols$Munsell <- mm
 	
 	# Send out for 3D view if requested
 	

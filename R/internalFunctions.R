@@ -5,6 +5,69 @@
 	# Bryan Hanson, DePauw University, March 2013 hanson@depauw.edu
 	# Part of the photoSpec package
 
+	pointOnLineNearPoint <- function(Px, Py, slope, intercept) {
+		# Vectorized
+		Ax <- Px*10 # push the point out
+	 	Bx <- Px*-10
+	 	Ay <- Ax * slope + intercept
+	 	By <- Bx * slope + intercept
+	 	ans <- pointOnLine(Px, Py, Ax, Ay, Bx, By)
+	 	ans
+		}
+	
+	pointOnLine <- function(Px, Py, Ax, Ay, Bx, By) {
+		# Vectorized
+		PB <- data.frame(x = Px - Bx, y = Py - By)
+		AB <- data.frame(x = Ax - Bx, y = Ay - By)
+		PB <- as.matrix(PB)
+		AB <- as.matrix(AB)
+		k_raw <- k <- c()
+		for (n in 1:nrow(PB)) {
+			k_raw[n] <- (PB[n,] %*% AB[n,])/(AB[n,] %*% AB[n,])
+			if (k_raw[n] < 0)  { k[n] <- 0
+				} else { if (k_raw[n] > 1) k[n] <- 1
+					else k[n] <- k_raw[n] }
+			}
+		x = (k * Ax + (1 - k)* Bx)
+		y = (k * Ay + (1 - k)* By)
+		ans <- data.frame(x, y)
+		ans
+		}
+
+	ccp <- function(cie, gamut) { # Calc color purity
+		# cie is matrix of colors as cie xy
+
+		# Get needed data
+		ns <- nrow(cie)
+		D65 <- getWhiteValues("D65")	
+		if (gamut == "sl") { # spectral locus data (shark fin)
+			pg <- CIExyz[,c(2,3)] # 4400 rows
+			pg <- rbind(pg, pg[1,]) # repeat row so that polygon can close
+			}
+	
+		if (gamut == "sRGB") { # device color space
+			pg <- getGamutValues("sRGB")
+			pg <- rbind(pg, pg[1,]) # repeat row so that polygon can close
+			}
+
+		cie2 <-  extendAndRotateAroundD65(cie)
+		hits <- findPolygonIntersection(XY = cie2, xy = pg) # indices of intersections
+		print(hits)
+		if (length(hits) != ns) stop("Wrong number of gamut intersections")
+
+		cp <- rep(NA, ns)
+		for (i in 1:ns) {
+			dc <- dAB(D65, cie[i,]) # distance from D65 to color
+			ndx <- hits[i]
+			where <- lineIntersection(D65[1], D65[2], cie2[i,1], cie2[i,2],
+				pg[ndx, 1], pg[ndx, 2], pg[ndx + 1, 1], pg[ndx + 1, 2])
+			dg <- dAB(D65, where) # distance from D65 to gamut
+			cp[i] <- dc*100/dg
+			if (cp[i] > 100) cp[i] <- NA # these are out of gamut
+			}
+		cp
+		}
+
 	sortFromWhite <- function(Cols) { # sort colors based upon distance from white
 		# Cols should be a vector of hexadecimal colors
 		oCols <- Cols # save the original
@@ -20,67 +83,39 @@
 		return(as.character(df$cols))
 		}
 
-	ang0to2pi <- function(segment) { # compute angle rel to horiz axis
-		# segment given as c(x1, y1, x2, y2)
-		# compute angle relative to horiz axis
-		# using the usual unit circle conventions
-		# the segments need not intersect using this method
-		seg1 <- c(segment[3]-segment[1], segment[4]-segment[2])
-		theta <- atan2(seg1[2], seg1[1])
-		if (theta < 0) theta <- theta + 2*pi
-		return(theta)
-		}
-
 	dAB <- function(A, B) { # Euclidian distance between pts A & B
+		# NOT vectorized
 		# A, B each as c(x, y)
 		dAB <- sqrt((B[2]-A[2])^2 + (B[1]-A[1])^2)
 		}
 
 	findCIEindex <- function(x) { # find the index of a wavelength in CIExyz
+		# NOT vectorized
 		data(CIExyz)
 		i <- grep(x, CIExyz$wavelength)
 		ans <- i[1] # index/row number of the 1st occurance
 		}
 
-	rot180aroundD65 <- function(pt, ...) {
-
-		# pt input as c(x,y)
-		# This function creates a segment from 'pt' on the spectral locus
-		# through D65 and rotates it 180, and lengthens it so that it
-		# extends past either the spectral locus or line of purples
-		# on the far side
-		D65 <- as.numeric(getWhiteValues("D65"))	
-		ang <- pi
-		fac <- 2.0 # Ensures that the line segment is long enough to reach
-		# the far side of the shark fin or line of purples
-		x = D65[1] + (cos(ang) * (pt[1] - D65[1]) + sin(ang) * (pt[2] - D65[2]))*fac
-		y = D65[2] + (-sin(ang) * (pt[2] - D65[2]) + cos(ang) * (pt[2] - D65[2]))*fac
-		return(c(x,y))
-		}
-
-
-	extendFromD65 <- function(pt) { # Extend a vector starting on D65
-		# pt input as c(x,y)
-		# This function takes a segment from 'pt' to D65
-		# and lengthens it so that it extends past either the spectral locus or line of purples
-		# Same approach as rot180aroundD65 except the angle is zero
-		# However, here the segments must be made a lot longer because pt might
-		# be close to D65
-		D65 <- as.numeric(getWhiteValues("D65"))	
-		ang <- 0.0
-		fac <- 200.0 # Ensures that the line segment is long enough
-		x = D65[1] + (cos(ang) * (pt[1] - D65[1]) + sin(ang) * (pt[2] - D65[2]))*fac
-		y = D65[2] + (-sin(ang) * (pt[2] - D65[2]) + cos(ang) * (pt[2] - D65[2]))*fac
-		return(c(x,y))
+	extendAndRotateAroundD65 <- function(pts, ang = 0.0, fac = 200) {
+		# Vectorized (unit test available)
+		# pts is a data frame or matrix of x, y coords in columns
+		# This function takes a segment from each pt to D65
+		# and lengthens it by fac so that it extends past either
+		# the spectral locus or line of purples.
+		# Can also rotate around D65 by ang (in radians)
+		D65 <- as.numeric(getWhiteValues("D65"))
+		x = D65[1] + ((cos(ang) * (pts[,1] - D65[1])) - (sin(ang) * (pts[,2] - D65[2])))*fac
+		y = D65[2] + ((sin(ang) * (pts[,1] - D65[1])) + (cos(ang) * (pts[,2] - D65[2])))*fac
+		return(data.frame(x = x, y = y))
 		}
 
 	findPolygonIntersection <- function(XY, xy) {
 
 		# XY & xy input as 2 column matrices
-		# XY are the points to be tested
+		# XY are one end of a segment starting at D65
 		# xy are the vertices of the polygon
 		# treated as true line segments which are not extended
-		# returns indices of intersection
+		# returns indices of intersection for xy
 				
 		D65 <- as.numeric(getWhiteValues("D65"))
 		keep <- c()
@@ -89,14 +124,23 @@
 			its <- nrow(xy)-1
 		
 			# Check to see if the line segments intersect
-				
-			for (n in 1:its) { # loop over shark fin	
+			
+			# If a point is in the corner of the polygon
+			# and there is an intersection, it will be counted
+			# twice.  Once an intersection is found, check
+			# for this condition and adjust the indices
+			
+			for (n in 1:its) { # loop over xy (polygon)
 				inter <- doSegmentsIntersect(
 			        segment1 = c(XY[i,1], XY[i,2], D65[1], D65[2]),
 			        segment2 = c(xy[n,1], xy[n,2], xy[n+1,1], xy[n+1,2]))
-			    if (inter) keep <- c(keep, n)
+			    if (inter) { # check for intersection at a corner
+			    	keep <- c(keep, n)
+			    	twoInt <- isPointOnLine(c(XY[i,1], XY[i,2], D65[1], D65[2]), c(xy[n,1], xy[n,2]))
+			    	if (twoInt) keep <- keep[-length(keep)]
+			    	}
 				}
-	 		} # end of loop that checks each line segment
+	 		} # end of loop that checks each XY segment
 	
 		return(keep)
 		}

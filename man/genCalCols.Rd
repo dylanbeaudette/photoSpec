@@ -28,7 +28,7 @@ Integer.  The maximum Munsell value, should be <= 9.
 Integer.  The minimum Munsell chroma.
 }
   \item{maxChroma}{
-Integer.  The minimum Munsell chroma.  The default, 26, is the highest chroma of any hue that is in gamut, that is, can be represented in the sRGB colorspace (chroma goes as high as 38, which people can distinguish from nearby colors, but computers cannot).
+Integer.  The maximum Munsell chroma.  The default, 26, is the highest chroma of any hue that is in gamut, that is, can be represented in the sRGB colorspace (chroma goes as high as 38, which people can distinguish from nearby colors, but computers cannot display these colors).
 }
   \item{plotPC}{
 Logical. Shall a plot of the generated colors be drawn as paint chips?
@@ -45,7 +45,7 @@ Other parameters to be passed to downstream functions.
 }
 }
 \value{
-A list of 2 (rgb values are in [0...1]):
+A list of 3 (rgb values are in [0...1]):
 
 \tabular{llll}{
 \emph{element} \tab \emph{type} \tab \emph{description} \tab \cr
@@ -54,13 +54,11 @@ $rgb \tab data frame \tab Data frame containing the rgb coordinates of the chose
 \tab $r  \tab num \tab Values for red channel. \cr
 \tab $g  \tab num \tab Values for green channel. \cr
 \tab $b  \tab num \tab Values for blue channel. \cr
+$Munsell \tab char \tab A vector with the Munsell color.
 }
 }
 \details{
-If you don't use the maximum range for values ([1...9]) the calibration curve may have an exaggerated hump in it.  This is not recommended.
-}
-\section{Warning}{
-Non-contiguous Munsell hues are not properly handled at this time.
+If you don't use the maximum range for values ([1...9]) the calibration curve in rgb space may have an exaggerated hump in it.  This is not recommended.  The Munsell colors returned are in effect 'rounded' as the Munsell system is quantized rather than continuous (i.e. there is less resolution in the Munsell system than in the CIE or rgb color spaces, and the nearest Munsell color is returned).  The Munsell hues are stored internally in order 5R -> 10RP but conceptually the system wraps around in a circle.  This affects how minHue and maxHue are processed.  
 }
 
 \references{

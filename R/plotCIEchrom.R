@@ -55,8 +55,11 @@ plotCIEchrom <- function(gradient = NULL, colSpace = "sRGB", ex = 1.0,
 
 	if (!is.null(gradient)) {
 		grid.raster(finras, x = 0.5, y = 0.5, interpolate = FALSE, default.units = "npc")
-		msg <- "Warning: the color gradient appearance\nwill vary with the device, surface\n& incident light used to view it\nand is not likely correct anywhere"
-		grid.text(msg, x = 0.98, y = 0.9, gp = gpar(fontface = "italic", cex = 0.9),
+		msg1 <- "Warning: the color gradient appearance\nwill vary with the device, surface\n& incident light used to view it\nand is not likely correct anywhere"
+		grid.text(msg1, x = 0.98, y = 0.9, gp = gpar(fontface = "italic", cex = 0.9),
+			just = "right")
+		msg2 <- paste("ex =", ex, "    color space =", colSpace, sep = " ")
+		grid.text(msg2, x = 0.98, y = 0.02, gp = gpar(cex = 0.5),
 			just = "right")
 		}
 
@@ -180,10 +183,6 @@ plotCIEchrom <- function(gradient = NULL, colSpace = "sRGB", ex = 1.0,
 			arrow = arrow(ends = "last", length = unit(0.025, "npc"),
 			angle = 15, type = "closed"))
 		}
-
-	msg <- paste("ex =", ex, "    color space =", colSpace, sep = " ")
-	grid.text(msg, x = 0.98, y = 0.02, gp = gpar(cex = 0.5),
-		just = "right")
 
 	if (is.null(gradient)) ans <- NULL
 	if (!is.null(gradient)) ans <- finras

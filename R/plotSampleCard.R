@@ -2,7 +2,7 @@
 
 plotSampleCard <- function(calCols, size = c(6, 4), ruler = c(3.5, 2.5),
 	chip.order = "pale2dark", chip.rep = 1, title = "no title",
-	guide = FALSE) {
+	guide = NULL) {
 
 	# Bryan Hanson, DePauw University, March 2013 hanson@depauw.edu
 	# Part of the photoSpec package
@@ -86,21 +86,29 @@ plotSampleCard <- function(calCols, size = c(6, 4), ruler = c(3.5, 2.5),
 		}
 
 	# Each of the following choices needs to create xy and labs properly
-	# for guide = TRUE which is the next step
+	# for guide which is the next step
 	
 	if (chip.order == "random") { # not sure this is the most sensible option
 		wh <- sample(1:nrow(xy), ncc)
 		xy <- xy[wh,] # these will be the positions to be used
 		grid.rect(x = xy$x, y = xy$y, width = 0.5, height = 0.5, default.units = "cm",
 		gp = gpar(fill = hexcol, col = "transparent"))
-		labs <- hexcol
+		if (guide == "hex") labs <- hexcol
+		if (guide == "Munsell") {
+			mrgb <- hex2RGB(hexcol)@coords
+			labs <- rgb2mnsl(mrgb + 0.0001) # fix for buglet in munsell
+			}
 		}
 
 	if ((chip.order == "munsell") | (chip.order == "pale2dark")) {
 		xy <- xy[1:ncc,]
 		grid.rect(x = xy$x, y = xy$y, width = 0.5, height = 0.5, default.units = "cm",
 		gp = gpar(fill = hexcol, col = "transparent"))
-		labs <- hexcol
+		if (guide == "hex") labs <- hexcol
+		if (guide == "Munsell") {
+			mrgb <- hex2RGB(hexcol)@coords
+			labs <- rgb2mnsl(mrgb + 0.0001) # fix for buglet in munsell
+			}
 		}
 
 	if (chip.order == "fill") { # fills the page, in order provided
@@ -110,7 +118,11 @@ plotSampleCard <- function(calCols, size = c(6, 4), ruler = c(3.5, 2.5),
 		hexcol <- c(hexcol, hexcol[1:rem])
 		grid.rect(x = xy$x, y = xy$y, width = 0.5, height = 0.5, default.units = "cm",
 		gp = gpar(fill = hexcol, col = "transparent"))
-		labs <- hexcol
+		if (guide == "hex") labs <- hexcol
+		if (guide == "Munsell") {
+			mrgb <- hex2RGB(hexcol)@coords
+			labs <- rgb2mnsl(mrgb + 0.0001) # fix for buglet in munsell
+			}
 		}
 
 	# Now mark the white, 18% gray and black
@@ -121,7 +133,13 @@ plotSampleCard <- function(calCols, size = c(6, 4), ruler = c(3.5, 2.5),
 	grid.rect(x = xy$x[gry], y = xy$y[gry], width = 0.6, height = 0.6, default.units = "cm")
 	grid.rect(x = xy$x[blk], y = xy$y[blk], width = 0.6, height = 0.6, default.units = "cm")
 
-	if (guide) {
+	if (guide == "hex") {
+		grid.rect(x = xy$x, y = xy$y, width = 0.6, height = 0.6, default.units = "cm")
+		grid.text(label = labs, x = xy$x, y = xy$y - 0.5,
+			default.units = "cm", just = "center", gp = gpar(cex = 0.5))
+		}
+
+	if (guide == "Munsell") {
 		grid.rect(x = xy$x, y = xy$y, width = 0.6, height = 0.6, default.units = "cm")
 		grid.text(label = labs, x = xy$x, y = xy$y - 0.5,
 			default.units = "cm", just = "center", gp = gpar(cex = 0.5))

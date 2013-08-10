@@ -15,7 +15,9 @@ showCIEcalibration <- function(calCols, sampCol = NULL, title = NULL, gradient =
 	cie <- cbind(x, y)
 
 	plotCIEchrom(gradient = gradient, opts = opts, title = title, ...)
-	grid.points(cie[,1], cie[,2], size = unit(0.25, "char"))
+	if (is.null(gradient)) mycols <- calCols$hexcol
+	if (!is.null(gradient)) mycols <- "black"
+	grid.points(cie[,1], cie[,2], size = unit(0.25, "char"), gp = gpar(col = mycols))
 
 	if (!is.null(sampCol)) {
 		if ("cols" %in% names(sampCol)) sampCol$hex <- sampCol$cols # backward compatability

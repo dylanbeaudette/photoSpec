@@ -87,6 +87,9 @@ showCIEcalibration(calCols = purblu, sampCol = sc[4,], title = "Good Fit")
 #
 # Not too bad of a fit! Even though the residual is about the same, the sample is
 # in the thick of the calibration cloud.
+#
+showCIEcalibration(calCols = purblu, sampCol = sc[4,], title = "Good Fit", lambdas = 550, plotPts = TRUE)
+#
 }
 \keyword{ multivariate }
 \keyword{ plot }
