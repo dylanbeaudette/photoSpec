@@ -241,7 +241,7 @@ selectCIExy <- function(L1 = NULL, L2 = NULL, colSpace = "sRGB", ex = 1.0, ...) 
 
 	# Label L1 and L2
 	lab.pos <- in.segs[c(1,3), ]
-	for (i in 1:2) { 
+	for (i in 1:2) { 		# this is now vectorized so the loop can be eliminated
 		lab.pos[i,] <- extendAndRotateAroundD65(pts = lab.pos[i,], ang = 0, fac = 1.1)
 		}
 	grid.text(label = expression(lambda[1]), lab.pos[1,1], lab.pos[1,2], default.units = "native")

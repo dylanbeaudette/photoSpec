@@ -1,0 +1,41 @@
+\name{runAllCal}
+\alias{runAllCal}
+\title{
+Run call calibration options
+}
+\description{
+This function runs both \code{\link{showCIEcalibration}} and \code{\link{showRGBcalibration}} and returns the results in a single data frame.
+}
+\usage{
+runAllCal(calCols, sampCol = NULL, title = NULL, opts = "sRGB", ...)
+}
+\arguments{
+  \item{calCols}{
+An list with elements \code{rgb} and \code{hexcol}.  See \code{\link{genCalCols}} for details.
+}
+  \item{sampCol}{
+A data frame with columns \code{hex} which contains hexadecimal strings, and \code{id} which has the sample names.
+}
+  \item{title}{
+A character vector giving a title for the plot.
+}
+  \item{opts}{
+Character vector passed to \code{plotCIEchrom}.
+}
+  \item{\dots}{
+Other options to be passed to either \code{grid} plotting functions, or \code{\link{showCIEcalibration}} or \code{\link{showRGBcalibration}}.  See those functions for the possible options, along with the example below.
+}
+}
+\value{
+A plot is drawn using either \code{rgl} or \code{grid} graphics, and information about the calibration is returned in a data frame (DESCRIBE).
+}
+\references{
+NEED A REFERENCE
+}
+\author{
+Bryan A. Hanson, DePauw University. \email{hanson@depauw.edu}
+}
+\examples{
+##---- Should be DIRECTLY executable !! ----
+}
+\keyword{ plot }

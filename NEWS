@@ -4,9 +4,13 @@ photoSpec: A photographic spectrophotometer
 Bryan A. Hanson DePauw University, Greencastle Indiana USA
 
 ##### Version 0.4-10
-Date: 2013-08-
+Date: 2013-08-12
 NEED TO DO
 >> Fixed a problem in calcColorPurity in which a segment from a wavelength through D65 which should hit the line of purples did not.
+>> Changed colors and symbols on calcColorPurity when plotLambdas = TRUE.
+>> Added labeling when lambdas are given in calcColorPurity.
+>> Cleaned up showRGBcalibration code. Gained a ... argument.
+>> Adde runAllCal, a wrapper to coordinate everything.
 
 ##### Version 0.4-9
 Date: 2013-08-09
