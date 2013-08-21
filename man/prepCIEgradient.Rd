@@ -27,7 +27,7 @@ Arguments to be passed downstream.
 A raster object composed of 3 planes, one each for the red, green and blue channels.  The dimensions are those of \code{vertices}.
 }
 \references{
-NEED A REFERENCE
+\url{https://github.com/bryanhanson/photoSpec}
 }
 \author{
 Bryan A. Hanson, DePauw University. \email{hanson@depauw.edu}

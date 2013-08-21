@@ -14,6 +14,7 @@ showCIEcalibration <- function(calCols, sampCol = NULL, title = NULL, gradient =
 	y <- XYZ[,2]/rowSums(XYZ)
 	cie <- cbind(x, y)
 
+	#grid.newpage()
 	plotCIEchrom(gradient = gradient, opts = opts, title = title, ...)
 	if (is.null(gradient)) mycols <- calCols$hexcol
 	if (!is.null(gradient)) mycols <- "black"

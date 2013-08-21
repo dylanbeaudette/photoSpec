@@ -2,7 +2,7 @@
 
 genCalCols <- function(minHue = "2.5R", maxHue = "10R",
 	minVal = 1, maxVal = 9, minChroma = 2, maxChroma = 26,
-	plotPC = FALSE, showRGB = TRUE, showCIE = FALSE, ...) {
+	plotPC = TRUE, showRGB = FALSE, showCIE = FALSE, ...) {
 
 	# Bryan Hanson, DePauw University, June 2013 hanson@depauw.edu
 	# Part of the photoSpec package
@@ -61,8 +61,8 @@ genCalCols <- function(minHue = "2.5R", maxHue = "10R",
 	
 	# Send out for 3D view if requested
 	
-	if (showRGB) showRGBcalibration(calCols)
-	if (showCIE) showCIEcalibration(calCols)
+	if (showRGB) showRGBcalibration(calCols, ...)
+	if (showCIE) showCIEcalibration(calCols, ...)
 	
 	invisible(calCols)
 	}

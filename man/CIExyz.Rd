@@ -18,7 +18,7 @@ $ z         : num  0.815 0.815 0.815 0.815 0.815 ...\cr
 \source{Color Vision Research Lab.  \url{cvrl.ioo.ucl.ac.uk/index.htm}  Go to this URL, then choose 'NEW CIE XYZ...' In the new page that opens, go to 'New physiologically-relevant CIE x,y chromaticity coordinates (proposed)' and get the 2-deg coordinates at 0.1 nm resolution
 }
 \references{
-NEED REFERENCE
+\url{https://github.com/bryanhanson/photoSpec}
 }
 \examples{
 data(CIExyz)

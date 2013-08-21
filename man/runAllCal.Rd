@@ -23,14 +23,14 @@ A character vector giving a title for the plot.
 Character vector passed to \code{plotCIEchrom}.
 }
   \item{\dots}{
-Other options to be passed to either \code{grid} plotting functions, or \code{\link{showCIEcalibration}} or \code{\link{showRGBcalibration}}.  See those functions for the possible options, along with the example below.
+Other options to be passed to either \code{grid} plotting functions, or \code{\link{showCIEcalibration}} or \code{\link{showRGBcalibration}}.  See those functions for the possible options, along with the examples below.
 }
 }
 \value{
 A plot is drawn using either \code{rgl} or \code{grid} graphics, and information about the calibration is returned in a data frame (DESCRIBE).
 }
 \references{
-NEED A REFERENCE
+\url{https://github.com/bryanhanson/photoSpec}
 }
 \author{
 Bryan A. Hanson, DePauw University. \email{hanson@depauw.edu}

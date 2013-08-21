@@ -13,7 +13,7 @@ plotCIEchrom(gradient = NULL, colSpace = "sRGB", ex = 1.0,
 }
 \arguments{
   \item{gradient}{
-Character: either \code{"sl"}, \code{NULL}, or a data frame with columns x and y.  If \code{NULL}, no gradient is drawn.  If \code{"sl"} a gradient filling the entire spectral locus is drawn.  If a data frame, the vertices specify a polygon to be filled with the gradient.  The argument \code{"colSpace"} determines the color space of the gradient to be drawn.
+Character: either \code{"sl"}, \code{NULL}, or a data frame with columns x and y.  If \code{NULL}, no gradient is drawn.  If \code{"sl"} a gradient filling the entire spectral locus is drawn.  If a data frame, the vertices should specify a polygon to be filled with the gradient.  The argument \code{"colSpace"} determines the color space of the gradient to be drawn.
 }
   \item{colSpace}{
 Character string giving the color space to use for drawing the gradient.  One of \code{c("sRGB", "Apple RGB")}.  \code{Apple RGB} is mainly of historical interest; no physical devices use it at this time.
@@ -36,6 +36,7 @@ A plot is drawn (using \code{grid} graphics).
 }
 \references{
 For \code{opts = "Munsell"} the Munsell designation by wavelength are taken from Romney & Indow \url{pnas.org/cgi/doi/10.1073/pnas.162368999}
+\url{https://github.com/bryanhanson/photoSpec}
 }
 \author{
 Bryan A. Hanson, DePauw University. \email{hanson@depauw.edu}
@@ -47,7 +48,7 @@ The appearance of the color gradient will vary with the device, surface and inci
 
 \examples{
 plotCIEchrom() # no gradient
-# These are a too slow for CRAN checks:
+## These are a too slow for CRAN checks:
 \dontrun{
 plotCIEchrom(gradient = "sl") # basic plot
 # Notice there is not much yellow in that plot.  Increase

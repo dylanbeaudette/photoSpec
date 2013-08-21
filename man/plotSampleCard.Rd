@@ -47,7 +47,7 @@ Be sure when printing that scaling is set to 100 percent or the scale will not b
 None.  A plot is drawn using \code{grid} graphics.  This should be saved as a pdf or jpeg and printed for use.
 }
 \references{
-NEED A REFERENCE
+\url{https://github.com/bryanhanson/photoSpec}
 }
 \author{
 Bryan A. Hanson, DePauw University. \email{hanson@depauw.edu}
@@ -56,22 +56,21 @@ Bryan A. Hanson, DePauw University. \email{hanson@depauw.edu}
 require("grid")
 # Generate some calibration colors:
 #
-green1 <- genCalCols(minHue = "5G", maxHue = "5G",
-	plotPC = FALSE, showCal = FALSE)
+green1 <- genCalCols(minHue = "5G", maxHue = "5G", plotPC = FALSE)
 #
 # Plot the card:
 #
-card1 <- plotSampleCard(calCols = green1, size = c(6, 4), ruler = c(3.5, 2.5),
-chip.order = "pale2dark", chip.rep = 3, guide = FALSE)
+greenCard <- plotSampleCard(calCols = green1, size = c(6, 4), ruler = c(3.5, 2.5),
+chip.order = "pale2dark", chip.rep = 3, guide = "hex",
+title = "Middle Greens")
 #
 # A larger set of red calibration colors, so use every 2nd color.
-# Also, show the guides for fun.
+# Also, illustrate labeling with the Munsell notation.
 #
-red1 <- genCalCols(minHue = "2.5R", maxHue = "10R",
-	plotPC = FALSE, showCal = FALSE)
+red1 <- genCalCols(minHue = "2.5R", maxHue = "10R", plotPC = FALSE)
 #
-card2 <- plotSampleCard(calCols = red1, size = c(6, 4), ruler = c(3.5, 2.5),
-chip.order = "munsell", chip.rep = 0.5, guide = TRUE)
+redCard <- plotSampleCard(calCols = red1, size = c(6, 4), ruler = c(3.5, 2.5),
+chip.order = "munsell", chip.rep = 0.5, guide = "Munsell", title = "All the Reds")
 
 }
 \keyword{ plot }

@@ -25,7 +25,7 @@ The desired white point values.  One of \code{c("D65", "E", "C", "D50")}.
 A data frame with columns x, y containing the vertices of the requested gamut in CIE chromaticity coordinates, or, for a white point, a data frame containing the coordinates of the requested white point.
 }
 \references{
-NEED A REFERENCE
+\url{https://github.com/bryanhanson/photoSpec}
 }
 \author{
 Bryan A. Hanson, DePauw University. \email{hanson@depauw.edu}

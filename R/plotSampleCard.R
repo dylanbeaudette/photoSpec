@@ -13,7 +13,7 @@ plotSampleCard <- function(calCols, size = c(6, 4), ruler = c(3.5, 2.5),
 	
 	# Main viewport
 	
-#	if (new.page) grid.newpage() # increase height to accommodate title, csn
+	grid.newpage()
 	pushViewport(viewport(width = size[1], height = size[2], default.units = "in"))
 	
 	# Draw the sample region with calibration grill/grid

@@ -15,24 +15,24 @@ An list with elements \code{rgb} and \code{hexcol}. See \code{\link{genCalCols}}
 }
 
   \item{sampCol}{
-A data frame with columns \code{cols} which contains hexadecimal strings, and \code{id} which has the sample names.  If missing, the principal curve is computed.
+A data frame with columns \code{hex} which contains hexadecimal strings, and \code{id} which has the sample names.  If missing, only the principal curve is computed.
 }
 }
 
 \details{
-The principal curve through the calibration colors in rgb space is computed after adding pure white (1, 1, 1) and pure black (0, 0, 0) (this is analogous to finding a principal component).  The sample color is then projected onto this curve.  Its position along the curve as a percentage of the total length is reported as a value approximately proportional to the Munsell value.
+The principal curve through the calibration colors in RGB space is computed after adding pure white (1, 1, 1) and pure black (0, 0, 0) to the data supplied (this is analogous to finding a principal component).  The sample color is then projected onto this curve.  Its position along the curve as a percentage of the total length is reported as a value approximately proportional to the Munsell value.
 }
 \value{
-A list with two top level elements: \code{calCols} is returned with two additional columns: \code{value} and \code{residual} containing the interpolated sample values and the distance of the samples from the principal curve. The second element is \code{pcfit} which contains the results of fitting the principal curve.
+A list with two top level elements: \code{calCols} is returned with two additional columns: \code{value} and \code{residual}, containing the interpolated sample values and the distance of the samples from the principal curve. The second element is \code{pcfit} which contains the results of fitting the principal curve.
 }
 \references{
-NEED A REFERENCE
+\url{https://github.com/bryanhanson/photoSpec}
 }
 \author{
 Bryan A. Hanson, DePauw University. \email{hanson@depauw.edu}
 }
 
 \seealso{
-\code{\link{showRGBcalibration}} for an example.
+See \code{\link{showRGBcalibration}}, the user facing function, for additional examples.
 }
 \keyword{ utilities }

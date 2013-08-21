@@ -37,7 +37,7 @@ $case \tab chr \tab The manner in which the L1/L2 -> D65 vector hits the spectra
 $verts  \tab data.frame \tab x & y wedge vertices. \cr
 $raster \tab raster \tab A raster object giving the gradient \cr
 $colSpace \tab chr \tab Character string giving the color space in use. \cr
-$ex \tab num \tab The exposure val.ue \cr
+$ex \tab num \tab The exposure value \cr
 $p4 \tab num \tab The point where L1 -> D65 intersects the spectral locus. \cr
 $p5 \tab num \tab The point where L2 -> D65 intersects the spectral locus. \cr
 $p6 \tab num \tab The point where (L2 - L1) -> D65 intersects the spectral locus. \cr
@@ -45,7 +45,7 @@ $xPt \tab num \tab The point in the wedge farthest from D65. \cr
 }
 }
 \references{
-NEED A REFERENCE
+\url{https://github.com/bryanhanson/photoSpec}
 }
 \author{
 Bryan A. Hanson, DePauw University. \email{hanson@depauw.edu}

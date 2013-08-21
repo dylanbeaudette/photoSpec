@@ -18,6 +18,9 @@ License: \tab GPL-3\cr
 LazyLoad: \tab yes\cr
 }
 }
+\references{
+\url{https://github.com/bryanhanson/photoSpec}
+}
 \author{
 Bryan A. Hanson, DePauw University, Greencastle Indiana USA
 

@@ -10,4 +10,5 @@ export(calcSampleValue,
 	showRGBcalibration,
 	showCIEcalibration,
 	runAllCal)
-import(munsell, princurve, grid, splancs, rgl, plyr, aqp, digest, colorspace)
+import(munsell, princurve, grid, splancs, rgl, plyr, aqp, digest)
+importFrom(colorspace, hex2RGB)
