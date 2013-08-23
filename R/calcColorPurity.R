@@ -96,13 +96,20 @@ calcColorPurity <- function(sampCol = NULL, gamut = "sRGB", lambdas = NULL,
 				i2 <- findPolygonIntersection(XY = Lpts, xy = pg) # indices of intersections
 				idx2 <- c(idx2, i2)
 				}
-			#print(idx2) # if idx2 = 4400 must manually find intersection FIX
+
+			cat("idx2 =", idx2, "\n") # if idx2 = 4400 must manually find intersection FIX
+			
 			# Now plot 'em
 			grid.points(projPts[,1], projPts[,2], size = unit(0.5, "char"), pch = 4,
 				gp = gpar(col = "red"), default.units = "native")
-			
-			grid.segments(x0 = CIExyz[idx1,2], y0 = CIExyz[idx1,3], x1 = CIExyz[idx2,2], y1 = CIExyz[idx2,3],
-				gp = gpar(col = "red"), default.units = "native")
+
+			# Assemble all the segement endpoints
+			x0 = CIExyz[idx1,2]
+			y0 = CIExyz[idx1,3]
+			x1 = CIExyz[idx2,2]
+			y1 = CIExyz[idx2,3]
+						
+			grid.segments(x0, y0, x1, y1, gp = gpar(col = "red"), default.units = "native")
 				
 			# label 'em
 			lab.pos <- extendAndRotateAroundD65(pts = CIExyz[idx1,c(2,3)], ang = 0, fac = 1.2)
