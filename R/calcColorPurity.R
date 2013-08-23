@@ -97,17 +97,40 @@ calcColorPurity <- function(sampCol = NULL, gamut = "sRGB", lambdas = NULL,
 				idx2 <- c(idx2, i2)
 				}
 
-			cat("idx2 =", idx2, "\n") # if idx2 = 4400 must manually find intersection FIX
-			
 			# Now plot 'em
 			grid.points(projPts[,1], projPts[,2], size = unit(0.5, "char"), pch = 4,
 				gp = gpar(col = "red"), default.units = "native")
 
-			# Assemble all the segement endpoints
-			x0 = CIExyz[idx1,2]
-			y0 = CIExyz[idx1,3]
-			x1 = CIExyz[idx2,2]
-			y1 = CIExyz[idx2,3]
+			# Assemble all the segment end points
+			# Must manually fix when idx2 = 4400, the line of purples
+			if (all(idx2 != 4400)) {
+				x0 = CIExyz[idx1,2]
+				y0 = CIExyz[idx1,3]
+				x1 = CIExyz[idx2,2]
+				y1 = CIExyz[idx2,3]
+				}
+
+			if (any(idx2 == 4400)) {
+				prb <- which(idx2 == 4400)
+				# remove that entry and the one before it
+				idx1a  <- idx1[-c(prb, prb-1)]
+				idx2a  <- idx2[-c(prb, prb-1)]
+				x0 = CIExyz[idx1a,2]
+				y0 = CIExyz[idx1a,3]
+				x1 = CIExyz[idx2a,2]
+				y1 = CIExyz[idx2a,3]
+				# Manually find the intersection
+				for (i in 1:length(prb)) {
+					pp <- findCIEindex(lambdas[prb[i]])
+					loc <- lineIntersection(CIExyz[1,2], CIExyz[1,3], CIExyz[4400,2], CIExyz[4400,3],
+						D65[1], D65[2],
+						CIExyz[pp,2], CIExyz[pp,3])
+					x0 <- c(x0, CIExyz[pp,2])
+					y0 <- c(y0, CIExyz[pp,3])
+					x1 <- c(x1, loc[1])
+					y1 <- c(y1, loc[2])
+					}
+				}
 						
 			grid.segments(x0, y0, x1, y1, gp = gpar(col = "red"), default.units = "native")
 				
