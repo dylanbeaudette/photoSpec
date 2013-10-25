@@ -3,6 +3,12 @@ NEWS file for package photoSpec
 photoSpec: A photographic spectrophotometer
 Bryan A. Hanson DePauw University, Greencastle Indiana USA
 
+##### Version 0.4-12
+Date: 2013-10-24
+>> Semantic versioning is now in effect (it basically was already, this makes it official).  See semver.org
+>> Small fixes to documentation.
+>> Added a helper function, getRGorB to calcColorPurity.  This simply extracts the R, G or B channel from the sampCol vector and adds it to the return value.
+
 ##### Version 0.4-11
 Date: 2013-08-22
 >> Fixed a problem in calcColorPurity in which a segment from a wavelength through D65 which should hit the line of purples did not.

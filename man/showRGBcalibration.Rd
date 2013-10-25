@@ -65,6 +65,7 @@ sc <- data.frame(cols = c("#FF0000", "#0000FF", "#98F5FF", "#6495ED"),
 #
 showRGBcalibration(calCols = bluehues, sampCol = sc, title = "Good Bad & Ugly")
 showCIEcalibration(calCols = bluehues, sampCol = sc, title = "Good Bad & Ugly")
+# NEED TO ADD EXAMPLE OF LAMBDAS, AND IN PARTICULAR CHECK THAT 575 GIVES THE RIGHT ANSWER
 #
 # What's going on with good old blue?
 # Compare it with the nearest Munsell color.  Notice that

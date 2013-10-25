@@ -1,7 +1,7 @@
 \name{runAllCal}
 \alias{runAllCal}
 \title{
-Run call calibration options
+Run all calibration options
 }
 \description{
 This function runs both \code{\link{showCIEcalibration}} and \code{\link{showRGBcalibration}} and returns the results in a single data frame.
@@ -23,7 +23,7 @@ A character vector giving a title for the plot.
 Character vector passed to \code{plotCIEchrom}.
 }
   \item{\dots}{
-Other options to be passed to either \code{grid} plotting functions, or \code{\link{showCIEcalibration}} or \code{\link{showRGBcalibration}}.  See those functions for the possible options, along with the examples below.
+Other options to be passed to either \code{grid} plotting functions, for \code{\link{showCIEcalibration}}, or \code{rgl} plotting functions, for \code{\link{showRGBcalibration}}.  Arguments must be appropriate for the plotting system.  See those functions for the possible options, along with the examples below.
 }
 }
 \value{
