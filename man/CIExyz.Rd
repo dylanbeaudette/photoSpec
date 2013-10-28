@@ -5,7 +5,7 @@
 Spectral Locus for the 1931 CIE chromaticity diagram
 }
 \description{
-This data set gives wavelengths every 0.1 nm, along with the associated CIE xyz values for the spectral locus of the 1931 CIE chromaticity diagram.  They are called xyz values here as they are called that in the original source, but they are also known as xyY or XYZ values (need to double check).
+This data set gives wavelengths every 0.1 nm, along with the associated CIE xyz values for the spectral locus of the 1931 CIE chromaticity diagram.  They are called xyz values here as they are called that in the original source, but they are also known as xyY or XYZ values.
 }
 \usage{data(CIExyz)}
 \format{

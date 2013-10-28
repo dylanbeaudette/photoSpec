@@ -1,8 +1,8 @@
 Package: photoSpec
 Type: Package
 Title: photoSpec: A photographic spectrophotometer
-Version: 0.4-12
-Date: 2013-10-24
+Version: 0.4-13
+Date: 2013-10-28
 Author: Bryan A. Hanson DePauw University, Greencastle Indiana USA
 Maintainer: Bryan A. Hanson <hanson@depauw.edu>
 Authors@R:	c(person("Bryan", "Hanson", role = c("aut", "cre"), email = "hanson@depauw.edu"),

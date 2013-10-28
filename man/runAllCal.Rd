@@ -4,7 +4,7 @@
 Run all calibration options
 }
 \description{
-This function runs both \code{\link{showCIEcalibration}} and \code{\link{showRGBcalibration}} and returns the results in a single data frame.
+This function runs both \code{\link{showCIEcalibration}} and \code{\link{showRGBcalibration}} and it extracts just the R, G and B channels if \code{sampCol} is provided.  The results are returned in a single data frame.
 }
 \usage{
 runAllCal(calCols, sampCol = NULL, title = NULL, opts = "sRGB", ...)

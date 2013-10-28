@@ -5,6 +5,38 @@
 	# Bryan Hanson, DePauw University, March 2013 hanson@depauw.edu
 	# Part of the photoSpec package
 
+	getRGorB <- function(hexvector = NULL, channel = "R") {
+	
+		# Function to take a vector of hex values and return just the
+		# selected channel on a 0...1 scale
+		
+		# Check some basic things
+		if (is.null(hexvector)) stop("Must provide a hexadecimal value")
+		if (!identical(nchar(hexvector), rep(7L, length(hexvector)))) stop("hexvector should be of form #abcdef")
+	
+		# Get the selected channel and convert to integer, then to 0...1 scale
+		
+		if (channel == "R") {
+			ans <- substr(hexvector, 2, 3)
+			ans <- strtoi(ans, 16L)/255
+			}
+	
+		if (channel == "G") {
+			ans <- substr(hexvector, 4, 5)
+			ans <- strtoi(ans, 16L)/255
+			}
+	
+		if (channel == "B") {
+			ans <- substr(hexvector, 6, 7)
+			ans <- strtoi(ans, 16L)/255
+			}
+	
+		ans
+		}
+
+	# End of helper function
+			
+
 	pointOnLineNearPoint <- function(Px, Py, slope, intercept) {
 		# Vectorized
 		Ax <- Px*10 # push the point out

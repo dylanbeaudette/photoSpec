@@ -3,6 +3,12 @@ NEWS file for package photoSpec
 photoSpec: A photographic spectrophotometer
 Bryan A. Hanson DePauw University, Greencastle Indiana USA
 
+##### Version 0.4-13
+Date: 2013-10-28
+>> Additional improvements to the documentation, especially the examples.
+>> Moved getRGorB to internalFunctions.R
+>> Use of getRGorB moved to runAllCal from calcColorPurity.
+
 ##### Version 0.4-12
 Date: 2013-10-24
 >> Semantic versioning is now in effect (it basically was already, this makes it official).  See semver.org

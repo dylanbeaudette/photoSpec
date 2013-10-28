@@ -20,7 +20,7 @@ Numeric, giving the upper wavelength at the edge of the region to be analyzed.
 Character string giving the color space to use for drawing the gradient.  One of \code{c("sRGB", "Apple RGB")}.  \code{Apple RGB} is mainly of historical interest; no physical devices use it at this time.
 }
   \item{ex}{
-Numeric.  The 'exposure' to use.  The exposure must be used with \strong{extreme care}.  Larger values of \code{exposure} make the white point whiter in the plot, and lightens colors near the spectral locus.  The purpose is to alter the aesthetics of the plot - that is, to make the white "whiter" for the visual effect (perhaps in teaching CIE concepts).  It must be used with care and competence!
+Numeric.  The 'exposure' to use.  The exposure must be used with \strong{extreme care}.  Larger values of \code{exposure} make the white point whiter in the plot, and lightens colors near the spectral locus (driving some off the plot!).  The purpose is to alter the aesthetics of the plot - that is, to make the white "whiter" so that it looks "right".  The effect of exposure will vary with the display device.
 }
   \item{\ldots}{
 Arguments to be passed to \code{\link{plotCIEchrom}}, typically one of the \code{opts}.
@@ -43,6 +43,7 @@ $p5 \tab num \tab The point where L2 -> D65 intersects the spectral locus. \cr
 $p6 \tab num \tab The point where (L2 - L1) -> D65 intersects the spectral locus. \cr
 $xPt \tab num \tab The point in the wedge farthest from D65. \cr
 }
+Some of these quantities date to early versions of the package and are not currently used, but are kept here as they may be useful later.
 }
 \references{
 \url{https://github.com/bryanhanson/photoSpec}

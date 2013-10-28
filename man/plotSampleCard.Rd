@@ -24,13 +24,13 @@ The \code{c(width, height)} of the sample scale to be drawn, in cm.
 String.  Determines how the colors will be positioned on the card.  One of \code{c("random", "munsell", "pale2dark", "fill")}.  See the examples.
 }
   \item{chip.rep}{
-Numeric; the number of replicates of \code{calCols} to use.  If \code{chip.rep >= 1} it is taken as an integer and the calibration colors are replicated accordingly (this gives copies of the same color which can be useful in a possibly unevenly lit photograph). If \code{chip.rep < 1} \code{chip.rep} must be in \code{c(0.5, 0.33, 0.25, 0.2)} and 1/2, 1/3, 1/4 or 1/5 respectively of the calibration colors will be used.
+Numeric; the number of replicates of \code{calCols} to use.  If \code{chip.rep >= 1} it is taken as an integer and the calibration colors are replicated accordingly (this gives copies of the same color which can be useful in a possibly unevenly lit photograph). If \code{chip.rep < 1} \code{chip.rep} must be in \code{c(0.5, 0.33, 0.25, 0.2)} in which case 1/2, 1/3, 1/4 or 1/5 respectively of the calibration colors will be used.
 }
   \item{title}{
 String.  A title for the card.
 }
   \item{guide}{
-Character.  If \code{hex}, outline the card colors and give the hexadecimal codes for each.  If \code{Munsell}, use the Munsell nomenclature.
+Character.  If \code{hex}, outline the card colors and give the hexadecimal codes for each.  If \code{Munsell}, use the Munsell nomenclature.  Note that with the Munsell system some rounding occurs.
 }
   \item{...}{
 Arguments to be passed downstream, likely to \code{grid} drawing functions.
@@ -44,7 +44,7 @@ Be sure when printing that scaling is set to 100 percent or the scale will not b
 }
 
 \value{
-None.  A plot is drawn using \code{grid} graphics.  This should be saved as a pdf or jpeg and printed for use.
+None.  A plot is drawn using \code{grid} graphics.  This should be saved as a pdf or jpeg and printed for use.  Note that a serial number is added to each plot so that the card can be uniquely identified.
 }
 \references{
 \url{https://github.com/bryanhanson/photoSpec}
@@ -70,7 +70,7 @@ title = "Middle Greens")
 red1 <- genCalCols(minHue = "2.5R", maxHue = "10R", plotPC = FALSE)
 #
 redCard <- plotSampleCard(calCols = red1, size = c(6, 4), ruler = c(3.5, 2.5),
-chip.order = "munsell", chip.rep = 0.5, guide = "Munsell", title = "All the Reds")
+chip.order = "munsell", chip.rep = 0.5, guide = "Munsell", title = "Half of All the Munsell Reds")
 
 }
 \keyword{ plot }

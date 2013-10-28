@@ -9,46 +9,11 @@ calcColorPurity <- function(sampCol = NULL, gamut = "sRGB", lambdas = NULL,
 	# This method does not require calibration, and depends 100%
 	# on the accuracy of the hexadecimal codes provided.
 
-	# Helper function
-	
-	getRGorB <- function(hexvector = NULL, channel = "R") {
-	
-	# Function to take a vector of hex values and return just the
-	# selected channel on a 0...1 scale
-	# Part of photoSpec
-	# Bryan Hanson, DePauw University, October 2013
-	
-	# Check some basic things
-	if (is.null(hexvector)) stop("Must provide a hexadecimal value")
-	if (!identical(nchar(hexvector), rep(7L, length(hexvector)))) stop("hexvector should be of form #abcdef")
-
-	# Get the selected channel and convert to integer, then to 0...1 scale
-	
-	if (channel == "R") {
-		ans <- substr(hexvector, 2, 3)
-		ans <- strtoi(ans, 16L)/255
-		}
-
-	if (channel == "G") {
-		ans <- substr(hexvector, 4, 5)
-		ans <- strtoi(ans, 16L)/255
-		}
-
-	if (channel == "B") {
-		ans <- substr(hexvector, 6, 7)
-		ans <- strtoi(ans, 16L)/255
-		}
-
-	ans
-}
-
-	# End of helper function
-			
 	if (is.null(sampCol)) stop("No sample colors provided")
 	ns <- nrow(sampCol) # no. of samples
 	
 	# sampCol should have columns hex and id - backward compatability
-	if ("cols" %in% names(sampCol)) sampCol$hex <- sampCol$cols
+	# if ("cols" %in% names(sampCol)) sampCol$hex <- sampCol$cols
 	
 	# Convert to CIE xy  * this approach ignores brightness*
 	rgb <- t(col2rgb(sampCol$hex)/255)
@@ -75,12 +40,6 @@ calcColorPurity <- function(sampCol = NULL, gamut = "sRGB", lambdas = NULL,
 	cp <- sampCol # also need to record which gamut was in use
 	cp$purity <- ccp(cie, gamut)
 	
-	# Extract just the R, G or B channel for each hex code passed
-
-	cp$R <- getRGorB(hexvector = as.character(sampCol$hex), channel = "R")
-	cp$G <- getRGorB(hexvector = as.character(sampCol$hex), channel = "G")
-	cp$B <- getRGorB(hexvector = as.character(sampCol$hex), channel = "B")
-
 	# Compute apparent lambda max for each sample (appLmax)
 	# Find where the D65 -> cie segment hits the spectral locus
 	# on the *far* side (so rotate 180 deg)

@@ -38,7 +38,7 @@ The brightness component of the CIE system is discarded.  Color purity using sRG
 The accuracy of the values returned by this function depends entirely on the accuracy of the supplied colors.  There is no calibration performed in this function.
 }
 \value{
-A plot is made, and \code{sampCols} is returned with two new columns: \code{purity} and \code{appLmax}.  The latter gives the apparent lambda max (dominant wavelength) of the color, obtained by extrapolating from the color back to D65 and then to the spectral locus, where the wavelength is obtained.  If \code{!is.null(lambdas)} additional columns are provided giving the color purity (projection) of each sample at that wavelength.  In all cases, if the projection onto the relevant vector is outside the specified gamut, \code{NA} is returned. TWO IDENTICAL COLUMNS ARE RETURNED, COL AND HEX, ONLY NEED ONE.
+A plot is made, and \code{sampCols} is returned with two new columns: \code{purity} and \code{appLmax}.  The latter gives the apparent lambda max (dominant wavelength) of the color, obtained by extrapolating from the color back to D65 and then to the spectral locus, where the wavelength is obtained.  If \code{!is.null(lambdas)} additional columns are provided giving the color purity (projection) of each sample at that wavelength.  In all cases, if the projection onto the relevant vector is outside the specified gamut, \code{NA} is returned.
 }
 \seealso{
 See the examples in \code{\link{showCIEcalibration}} which is the user-facing function.
@@ -58,12 +58,12 @@ Bryan A. Hanson, DePauw University. \email{hanson@depauw.edu}
 # standard colors on the sRGB gamut including corners
 hex <- c("#FF0000", "#FF00FF", "#0000FF", "#00FFFF", "#00FF00", "#FFFF00")
 id <- c("red", "magenta", "blue", "cyan", "green", "yellow")
-sc1 <- data.frame(cols = hex, id = id)
+sc1 <- data.frame(hex = hex, id = id)
 
 # colors in the interior
 hex <- c("#7FFFD4", "#CD4F39", "#6495ED", "#E9967A", "#FF69B4", "#ADFF2F", "#BF3EFF")
 id <- c("aquamarine", "tomato3", "cornflowerblue", "darksalmon", "hotpink", "greenyellow", "darkorchid1")
-sc2 <- data.frame(cols = hex, id = id)
+sc2 <- data.frame(hex = hex, id = id)
 
 tst1 <- calcColorPurity(sampCol = sc1, plotPts = FALSE)
 tst2 <- calcColorPurity(sampCol = sc2, plotPts = FALSE)

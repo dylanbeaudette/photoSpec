@@ -1,10 +1,10 @@
 \name{genCalCols}
 \alias{genCalCols}
 \title{
-Generate a set of calibration colors
+Generate a set of calibration colors from a Munsell specification
 }
 \description{
-This function generates a set of calibration colors.  It is the starting point for the use of \code{photoSpec}.
+This function generates a set of calibration colors from Munsell specifications.  It is the starting point for the use of \code{photoSpec}.
 }
 \usage{
 genCalCols(minHue = "2.5R", maxHue = "10R",
@@ -54,11 +54,13 @@ $rgb \tab data frame \tab Data frame containing the RGB coordinates of the chose
 \tab $r  \tab num \tab Values for red channel. \cr
 \tab $g  \tab num \tab Values for green channel. \cr
 \tab $b  \tab num \tab Values for blue channel. \cr
-$Munsell \tab char \tab A vector with the Munsell color.
+$Munsell \tab char \tab A vector with the Munsell color designation.
 }
 }
 \details{
-If you don't use the maximum range for values ([1...9]) the calibration curve in RGB space may have an exaggerated hump in it.  This is not recommended.  The Munsell colors returned are in effect 'rounded' as the Munsell system is quantized rather than continuous (i.e. there is less resolution in the Munsell system than in the CIE or RGB color spaces, and the nearest Munsell color is returned).  The Munsell hues are stored internally in order 5R -> 10RP, but conceptually the Munsell system wraps around in a circle.  This affects how minHue and maxHue are processed.  
+If you don't use the maximum range for values ([1...9]) the calibration curve in RGB space (using \code{\link{calcSampleValue}} via \code{\link{showRGBcalibration}}) may have an exaggerated hump in it.  This is not recommended as the validity of the results is unknown.  The Munsell colors returned are in effect 'rounded' as the Munsell system is quantized rather than continuous (i.e. there is less resolution in the Munsell system than in the CIE or RGB color spaces, and the nearest Munsell color is returned).
+}
+\section{Warning}{The Munsell hues are stored internally in order 5R -> 10RP, but conceptually the Munsell system wraps around in a circle.  This affects how minHue and maxHue are processed, but we believe that any range of hues returns the correct value.  Check it anyway!
 }
 
 \references{
@@ -88,6 +90,6 @@ green2 <- genCalCols(minHue = "2.5G", maxHue = "10G", plotPC = FALSE, showRGB = 
 #
 red1 <- genCalCols(minHue = "2.5R", maxHue = "10R",
 plotPC = FALSE, showRGB = TRUE, showCIE = TRUE,
-title = "All Possible Reds")
+title = "All Possible Munsell Reds")
 }
 \keyword{ plot }
