@@ -7,11 +7,11 @@ Calculate the purity of a color
 This function takes a data frame of sample colors in hexadecimal code, converts them into the CIE color space, and uses the CIE xy values to compute their color purity.  Color purity is the distance from the white point D65 to the color, divided by the distance from D65 to either the sRGB gamut or the spectral locus, along the line extended from D65 through the color (expressed as a percentage).  Called by \code{\link{showCIEcalibration}} and generally not the user.  Optionally, a vector of wavelengths can be supplied, and the projection (color purity) of each color onto that wavelength is returned. NEEDS A PICTURE OF THE COLOR PURITY CONCEPT.
 }
 \usage{
-calcColorPurity(sampCol = NULL, gamut = "sRGB", lambdas = NULL,
+calcColorPurity(sampCols = NULL, gamut = "sRGB", lambdas = NULL,
 	plotPts = TRUE, plotLambdas = FALSE, ...)
 }
 \arguments{
-  \item{sampCol}{
+  \item{sampCols}{
 A data frame with columns \code{hex} which contains hexadecimal strings, and \code{id} which has the sample names.
 }
   \item{gamut}{
@@ -43,7 +43,7 @@ The color purity calculated depends upon the gamut supplied, see 'Details'.
 }
 
 \value{
-The supplied data frame \code{sampCols} is returned with two new columns: \code{purity} and \code{appLmax}.  The latter gives the apparent lambda max (dominant wavelength) of the color, obtained by extrapolating from the color back to D65 and then to the spectral locus, where the wavelength is obtained.  If \code{!is.null(lambdas)} additional columns are provided giving the color purity (projection) of each sample at each wavelength.  If the projection onto the reference line is outside the specified gamut, \code{NA} is returned.
+The supplied data frame \code{sampColss} is returned with two new columns: \code{purity} and \code{appLmax}.  The latter gives the apparent lambda max (dominant wavelength) of the color, obtained by extrapolating from the color back to D65 and then to the spectral locus, where the wavelength is obtained.  If \code{!is.null(lambdas)} additional columns are provided giving the color purity (projection) of each sample at each wavelength.  If the projection onto the reference line is outside the specified gamut, \code{NA} is returned.
 
 If a CIE diagram has already been drawn (as it would if this function were called by \code{\link{showCIEcalibration}}) AND  \code{plotLambdas = TRUE}, a reference line is drawn from each lambda through D65, and an red X indicates where each sample projects onto the reference line.
 }
@@ -72,8 +72,9 @@ hex <- c("#7FFFD4", "#CD4F39", "#6495ED", "#E9967A", "#FF69B4", "#ADFF2F", "#BF3
 id <- c("aquamarine", "tomato3", "cornflowerblue", "darksalmon", "hotpink", "greenyellow", "darkorchid1")
 sc2 <- data.frame(hex = hex, id = id)
 
-tst1 <- calcColorPurity(sampCol = sc1, plotPts = FALSE, lambdas = c(500, 550, 610))
-tst2 <- calcColorPurity(sampCol = sc2, plotPts = FALSE)
+tst1 <- calcColorPurity(sampCols = sc1, plotPts = FALSE, lambdas = c(500, 610))
+# NOTE SINGULARITY IF LAMBDA = 550 IS USE WITH sc1.  549 OR 551 WORK FINE.
+tst2 <- calcColorPurity(sampCols = sc2, plotPts = FALSE)
 }
 
 \keyword{ utilities }

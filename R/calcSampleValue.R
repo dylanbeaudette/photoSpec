@@ -1,6 +1,6 @@
 
 
-calcSampleValue <- function(calCols, sampCol = NULL) {
+calcSampleValue <- function(calCols, sampCols = NULL) {
 	
 	# Function to project sample color(s) onto the principal
 	# curve formed by the calCols along with pure black and white.
@@ -15,24 +15,24 @@ calcSampleValue <- function(calCols, sampCol = NULL) {
 	calCols$rgb <- rbind(calCols$rgb, c(0.0, 0.0, 0.0), c(1, 1, 1))	
 	fit <- principal.curve(as.matrix(calCols$rgb))
 	
-	if (!is.null(sampCol)) {
+	if (!is.null(sampCols)) {
 		# Convert to rgb, then fit back onto existing principal curve
-		rgb <- t(col2rgb(sampCol$cols)/255)
+		rgb <- t(col2rgb(sampCols$hex)/255)
 		
 		for (i in 1:nrow(rgb)) { # fit each sample separately
 			tm <- matrix(c(0.0, 0.0, 0.0, as.vector(rgb[i,]), 1.0, 1.0, 1.0), ncol = 3, byrow = TRUE)
 			fit2 <- get.lam(tm, fit$s, tag = fit$tag)
 			conc <- 1 - fit2$lambda[2]/fit2$lambda[3]
 			conc <- round(conc, 2)
-			sampCol$value[i] <- conc
-			sampCol$residual[i] <- fit2$dist
-			# message("Sample ", sampCol$id[i], " is ", round(fit2$dist, 2), " from the calibration curve")
-			# message("Sample ", sampCol$id[i], " has absorbance ", conc, "\n")
+			sampCols$value[i] <- conc
+			sampCols$residual[i] <- fit2$dist
+			# message("Sample ", sampCols$id[i], " is ", round(fit2$dist, 2), " from the calibration curve")
+			# message("Sample ", sampCols$id[i], " has absorbance ", conc, "\n")
 			}
 		}
 	
 	# assemble everything that might be useful
 	L <- list(pcfit = fit)
-	if (!is.null(sampCol)) L$sampCol <- sampCol
+	if (!is.null(sampCols)) L$sampCols <- sampCols
 	invisible(L)
 	}

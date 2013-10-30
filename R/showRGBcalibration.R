@@ -1,5 +1,5 @@
 
-showRGBcalibration <- function(calCols, sampCol = NULL, title = NULL, ...) {
+showRGBcalibration <- function(calCols, sampCols = NULL, title = NULL, ...) {
 		
 	# Function to make a 3D plot of a color sample,
 	# along with a set of calibration colors.
@@ -20,15 +20,15 @@ showRGBcalibration <- function(calCols, sampCol = NULL, title = NULL, ...) {
 
 	# Compute and show the principal curve/pts, calibrate, if sampCols given
 	
-	if (!is.null(sampCol)) {
+	if (!is.null(sampCols)) {
 		# decorate the plot
-		rgb <- t(col2rgb(sampCol$cols)/255)
-		points3d(rgb[,1], rgb[,2], rgb[,3], col = sampCol$cols, size = 10)
+		rgb <- t(col2rgb(sampCols$hex)/255)
+		points3d(rgb[,1], rgb[,2], rgb[,3], col = sampCols$hex, size = 10)
 		
 		# calibrate and show principal curve
-		pts <- calcSampleValue(calCols, sampCol)
+		pts <- calcSampleValue(calCols, sampCols)
 		lines3d(pts$pcfit$s[pts$pcfit$tag,], col = "white", lwd = 3)
-		return(pts$sampCol)
+		return(pts$sampCols)
 		}
 		
 	invisible()

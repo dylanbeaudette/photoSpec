@@ -1,5 +1,5 @@
 
-showCIEcalibration <- function(calCols, sampCol = NULL, title = NULL, gradient = NULL, opts = "sRGB", ...) {
+showCIEcalibration <- function(calCols, sampCols = NULL, title = NULL, gradient = NULL, opts = "sRGB", ...) {
 		
 	# Function to show calibration colors, and optionally sample colors
 	# on the CIE chromaticity diagram
@@ -20,9 +20,9 @@ showCIEcalibration <- function(calCols, sampCol = NULL, title = NULL, gradient =
 	if (!is.null(gradient)) mycols <- "black"
 	grid.points(cie[,1], cie[,2], size = unit(0.25, "char"), gp = gpar(col = mycols))
 
-	if (!is.null(sampCol)) {
-		if ("cols" %in% names(sampCol)) sampCol$hex <- sampCol$cols # backward compatability
-		res <- calcColorPurity(sampCol, ...)
+	if (!is.null(sampCols)) {
+#		if ("cols" %in% names(sampCols)) sampCols$hex <- sampCols$cols # backward compatability
+		res <- calcColorPurity(sampCols, ...)
 		return(res)
 		}
 	invisible()

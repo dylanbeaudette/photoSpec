@@ -44,7 +44,7 @@ Bryan A. Hanson, DePauw University. \email{hanson@depauw.edu}
 }
 
 \section{Warning }{
-The appearance of the color gradient will vary with the device, surface and incident light used to view it and is not likely correct anywhere.  \strong{It also varies with \code{exposure}}.
+The appearance of the color gradient will vary with the device, surface and incident light used to view it and is not likely correct anywhere.  \strong{The appearance varies strongly with exposure}.
 }
 
 \examples{
@@ -55,8 +55,8 @@ plotCIEchrom(gradient = "sl") # basic plot
 # Notice there is not much yellow in that plot.  Increase
 # the exposure to bring in some yellow, at the expense of some blues:
 plotCIEchrom(gradient = "sl", ex = 1.4)
-# This next one shows the gradient for a CMYK printing process
-# and outlines the colors a typical monitor can display.
+# Next show a gradient for the CMYK printing process
+# and outline the colors a typical monitor can display.
 plotCIEchrom(gradient = getGamutValues("SWOP"), opts = c("D65", "SWOP", "sRGB"))
 }
 }

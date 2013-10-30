@@ -1,6 +1,6 @@
 
 
-calcColorPurity <- function(sampCol = NULL, gamut = "sRGB", lambdas = NULL,
+calcColorPurity <- function(sampCols = NULL, gamut = "sRGB", lambdas = NULL,
 	plotPts = TRUE, plotLambdas = FALSE, ...) {
 
 	# Bryan Hanson, DePauw University, July 2013 hanson@depauw.edu
@@ -9,14 +9,14 @@ calcColorPurity <- function(sampCol = NULL, gamut = "sRGB", lambdas = NULL,
 	# This method does not require calibration, and depends 100%
 	# on the accuracy of the hexadecimal codes provided.
 
-	if (is.null(sampCol)) stop("No sample colors provided")
-	ns <- nrow(sampCol) # no. of samples
+	if (is.null(sampCols)) stop("No sample colors provided")
+	ns <- nrow(sampCols) # no. of samples
 	
-	# sampCol should have columns hex and id - backward compatability
-	# if ("cols" %in% names(sampCol)) sampCol$hex <- sampCol$cols
+	# sampCols should have columns hex and id - backward compatability
+	# if ("cols" %in% names(sampCols)) sampCols$hex <- sampCols$cols
 	
 	# Convert to CIE xy  * this approach ignores brightness*
-	rgb <- t(col2rgb(sampCol$hex)/255)
+	rgb <- t(col2rgb(sampCols$hex)/255)
 	XYZ <- convertColor(rgb, from = "sRGB", to = "XYZ")
 	x <- XYZ[,1]/rowSums(XYZ)
 	y <- XYZ[,2]/rowSums(XYZ)
@@ -31,13 +31,13 @@ calcColorPurity <- function(sampCol = NULL, gamut = "sRGB", lambdas = NULL,
 			gp = gpar(cex = 0.75))
 		
 		grid.points(cie[,1], cie[,2], size = unit(0.5, "char"))
-		grid.text(label = sampCol$id, cie[,1], cie[,2], default.units = "native",
+		grid.text(label = sampCols$id, cie[,1], cie[,2], default.units = "native",
 			hjust = 0, gp = gpar(cex = 0.75))
 		}
 
 	# Compute color purity (ratio of D65 to color / D65 to gamut) @ apparent lambda max
 
-	cp <- sampCol # also need to record which gamut was in use
+	cp <- sampCols # also need to record which gamut was in use
 	cp$purity <- ccp(cie, gamut)
 	
 	# Compute apparent lambda max for each sample (appLmax)
