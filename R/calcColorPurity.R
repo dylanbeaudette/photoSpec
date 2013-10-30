@@ -76,17 +76,18 @@ calcColorPurity <- function(sampCol = NULL, gamut = "sRGB", lambdas = NULL,
 			cplpt <- ccp(lpt, gamut) # compute vector of color purity at each supplied lambda
 			projVals[i,] <- cplpt
 			projPts <- rbind(projPts, lpt)
-			for (n in 1:nl) { # save the projected points for plotting later
+			# for (n in 1:nl) { # save the projected points for plotting later
 				
-				}
+				# }
 				
 			} # end of looping over samples
 			
-		projPts <- projPts[-1,]
+		projPts <- projPts[-1,] # remove NAs
 		cp <- cbind(cp, projVals) # return value
 		
 		if (plotLambdas) {
-			# Draw reference line from each lambda through D65
+			# Draw a reference line from each lambda through D65 to the spectral locus on the other side
+			# First, get the CIE index of the end points
 			idx1 <- c()
 			idx2 <- c()
 			for (i in 1:length(lambdas)) { # loop over lambdas
@@ -97,11 +98,7 @@ calcColorPurity <- function(sampCol = NULL, gamut = "sRGB", lambdas = NULL,
 				idx2 <- c(idx2, i2)
 				}
 
-			# Now plot 'em
-			grid.points(projPts[,1], projPts[,2], size = unit(0.5, "char"), pch = 4,
-				gp = gpar(col = "red"), default.units = "native")
-
-			# Assemble all the segment end points
+			# Find the segment end points as x, y
 			# Must manually fix when idx2 = 4400, the line of purples
 			if (all(idx2 != 4400)) {
 				x0 = CIExyz[idx1,2]
@@ -111,14 +108,22 @@ calcColorPurity <- function(sampCol = NULL, gamut = "sRGB", lambdas = NULL,
 				}
 
 			if (any(idx2 == 4400)) {
+				# cat("idx1 = ", idx1, "\n")
+				# cat("idx2 = ", idx2, "\n")
 				prb <- which(idx2 == 4400)
-				# remove that entry and the one before it
-				idx1a  <- idx1[-c(prb, prb-1)]
-				idx2a  <- idx2[-c(prb, prb-1)]
+				# Remove that entry
+				# idx1a  <- idx1[-c(prb, prb-1)]
+				# idx2a  <- idx2[-c(prb, prb-1)]
+				idx1a  <- idx1[-prb]
+				idx2a  <- idx2[-prb]
 				x0 = CIExyz[idx1a,2]
 				y0 = CIExyz[idx1a,3]
 				x1 = CIExyz[idx2a,2]
 				y1 = CIExyz[idx2a,3]
+				# cat("x0 = ", x0, "\n")
+				# cat("y0 = ", y0, "\n")
+				# cat("x1 = ", x1, "\n")
+				# cat("y1 = ", y1, "\n")
 				# Manually find the intersection
 				for (i in 1:length(prb)) {
 					pp <- findCIEindex(lambdas[prb[i]])
@@ -131,10 +136,17 @@ calcColorPurity <- function(sampCol = NULL, gamut = "sRGB", lambdas = NULL,
 					y1 <- c(y1, loc[2])
 					}
 				}
-						
+			
+			# Now we have everything ready to plot	
 			grid.segments(x0, y0, x1, y1, gp = gpar(col = "red"), default.units = "native")
-				
-			# label 'em
+
+			# Plot the projected points with an X				
+			# Note: this code draws the projection even if it out of gamut.
+			# If out of gamut, cp returns NA which could be checked here and the drawing skipped
+			grid.points(projPts[,1], projPts[,2], size = unit(0.5, "char"), pch = 4,
+				gp = gpar(col = "red"), default.units = "native")
+
+			# Label 'em
 			lab.pos <- extendAndRotateAroundD65(pts = CIExyz[idx1,c(2,3)], ang = 0, fac = 1.2)
 			for (i in 1:nl) {
 				grid.text(label = bquote(lambda[.(lambdas[i])]), lab.pos[i,1], lab.pos[i,2],

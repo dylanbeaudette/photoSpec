@@ -83,7 +83,9 @@
 			}
 
 		cie2 <-  extendAndRotateAroundD65(cie)
+#		hits <- findPolygonIntersection(XY = cie, xy = pg) # indices of intersections
 		hits <- findPolygonIntersection(XY = cie2, xy = pg) # indices of intersections
+#		cat("hits = ", hits, "\n")
 		if (length(hits) != ns) stop("Wrong number of gamut intersections")
 
 		cp <- rep(NA, ns)
