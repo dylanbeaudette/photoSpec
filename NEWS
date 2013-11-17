@@ -3,6 +3,18 @@ NEWS file for package photoSpec
 photoSpec: A photographic spectrophotometer
 Bryan A. Hanson DePauw University, Greencastle Indiana USA
 
+##### Version 0.4-15
+Date: 2013-11-16
+>> Previous attempt to fix ccp did not work!  It now correctly computes color purity, including negative values.
+>> Modified calcColorPurity and ccp for increased speed and ease of code maintenance.
+>> Created findCIEindex2, a vectorized version of findCIEindex.  Have not yet systematically changed all code to use it yet, however.
+>> Vectorized lineIntersection and updated code which uses it.
+>> Vectorized dAB and updated code which uses it.
+
+##### Version 0.4-14
+Date: 2013-11-12
+>> Modified ccp to return negative color purity values where appropriate.
+
 ##### Version 0.4-13
 Date: 2013-10-30
 >> Additional improvements to the documentation, especially the examples.

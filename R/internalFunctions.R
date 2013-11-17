@@ -66,8 +66,42 @@
 		ans
 		}
 
+	# ccp <- function(cie, gamut) { # Calc color purity
+		# # cie is matrix of colors giving cie xy
+
+		# # Get needed data
+		# ns <- nrow(cie)
+		# D65 <- getWhiteValues("D65")	
+		# if (gamut == "sl") { # spectral locus data (shark fin)
+			# pg <- CIExyz[,c(2,3)] # 4400 rows
+			# pg <- rbind(pg, pg[1,]) # repeat row so that polygon can close
+			# }
+	
+		# if (gamut == "sRGB") { # device color space
+			# pg <- getGamutValues("sRGB")
+			# pg <- rbind(pg, pg[1,]) # repeat row so that polygon can close
+			# }
+
+		# cie2 <-  extendAndRotateAroundD65(cie) # defaults: simply extends
+		# hits <- findPolygonIntersection(XY = cie2, xy = pg) # indices of intersections
+		# if (length(hits) != ns) stop("Wrong number of gamut intersections")
+
+		# cp <- rep(NA, ns)
+		# for (i in 1:ns) {
+			# dc <- dAB(D65, cie[i,]) # distance from D65 to color
+			# ndx <- hits[i]
+			# where <- lineIntersection(D65[1], D65[2], cie2[i,1], cie2[i,2],
+				# pg[ndx, 1], pg[ndx, 2], pg[ndx + 1, 1], pg[ndx + 1, 2])
+			# dg <- dAB(D65, where) # distance from D65 to gamut
+			# # Final calc
+			# cp[i] <- dc*100/dg # these are by definition always (+)
+			# if (cp[i] > 100) cp[i] <- NA # these are out of gamut
+			# }
+		# cp
+		# }
+
 	ccp <- function(cie, gamut) { # Calc color purity
-		# cie is matrix of colors as cie xy
+		# cie is matrix of colors giving cie xy
 
 		# Get needed data
 		ns <- nrow(cie)
@@ -82,21 +116,18 @@
 			pg <- rbind(pg, pg[1,]) # repeat row so that polygon can close
 			}
 
-		cie2 <-  extendAndRotateAroundD65(cie)
-#		hits <- findPolygonIntersection(XY = cie, xy = pg) # indices of intersections
+		cie2 <-  extendAndRotateAroundD65(cie) # defaults: simply extends
 		hits <- findPolygonIntersection(XY = cie2, xy = pg) # indices of intersections
-#		cat("hits = ", hits, "\n")
 		if (length(hits) != ns) stop("Wrong number of gamut intersections")
 
-		cp <- rep(NA, ns)
-		for (i in 1:ns) {
-			dc <- dAB(D65, cie[i,]) # distance from D65 to color
-			ndx <- hits[i]
-			where <- lineIntersection(D65[1], D65[2], cie2[i,1], cie2[i,2],
-				pg[ndx, 1], pg[ndx, 2], pg[ndx + 1, 1], pg[ndx + 1, 2])
-			dg <- dAB(D65, where) # distance from D65 to gamut
-			cp[i] <- dc*100/dg
-			if (cp[i] > 100) cp[i] <- NA # these are out of gamut
+		dc <- dAB(D65, cie) # distance from D65 to color
+		where <- lineIntersection(D65[1], D65[2], cie2[,1], cie2[,2],
+			pg[hits, 1], pg[hits, 2], pg[hits + 1, 1], pg[hits + 1, 2])
+		dg <- dAB(D65, where) # distance from D65 to gamut
+		# Final calc
+		cp <- dc*100/dg # these are by definition always (+)
+		for (n in 1:length(cp)) {
+			if (cp[n] > 100) cp[n] <- NA # these are out of gamut
 			}
 		cp
 		}
@@ -116,10 +147,17 @@
 		return(as.character(df$cols))
 		}
 
+	# dAB <- function(A, B) { # Euclidian distance between pts A & B
+		# # NOT vectorized
+		# # A, B each as c(x, y)
+		# dAB <- sqrt((B[2]-A[2])^2 + (B[1]-A[1])^2)
+		# }
+
 	dAB <- function(A, B) { # Euclidian distance between pts A & B
-		# NOT vectorized
-		# A, B each as c(x, y)
-		dAB <- sqrt((B[2]-A[2])^2 + (B[1]-A[1])^2)
+		# Vectorized
+		# A, B each as data frames with columns x, y (not necessarily named)
+		# return value is a vector of distances
+		dAB <- sqrt((B[,2]-A[,2])^2 + (B[,1]-A[,1])^2)
 		}
 
 	findCIEindex <- function(x) { # find the index of a wavelength in CIExyz
@@ -127,6 +165,29 @@
 		data(CIExyz)
 		i <- grep(x, CIExyz$wavelength)
 		ans <- i[1] # index/row number of the 1st occurance
+		}
+
+	findCIEindex2 <- function(x) { # find the index of a wavelength in CIExyz
+		# This version is vectorized. It
+		# returns the indicies of the first occurance
+		# of each x entry in CIExyz$wavelength
+		data(CIExyz)
+		i <- match(x, CIExyz$wavelength, nomatch = NA)
+
+		if (any(is.na(i))) { # give the user some troubleshooting info
+			bad <- which(is.na(i))
+			if (length(bad) == 1) {
+				msg <- paste("Wavelength", x[bad], "is out of range on the CIE diagram")
+				stop(msg)
+				}
+			
+			if (length(bad) > 1) {
+				allbad <- paste(x[bad], collapse = ",")
+				msg <- paste("Wavelengths", allbad, "are out of range on the CIE diagram")
+				stop(msg)
+				}
+			}
+		i
 		}
 
 	extendAndRotateAroundD65 <- function(pts, ang = 0.0, fac = 200) {
@@ -169,8 +230,14 @@
 			        segment2 = c(xy[n,1], xy[n,2], xy[n+1,1], xy[n+1,2]))
 			    if (inter) { # check for intersection at a corner
 			    	keep <- c(keep, n)
+			    	# cat("inter is TRUE\n")
+			    	# cat("its = ", its, "\n")
+			    	# cat("i = ", i, "\n\n")
 			    	twoInt <- isPointOnLine(c(XY[i,1], XY[i,2], D65[1], D65[2]), c(xy[n,1], xy[n,2]))
-			    	if (twoInt) keep <- keep[-length(keep)]
+			    	if (twoInt) keep <- {
+			    		cat("twoInt is TRUE\n")
+			    		keep[-length(keep)]
+			    		}
 			    	}
 				}
 	 		} # end of loop that checks each XY segment
@@ -183,11 +250,19 @@
 		# Finds the intersection of two lines
 		# specified as two line segments (so they are 'extended')
 		# Based on code initially written by M. Kukurugya
+		# Vectorized
+		x1 <- as.numeric(x1) # some inputs are data frames
+		x2 <- as.numeric(x2)
+		x3 <- as.numeric(x3)
+		x4 <- as.numeric(x4)
+		y1 <- as.numeric(y1)
+		y2 <- as.numeric(y2)
+		y3 <- as.numeric(y3)
+		y4 <- as.numeric(y4)
 		
 		den <- (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4)
-		if (den == 0) {
-			warning("No intersection found")
-			return(c(NA, NA))
+		for (n in 1:length(den)) {
+			if (den[n] == 0) warning("lineIntersection failed to find an intersection")
 			}
 		numA <- ((x1 * y2) - (y1 * x2))
 		numB <- ((x3 * y4) - (y3 * x4))
@@ -197,10 +272,32 @@
 		num4 <- (y1 - y2) * numB 
 		Px = (num1 - num2)/den
 		Py = (num3 - num4)/den
-		# cat("Px is", Px, "\n")
-		# cat("Py is", Py, "\n")
-		return(c(Px, Py))
+		return(data.frame(x = Px, y = Py))
 		}
+
+	# lineIntersection <- function(x1, y1, x2, y2, x3, y3, x4, y4) {
+		
+		# # Finds the intersection of two lines
+		# # specified as two line segments (so they are 'extended')
+		# # Based on code initially written by M. Kukurugya
+		
+		# den <- (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4)
+		# if (den == 0) {
+			# warning("No intersection found")
+			# return(c(NA, NA))
+			# }
+		# numA <- ((x1 * y2) - (y1 * x2))
+		# numB <- ((x3 * y4) - (y3 * x4))
+		# num1 <-  numA * (x3 - x4)
+		# num2 <- (x1 - x2) * numB
+		# num3 <- numA * (y3 -y4)
+		# num4 <- (y1 - y2) * numB 
+		# Px = (num1 - num2)/den
+		# Py = (num3 - num4)/den
+		# # cat("Px is", Px, "\n")
+		# # cat("Py is", Py, "\n")
+		# return(c(Px, Py))
+		# }
 
 # gist.github.com/bryanhanson/5471173 has more info on these next ones
 
