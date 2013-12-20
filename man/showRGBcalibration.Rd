@@ -14,7 +14,7 @@ gradient = NULL, opts = "sRGB", ...)
 }
 \arguments{
   \item{calCols}{
-An list with elements \code{rgb} and \code{hexcol}.  See \code{\link{genCalCols}} for details.
+An list with elements \code{rgb} and \code{hexcol}.  See \code{\link{genManyCols}} for details.
 }
   \item{sampCols}{
 A data frame with columns \code{hex} which contains hexadecimal strings, and \code{id} which has the sample names.
@@ -51,7 +51,7 @@ require("munsell")
 # Let's illustrate the general idea with some examples.
 # First, generate some calibration colors:
 #
-blues <- genCalCols(minHue = "2.5B", maxHue = "10B", plotPC = FALSE)
+blues <- genManyCols(minHue = "2.5B", maxHue = "10B", plotPC = FALSE)
 #
 # And some sample colors for experimentation:
 #
@@ -76,7 +76,7 @@ plot_hex("#0000FF")
 # that are similar to your expected sample colors.  Imagine your color sample
 # was cornflower, let's get new calibration colors that are more appropriate:
 #
-purblues <- genCalCols(minHue = "2.5PB", maxHue = "10PB",
+purblues <- genManyCols(minHue = "2.5PB", maxHue = "10PB",
 	minChroma = 2, maxChroma = 12, plotPC = FALSE)
 #
 showRGBcalibration(calCols = purblues, sampCols = sc[4,], title = "Good Fit")

@@ -9,7 +9,7 @@ runAllCal <- function(calCols, sampCols = NULL, title = NULL, opts = "sRGB", ...
 	# Part of the photoSpec package
 	
 	val <- showRGBcalibration(calCols = calCols, sampCols = sampCols, title = title, ...)
-	cie <- showCIEcalibration(calCols = calCols, sampCols = sampCols, title = title, ...)
+	cie <- showCIE(calCols = calCols, sampCols = sampCols, title = title, ...)
 	
 	if (!is.null(sampCols)) {
 		res <- cie

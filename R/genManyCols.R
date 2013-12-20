@@ -1,6 +1,6 @@
 
 
-genCalCols <- function(minHue = "2.5R", maxHue = "10R",
+genManyCols <- function(minHue = "2.5R", maxHue = "10R",
 	minVal = 1, maxVal = 9, minChroma = 2, maxChroma = 26,
 	plotPC = TRUE, showRGB = FALSE, showCIE = FALSE, ...) {
 
@@ -62,7 +62,7 @@ genCalCols <- function(minHue = "2.5R", maxHue = "10R",
 	# Send out for 3D view if requested
 	
 	if (showRGB) showRGBcalibration(calCols, ...)
-	if (showCIE) showCIEcalibration(calCols, ...)
+	if (showCIE) showCIE(calCols, ...)
 	
 	invisible(calCols)
 	}

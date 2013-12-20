@@ -1,14 +1,16 @@
 export(calcSampleValue,
 	calcColorPurity,
-	genCalCols,
+	genManyCols,
+	gen5cols,
 	getGamutValues,
 	getWhiteValues,
 	plotCIEchrom,
-	plotSampleCard,
+	plotLargeCard,
+	plotMiniCard,
 	prepCIEgradient,
 	selectCIExy,
 	showRGBcalibration,
-	showCIEcalibration,
+	showCIE,
 	runAllCal)
 import(munsell, princurve, grid, splancs, rgl, plyr, aqp, digest)
 importFrom(colorspace, hex2RGB)

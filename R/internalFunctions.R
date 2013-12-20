@@ -7,7 +7,7 @@
 
 	hex2CIExy <- function(somecols) {
 		# Convert to CIE xy  * this approach ignores brightness*
-		rgb <- t(col2rgb(somecols$hexcol)/255)
+		rgb <- t(col2rgb(somecols$hex)/255)
 		XYZ <- convertColor(rgb, from = "sRGB", to = "XYZ")
 		x <- XYZ[,1]/rowSums(XYZ)
 		y <- XYZ[,2]/rowSums(XYZ)

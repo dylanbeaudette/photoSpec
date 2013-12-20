@@ -26,7 +26,7 @@ gen5cols <- function(cols = c("yellow", "orange", "red"),
 	# Send out for visualization if requested
 	if (plotPC) print(plot_hex(hc)) # draws paint chips & labels them
 	if (showRGB) showRGBcalibration(calCols, ...)
-	if (showCIE) showCIEcalibration(calCols, ...)
+	if (showCIE) showCIE(calCols, ...)
 	
 	invisible(calCols)
 	}

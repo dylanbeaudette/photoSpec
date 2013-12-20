@@ -1,10 +1,11 @@
 \name{plotLargeCard}
 \alias{plotLargeCard}
+\alias{plotMiniCard}
 \title{
 Plot a sample card containing calibration colors (paint chips)
 }
 \description{
-This function plots a 'card' containing a series of calibration colors (paint chips or color swatches) and a simple grid calibrated in centimeters.  A sample is placed on the grid and photographed.  The photo is then analyzed.
+These functions plot a 'card' containing a series of calibration colors (paint chips or color swatches) and a simple grid calibrated in centimeters.  A sample is placed on the card and photographed.  The photo is then analyzed.
 }
 \usage{
 plotLargeCard(calCols, size = c(6, 4), ruler = c(3.5, 2.5),
@@ -12,7 +13,7 @@ chip.order = "pale2dark", chip.rep = 1, title = "no title", guide = NULL)
 }
 \arguments{
   \item{calCols}{
-An list with elements \code{rgb} and \code{hexcol}.  See \code{\link{genCalCols}} for details.
+An list with elements \code{rgb} and \code{hexcol}.  See \code{\link{genManyCols}} for details.
 }
   \item{size}{
 The \code{c(width, height)} of the printed card in inches.
@@ -56,7 +57,7 @@ Bryan A. Hanson, DePauw University. \email{hanson@depauw.edu}
 require("grid")
 # Generate some calibration colors:
 #
-green1 <- genCalCols(minHue = "5G", maxHue = "5G", plotPC = FALSE)
+green1 <- genManyCols(minHue = "5G", maxHue = "5G", plotPC = FALSE)
 #
 # Plot the card:
 #
@@ -67,7 +68,7 @@ title = "Middle Greens")
 # A larger set of red calibration colors, so use every 2nd color.
 # Also, illustrate labeling with the Munsell notation.
 #
-red1 <- genCalCols(minHue = "2.5R", maxHue = "10R", plotPC = FALSE)
+red1 <- genManyCols(minHue = "2.5R", maxHue = "10R", plotPC = FALSE)
 #
 redCard <- plotLargeCard(calCols = red1, size = c(6, 4), ruler = c(3.5, 2.5),
 chip.order = "munsell", chip.rep = 0.5, guide = "Munsell", title = "Half of All the Munsell Reds")

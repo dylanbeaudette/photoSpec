@@ -11,7 +11,7 @@ calcSampleValue(calCols, sampCols = NULL)
 }
 \arguments{
   \item{calCols}{
-An list with elements \code{rgb} and \code{hexcol}. See \code{\link{genCalCols}} for details.
+An list with elements \code{rgb} and \code{hexcol}. See \code{\link{genManyCols}} for details.
 }
 
   \item{sampCols}{
@@ -43,7 +43,7 @@ See \code{\link{showRGBcalibration}}, the user facing function, for examples.
 \examples{
 # These examples serve mainly to verify that the code works.
 # See ?showRGBcalibration for examples that create plots.
-blues <- genCalCols(minHue = "2.5B", maxHue = "10B", plotPC = FALSE)
+blues <- genManyCols(minHue = "2.5B", maxHue = "10B", plotPC = FALSE)
 sc <- data.frame(hex = c("#FF0000", "#0000FF", "#98F5FF", "#6495ED"),
 	id = c("red", "blue", "cadetblue1", "cornflower"))
 tst <- calcSampleValue(calCols = blues, sampCols = sc)

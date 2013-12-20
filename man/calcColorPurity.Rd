@@ -4,7 +4,7 @@
 Calculate the purity of a color
 }
 \description{
-This function takes a data frame of sample colors in hexadecimal code, converts them into the CIE color space, and uses the CIE xy values to compute their color purity.  Color purity is the distance from the white point D65 to the color, divided by the distance from D65 to either the sRGB gamut or the spectral locus, along the line extended from D65 through the color (expressed as a percentage).  Called by \code{\link{showCIEcalibration}} and generally not the user.  Optionally, a vector of wavelengths can be supplied, and the projection (color purity) of each color onto that wavelength is returned. NEEDS A PICTURE OF THE COLOR PURITY CONCEPT.
+This function takes a data frame of sample colors in hexadecimal code, converts them into the CIE color space, and uses the CIE xy values to compute their color purity.  Color purity is the distance from the white point D65 to the color, divided by the distance from D65 to either the sRGB gamut or the spectral locus, along the line extended from D65 through the color (expressed as a percentage).  Called by \code{\link{showCIE}} and generally not the user.  Optionally, a vector of wavelengths can be supplied, and the projection (color purity) of each color onto that wavelength is returned. NEEDS A PICTURE OF THE COLOR PURITY CONCEPT.
 }
 \usage{
 calcColorPurity(sampCols = NULL, gamut = "sRGB", lambdas = NULL,
@@ -45,10 +45,10 @@ The color purity calculated depends upon the gamut supplied, see 'Details'.
 \value{
 The supplied data frame \code{sampColss} is returned with two new columns: \code{purity} and \code{appLmax}.  The latter gives the apparent lambda max (dominant wavelength) of the color, obtained by extrapolating from the color back to D65 and then to the spectral locus, where the wavelength is obtained.  If \code{!is.null(lambdas)} additional columns are provided giving the color purity (projection) of each sample at each wavelength.  If the projection onto the reference line is outside the specified gamut, \code{NA} is returned.
 
-If a CIE diagram has already been drawn (as it would if this function were called by \code{\link{showCIEcalibration}}) AND  \code{plotLambdas = TRUE}, a reference line is drawn from each lambda through D65, and an red X indicates where each sample projects onto the reference line.
+If a CIE diagram has already been drawn (as it would if this function were called by \code{\link{showCIE}}) AND  \code{plotLambdas = TRUE}, a reference line is drawn from each lambda through D65, and an red X indicates where each sample projects onto the reference line.
 }
 \seealso{
-See the examples in \code{\link{showCIEcalibration}} which is the user-facing function.
+See the examples in \code{\link{showCIE}} which is the user-facing function.
 }
 
 \references{
@@ -60,7 +60,7 @@ Bryan A. Hanson, DePauw University. \email{hanson@depauw.edu}
 
 \examples{
 # These examples serve mainly to verify that the code works.
-# See ?showCIEcalibration for examples that create plots.
+# See ?showCIE for examples that create plots.
 #
 # standard colors on the sRGB gamut including corners
 hex <- c("#FF0000", "#FF00FF", "#0000FF", "#00FFFF", "#00FF00", "#FFFF00")

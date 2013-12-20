@@ -1,7 +1,7 @@
 
 
 calcColorPurity <- function(sampCols = NULL, gamut = "sRGB", lambdas = NULL,
-	plotPoints = TRUE, plotLambdas = FALSE, ...) {
+	plotPts = TRUE, plotLambdas = FALSE, ...) {
 
 	# Bryan Hanson, DePauw University, July 2013 hanson@depauw.edu
 	# Part of the photoSpec package
@@ -13,7 +13,7 @@ calcColorPurity <- function(sampCols = NULL, gamut = "sRGB", lambdas = NULL,
 	ns <- nrow(sampCols) # no. of samples
 		
 	# Convert to CIE xy  * this approach ignores brightness*
-	cie <- rgb2CIExy(sampCols)
+	cie <- hex2CIExy(sampCols)
 
 	D65 <- getWhiteValues("D65")
 	dx <- as.numeric(D65[1])
