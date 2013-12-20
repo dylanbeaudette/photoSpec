@@ -78,6 +78,6 @@ chip.order = "munsell", chip.rep = 0.5, guide = "Munsell", title = "Half of All 
 ### plotMiniCard Examples
 # Generate 5 colors:
 yor <- gen5cols(plotPC = FALSE)
-plotMiniCard(calCols = yor, guide = "Munsell")
+plotMiniCard(calCols = yor, guide = "Munsell", title = "Sample MiniCard")
 }
 \keyword{ plot }

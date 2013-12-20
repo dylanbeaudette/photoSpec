@@ -8,6 +8,7 @@ Date: 2013-12-20
 >> findCIEindex2, the vectorized version, was renamed to findCIEindex.
 >> Removed a lot temporary commenting in several places.
 >> Organized the functions in internalFunctions.
+>> Improved documentation examples.
 
 ##### Version 0.4-16
 Date: 2013-12-20

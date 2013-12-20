@@ -47,6 +47,6 @@ $Munsell \tab char \tab A vector with the Munsell color designation.
 Bryan A. Hanson, DePauw University. \email{hanson@depauw.edu}
 }
 \examples{
-##---- Should be DIRECTLY executable !! ----
+gen5cols() # defaults give yellow-orange-red swatches
 }
 \keyword{ utilities }
