@@ -12,6 +12,7 @@ Date: 2013-12-20
 >> Function genCalCols renamed to genManyCols so that its relation to gen5cols is clear.
 >> Function showCIEcalibration renamed to showCIE, since there is no true calibration.  Function also modified so that any combination of calCols and sampCols can be displayed.
 >> The conversion of hex codes to rgb and then to CIE x,y coordinates was moved to internalFunctions since it appeared in several functions.
+>> Removed calls to findCIEindex and replaced them with findCIEindex2.
 
 
 ##### Version 0.4-15

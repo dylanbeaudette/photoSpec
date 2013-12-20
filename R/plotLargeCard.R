@@ -1,11 +1,13 @@
 
 
-plotLargeCard <- function(calCols, size = c(6, 4), ruler = c(3.5, 2.5),
+plotLargeCard <- function(calCols = NULL, size = c(6, 4), ruler = c(3.5, 2.5),
 	chip.order = "pale2dark", chip.rep = 1, title = "no title",
-	guide = NULL) {
+	guide = "none") {
 
 	# Bryan Hanson, DePauw University, March 2013 hanson@depauw.edu
 	# Part of the photoSpec package
+
+	if (is.null(calCols)) stop("calCols must be provided")
 
 	if (ruler[1] > size[1]*2.54) stop("Grid width is larger than the width of the card")
 	if (ruler[2] > size[2]*2.54) stop("Grid height is larger than the height of the card")

@@ -24,9 +24,9 @@ selectCIExy <- function(L1 = NULL, L2 = NULL, colSpace = "sRGB", ex = 1.0, ...) 
 	D65 <- getWhiteValues("D65")
 	
 	# Find the coordinates of the input wavelengths
-	ans1 <- findCIEindex(L1)
-	ans2 <- findCIEindex(L2)
-	ans3 <- findCIEindex(L3)
+	ans1 <- findCIEindex2(L1)
+	ans2 <- findCIEindex2(L2)
+	ans3 <- findCIEindex2(L3)
 
 	# Put all the needed data in one place: p1 from L1, p2 from L2, p3 from L3
 	segs <- data.frame(
