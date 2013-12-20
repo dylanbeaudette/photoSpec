@@ -3,6 +3,12 @@ NEWS file for package photoSpec
 photoSpec: A photographic spectrophotometer
 Bryan A. Hanson DePauw University, Greencastle Indiana USA
 
+##### Version 0.4-17
+Date: 2013-12-20
+>> findCIEindex2, the vectorized version, was renamed to findCIEindex.
+>> Removed a lot temporary commenting in several places.
+>> Organized the functions in internalFunctions.
+
 ##### Version 0.4-16
 Date: 2013-12-20
 >> calcSampleValue return value 'value' is now called 'MunVal'.

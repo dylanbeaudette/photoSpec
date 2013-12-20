@@ -1,9 +1,11 @@
 
 
-##### Helper functions
+##### Internal Helper functions
 
 	# Bryan Hanson, DePauw University, March 2013 hanson@depauw.edu
 	# Part of the photoSpec package
+
+##### Misc Functions
 
 	hex2CIExy <- function(somecols) {
 		# Convert to CIE xy  * this approach ignores brightness*
@@ -14,6 +16,8 @@
 		cie <- cbind(x, y)
 		cie
 		}
+
+#####
 		
 	getRGorB <- function(hexvector = NULL, channel = "R") {
 	
@@ -44,71 +48,7 @@
 		ans
 		}
 
-	# End of helper function
-			
-
-	pointOnLineNearPoint <- function(Px, Py, slope, intercept) {
-		# Vectorized
-		Ax <- Px*10 # push the point out
-	 	Bx <- Px*-10
-	 	Ay <- Ax * slope + intercept
-	 	By <- Bx * slope + intercept
-	 	ans <- pointOnLine(Px, Py, Ax, Ay, Bx, By)
-	 	ans
-		}
-	
-	pointOnLine <- function(Px, Py, Ax, Ay, Bx, By) {
-		# Vectorized
-		PB <- data.frame(x = Px - Bx, y = Py - By)
-		AB <- data.frame(x = Ax - Bx, y = Ay - By)
-		PB <- as.matrix(PB)
-		AB <- as.matrix(AB)
-		k_raw <- k <- c()
-		for (n in 1:nrow(PB)) {
-			k_raw[n] <- (PB[n,] %*% AB[n,])/(AB[n,] %*% AB[n,])
-			if (k_raw[n] < 0)  { k[n] <- 0
-				} else { if (k_raw[n] > 1) k[n] <- 1
-					else k[n] <- k_raw[n] }
-			}
-		x = (k * Ax + (1 - k)* Bx)
-		y = (k * Ay + (1 - k)* By)
-		ans <- data.frame(x, y)
-		ans
-		}
-
-	# ccp <- function(cie, gamut) { # Calc color purity
-		# # cie is matrix of colors giving cie xy
-
-		# # Get needed data
-		# ns <- nrow(cie)
-		# D65 <- getWhiteValues("D65")	
-		# if (gamut == "sl") { # spectral locus data (shark fin)
-			# pg <- CIExyz[,c(2,3)] # 4400 rows
-			# pg <- rbind(pg, pg[1,]) # repeat row so that polygon can close
-			# }
-	
-		# if (gamut == "sRGB") { # device color space
-			# pg <- getGamutValues("sRGB")
-			# pg <- rbind(pg, pg[1,]) # repeat row so that polygon can close
-			# }
-
-		# cie2 <-  extendAndRotateAroundD65(cie) # defaults: simply extends
-		# hits <- findPolygonIntersection(XY = cie2, xy = pg) # indices of intersections
-		# if (length(hits) != ns) stop("Wrong number of gamut intersections")
-
-		# cp <- rep(NA, ns)
-		# for (i in 1:ns) {
-			# dc <- dAB(D65, cie[i,]) # distance from D65 to color
-			# ndx <- hits[i]
-			# where <- lineIntersection(D65[1], D65[2], cie2[i,1], cie2[i,2],
-				# pg[ndx, 1], pg[ndx, 2], pg[ndx + 1, 1], pg[ndx + 1, 2])
-			# dg <- dAB(D65, where) # distance from D65 to gamut
-			# # Final calc
-			# cp[i] <- dc*100/dg # these are by definition always (+)
-			# if (cp[i] > 100) cp[i] <- NA # these are out of gamut
-			# }
-		# cp
-		# }
+#####
 
 	ccp <- function(cie, gamut) { # Calc color purity
 		# cie is matrix of colors giving cie xy
@@ -142,6 +82,8 @@
 		cp
 		}
 
+#####
+
 	sortFromWhite <- function(Cols) { # sort colors based upon distance from white
 		# Cols should be a vector of hexadecimal colors
 		oCols <- Cols # save the original
@@ -157,11 +99,7 @@
 		return(as.character(df$cols))
 		}
 
-	# dAB <- function(A, B) { # Euclidian distance between pts A & B
-		# # NOT vectorized
-		# # A, B each as c(x, y)
-		# dAB <- sqrt((B[2]-A[2])^2 + (B[1]-A[1])^2)
-		# }
+#####
 
 	dAB <- function(A, B) { # Euclidian distance between pts A & B
 		# Vectorized
@@ -170,14 +108,9 @@
 		dAB <- sqrt((B[,2]-A[,2])^2 + (B[,1]-A[,1])^2)
 		}
 
-	findCIEindex <- function(x) { # find the index of a wavelength in CIExyz
-		# NOT vectorized
-		data(CIExyz)
-		i <- grep(x, CIExyz$wavelength)
-		ans <- i[1] # index/row number of the 1st occurance
-		}
+#####
 
-	findCIEindex2 <- function(x) { # find the index of a wavelength in CIExyz
+	findCIEindex <- function(x) { # find the index of a wavelength in CIExyz
 		# This version is vectorized. It
 		# returns the indicies of the first occurance
 		# of each x entry in CIExyz$wavelength
@@ -200,6 +133,8 @@
 		i
 		}
 
+##### Functions dealing with vectors, polygons and intersections (used in CIE functions)
+
 	extendAndRotateAroundD65 <- function(pts, ang = 0.0, fac = 200) {
 		# Vectorized (unit test available)
 		# pts is a data frame or matrix of x, y coords in columns
@@ -212,6 +147,8 @@
 		y = D65[2] + ((sin(ang) * (pts[,1] - D65[1])) + (cos(ang) * (pts[,2] - D65[2])))*fac
 		return(data.frame(x = x, y = y))
 		}
+
+#####
 
 	findPolygonIntersection <- function(XY, xy) {
 
@@ -255,6 +192,8 @@
 		return(keep)
 		}
 
+#####
+
 	lineIntersection <- function(x1, y1, x2, y2, x3, y3, x4, y4) {
 		
 		# Finds the intersection of two lines
@@ -285,31 +224,41 @@
 		return(data.frame(x = Px, y = Py))
 		}
 
-	# lineIntersection <- function(x1, y1, x2, y2, x3, y3, x4, y4) {
-		
-		# # Finds the intersection of two lines
-		# # specified as two line segments (so they are 'extended')
-		# # Based on code initially written by M. Kukurugya
-		
-		# den <- (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4)
-		# if (den == 0) {
-			# warning("No intersection found")
-			# return(c(NA, NA))
-			# }
-		# numA <- ((x1 * y2) - (y1 * x2))
-		# numB <- ((x3 * y4) - (y3 * x4))
-		# num1 <-  numA * (x3 - x4)
-		# num2 <- (x1 - x2) * numB
-		# num3 <- numA * (y3 -y4)
-		# num4 <- (y1 - y2) * numB 
-		# Px = (num1 - num2)/den
-		# Py = (num3 - num4)/den
-		# # cat("Px is", Px, "\n")
-		# # cat("Py is", Py, "\n")
-		# return(c(Px, Py))
-		# }
+#####
 
-# gist.github.com/bryanhanson/5471173 has more info on these next ones
+	pointOnLineNearPoint <- function(Px, Py, slope, intercept) {
+		# Vectorized
+		Ax <- Px*10 # push the point out
+	 	Bx <- Px*-10
+	 	Ay <- Ax * slope + intercept
+	 	By <- Bx * slope + intercept
+	 	ans <- pointOnLine(Px, Py, Ax, Ay, Bx, By)
+	 	ans
+		}
+
+#####
+	
+	pointOnLine <- function(Px, Py, Ax, Ay, Bx, By) {
+		# Vectorized
+		PB <- data.frame(x = Px - Bx, y = Py - By)
+		AB <- data.frame(x = Ax - Bx, y = Ay - By)
+		PB <- as.matrix(PB)
+		AB <- as.matrix(AB)
+		k_raw <- k <- c()
+		for (n in 1:nrow(PB)) {
+			k_raw[n] <- (PB[n,] %*% AB[n,])/(AB[n,] %*% AB[n,])
+			if (k_raw[n] < 0)  { k[n] <- 0
+				} else { if (k_raw[n] > 1) k[n] <- 1
+					else k[n] <- k_raw[n] }
+			}
+		x = (k * Ax + (1 - k)* Bx)
+		y = (k * Ay + (1 - k)* By)
+		ans <- data.frame(x, y)
+		ans
+		}
+
+##### These functions support the geometry-oriented functions above
+##### gist.github.com/bryanhanson/5471173 has more info on these next ones
 
 	getBoundingBox <- function(P0, P1) {
 	

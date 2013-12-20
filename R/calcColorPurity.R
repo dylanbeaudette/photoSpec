@@ -64,7 +64,7 @@ calcColorPurity <- function(sampCols = NULL, gamut = "sRGB", lambdas = NULL,
 		colnames(projVals) <- paste("Proj", lambdas, sep = "")
 		projVals <- as.data.frame(projVals) # ns rows x nl columns
 				
-		ind <- findCIEindex2(lambdas)
+		ind <- findCIEindex(lambdas)
 		if (length(ind) != nl) stop("Did not find every wavelength requested")
 		
 		s1 <- CIExyz[ind,3] - rep(dy, length(ind))

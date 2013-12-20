@@ -1,7 +1,7 @@
 Package: photoSpec
 Type: Package
 Title: photoSpec: A photographic spectrophotometer
-Version: 0.4-16
+Version: 0.4-17
 Date: 2013-12-20
 Author: Bryan A. Hanson DePauw University, Greencastle Indiana USA
 Maintainer: Bryan A. Hanson <hanson@depauw.edu>
