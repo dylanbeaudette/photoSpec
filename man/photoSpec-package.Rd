@@ -12,8 +12,8 @@ photoSpec allows one to apply Beer's Law to a photograph containing color swatch
 \tabular{ll}{
 Package: \tab photoSpec\cr
 Type: \tab Package\cr
-Version: \tab 0.4-15\cr
-Date: \tab 2013-11-16\cr
+Version: \tab 0.4-16\cr
+Date: \tab 2013-12-20\cr
 License: \tab GPL-3\cr
 LazyLoad: \tab yes\cr
 }

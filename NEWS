@@ -3,6 +3,17 @@ NEWS file for package photoSpec
 photoSpec: A photographic spectrophotometer
 Bryan A. Hanson DePauw University, Greencastle Indiana USA
 
+##### Version 0.4-16
+Date: 2013-12-20
+>> calcSampleValue return value 'value' is now called 'MunVal'.
+>> Added function plotMiniCard.
+>> Added function gen5cols for use with plotMiniCard.
+>> Function plotSampleCard renamed to plotLargeCard for consistency with plotMiniCard.
+>> Function genCalCols renamed to genManyCols so that its relation to gen5cols is clear.
+>> Function showCIEcalibration renamed to showCIE, since there is no true calibration.  Function also modified so that any combination of calCols and sampCols can be displayed.
+>> The conversion of hex codes to rgb and then to CIE x,y coordinates was moved to internalFunctions since it appeared in several functions.
+
+
 ##### Version 0.4-15
 Date: 2013-11-16
 >> Previous attempt to fix ccp did not work!  It now correctly computes color purity, including negative values.

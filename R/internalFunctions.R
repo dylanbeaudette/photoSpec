@@ -5,6 +5,16 @@
 	# Bryan Hanson, DePauw University, March 2013 hanson@depauw.edu
 	# Part of the photoSpec package
 
+	hex2CIExy <- function(somecols) {
+		# Convert to CIE xy  * this approach ignores brightness*
+		rgb <- t(col2rgb(somecols$hexcol)/255)
+		XYZ <- convertColor(rgb, from = "sRGB", to = "XYZ")
+		x <- XYZ[,1]/rowSums(XYZ)
+		y <- XYZ[,2]/rowSums(XYZ)
+		cie <- cbind(x, y)
+		cie
+		}
+		
 	getRGorB <- function(hexvector = NULL, channel = "R") {
 	
 		# Function to take a vector of hex values and return just the

@@ -1,6 +1,6 @@
 
 
-plotSampleCard <- function(calCols, size = c(6, 4), ruler = c(3.5, 2.5),
+plotLargeCard <- function(calCols, size = c(6, 4), ruler = c(3.5, 2.5),
 	chip.order = "pale2dark", chip.rep = 1, title = "no title",
 	guide = NULL) {
 

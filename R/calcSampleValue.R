@@ -24,7 +24,7 @@ calcSampleValue <- function(calCols, sampCols = NULL) {
 			fit2 <- get.lam(tm, fit$s, tag = fit$tag)
 			conc <- 1 - fit2$lambda[2]/fit2$lambda[3]
 			conc <- round(conc, 2)
-			sampCols$value[i] <- conc
+			sampCols$MunVal[i] <- conc
 			sampCols$residual[i] <- fit2$dist
 			# message("Sample ", sampCols$id[i], " is ", round(fit2$dist, 2), " from the calibration curve")
 			# message("Sample ", sampCols$id[i], " has absorbance ", conc, "\n")

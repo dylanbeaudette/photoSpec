@@ -1,15 +1,15 @@
 \name{showRGBcalibration}
 \alias{showRGBcalibration}
-\alias{showCIEcalibration}
+\alias{showCIE}
 \title{
 Draw a plot of calibration colors in a color space.  Optionally show a set of sample colors.
 }
 \description{
-These functions takes a vector of colors used for calibration and plots them in either the RGB or CIE color spaces.  \code{showRGBcalibration} uses package \code{rgl} to make a 3D interactive plot.  \code{\link{showCIEcalibration}} will display the CIE chromaticity diagram.  If sample colors are provided, the position of the samples relative to the calibration colors can be inspected to see if the sample colors are within the calibration region.  If sample colors are provided, the projection of the colors onto the principal curve is returned if using \code{showRGBcalibration} or the color purity is returned if using \code{\link{showCIEcalibration}}.
+These functions takes a vector of colors used for calibration and plots them in either the RGB or CIE color spaces.  \code{showRGBcalibration} uses package \code{rgl} to make a 3D interactive plot.  \code{\link{showCIE}} will display the CIE chromaticity diagram.  If sample colors are provided, the position of the samples relative to the calibration colors can be inspected to see if the sample colors are within the calibration region.  If sample colors are provided, the projection of the colors onto the principal curve is returned if using \code{showRGBcalibration} or the color purity is returned if using \code{\link{showCIE}}.
 }
 \usage{
 showRGBcalibration(calCols, sampCols = NULL, title = NULL, ...)
-showCIEcalibration(calCols, sampCols = NULL, title = NULL,
+showCIE(calCols, sampCols = NULL, title = NULL,
 gradient = NULL, opts = "sRGB", ...)
 }
 \arguments{
@@ -30,12 +30,12 @@ Character vector passed to \code{\link{plotCIEchrom}}.
 }
 
   \item{...}{
-Additional arguments to be passed to \code{\link{showCIEcalibration}}.  See the examples.
+Additional arguments to be passed to \code{\link{showCIE}}.  See the examples.
 }
 
 }
 \value{
-A plot is drawn using either \code{rgl} or \code{grid} graphics, and information about the calibration is returned in a data frame if \code{sampCols} is provided.  The data frame is \code{sampCols} to which has been appended the purity and apparent lambda max (appLmax)if \code{\link{showCIEcalibration}} was called.  If \code{lambdas} are provided, those results are appended to the data frame as well.  If \code{\link{showRGBcalibration}} was called it appends the value and residual.
+A plot is drawn using either \code{rgl} or \code{grid} graphics, and information about the calibration is returned in a data frame if \code{sampCols} is provided.  The data frame is \code{sampCols} to which has been appended the purity and apparent lambda max (appLmax)if \code{\link{showCIE}} was called.  If \code{lambdas} are provided, those results are appended to the data frame as well.  If \code{\link{showRGBcalibration}} was called it appends the value and residual.
 }
 \references{
 \url{https://github.com/bryanhanson/photoSpec}
@@ -62,7 +62,7 @@ sc <- data.frame(hex = c("#FF0000", "#0000FF", "#98F5FF", "#6495ED"),
 # range either.  Along with the other two shades of blue, let's see what happens:
 #
 showRGBcalibration(calCols = blues, sampCols = sc, title = "Good Bad & Ugly")
-showCIEcalibration(calCols = blues, sampCols = sc, title = "Good Bad & Ugly")
+showCIE(calCols = blues, sampCols = sc, title = "Good Bad & Ugly")
 #
 # What's going on with good old blue?
 # Compare it with the nearest Munsell color.  Notice that
@@ -80,13 +80,13 @@ purblues <- genCalCols(minHue = "2.5PB", maxHue = "10PB",
 	minChroma = 2, maxChroma = 12, plotPC = FALSE)
 #
 showRGBcalibration(calCols = purblues, sampCols = sc[4,], title = "Good Fit")
-showCIEcalibration(calCols = purblues, sampCols = sc[4,], title = "Good Fit")
+showCIE(calCols = purblues, sampCols = sc[4,], title = "Good Fit")
 #
 # Not too bad of a fit!
 #
 # The apparent lambda max is around 575 nm.  Let's pass that to the function
 # along with a nearby value.
-showCIEcalibration(calCols = purblues, sampCols = sc[4,], title = "Good Fit", lambdas = c(575, 550), plotPts = TRUE, plotLambdas = TRUE)
+showCIE(calCols = purblues, sampCols = sc[4,], title = "Good Fit", lambdas = c(575, 550), plotPts = TRUE, plotLambdas = TRUE)
 #
 }
 \keyword{ multivariate }

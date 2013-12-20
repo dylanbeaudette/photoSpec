@@ -1,5 +1,5 @@
-\name{genCalCols}
-\alias{genCalCols}
+\name{genManyCols}
+\alias{genManyCols}
 \title{
 Generate a set of calibration colors from a Munsell specification
 }
@@ -7,7 +7,7 @@ Generate a set of calibration colors from a Munsell specification
 This function generates a set of calibration colors from Munsell specifications.  It is the starting point for the use of \code{photoSpec}.
 }
 \usage{
-genCalCols(minHue = "2.5R", maxHue = "10R",
+genManyCols(minHue = "2.5R", maxHue = "10R",
 minVal = 1, maxVal = 9, minChroma = 2, maxChroma = 26,
 plotPC = TRUE, showRGB = FALSE, showCIE = FALSE, ...)
 }
@@ -77,19 +77,19 @@ require("rgl")
 #
 # The center greens (note that the 3D view is a surface):
 #
-green1 <- genCalCols(minHue = "5G", maxHue = "5G", showRGB = TRUE)
+green1 <- genManyCols(minHue = "5G", maxHue = "5G", showRGB = TRUE)
 #
 # All possible greens; 2D paint chip view is too busy so
 # turn that off:
 #
-green2 <- genCalCols(minHue = "2.5G", maxHue = "10G", plotPC = FALSE, showRGB = TRUE)
+green2 <- genManyCols(minHue = "2.5G", maxHue = "10G", plotPC = FALSE, showRGB = TRUE)
 #
 # All possible reds.  Note how the shape of all reds is thicker
 # than all possible greens (the Munsell solid is asymmetric).
 # Also show the CIE chromaticity diagram.
 #
-red1 <- genCalCols(minHue = "2.5R", maxHue = "10R",
+red1 <- genManyCols(minHue = "2.5R", maxHue = "10R",
 plotPC = FALSE, showRGB = TRUE, showCIE = TRUE,
 title = "All Possible Munsell Reds")
 }
-\keyword{ plot }
+\keyword{ utilities }

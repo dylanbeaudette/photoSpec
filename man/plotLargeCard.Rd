@@ -1,5 +1,5 @@
-\name{plotSampleCard}
-\alias{plotSampleCard}
+\name{plotLargeCard}
+\alias{plotLargeCard}
 \title{
 Plot a sample card containing calibration colors (paint chips)
 }
@@ -7,7 +7,7 @@ Plot a sample card containing calibration colors (paint chips)
 This function plots a 'card' containing a series of calibration colors (paint chips or color swatches) and a simple grid calibrated in centimeters.  A sample is placed on the grid and photographed.  The photo is then analyzed.
 }
 \usage{
-plotSampleCard(calCols, size = c(6, 4), ruler = c(3.5, 2.5),
+plotLargeCard(calCols, size = c(6, 4), ruler = c(3.5, 2.5),
 chip.order = "pale2dark", chip.rep = 1, title = "no title", guide = NULL)
 }
 \arguments{
@@ -60,7 +60,7 @@ green1 <- genCalCols(minHue = "5G", maxHue = "5G", plotPC = FALSE)
 #
 # Plot the card:
 #
-greenCard <- plotSampleCard(calCols = green1, size = c(6, 4), ruler = c(3.5, 2.5),
+greenCard <- plotLargeCard(calCols = green1, size = c(6, 4), ruler = c(3.5, 2.5),
 chip.order = "pale2dark", chip.rep = 3, guide = "hex",
 title = "Middle Greens")
 #
@@ -69,7 +69,7 @@ title = "Middle Greens")
 #
 red1 <- genCalCols(minHue = "2.5R", maxHue = "10R", plotPC = FALSE)
 #
-redCard <- plotSampleCard(calCols = red1, size = c(6, 4), ruler = c(3.5, 2.5),
+redCard <- plotLargeCard(calCols = red1, size = c(6, 4), ruler = c(3.5, 2.5),
 chip.order = "munsell", chip.rep = 0.5, guide = "Munsell", title = "Half of All the Munsell Reds")
 
 }
