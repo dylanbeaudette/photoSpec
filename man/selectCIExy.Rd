@@ -11,10 +11,10 @@ selectCIExy(L1, L2, colSpace = "sRGB", ex = 1.0, ...)
 }
 \arguments{
   \item{L1}{
-Numeric, giving the lower wavelength at the edge of the region to be analyzed.
+Numeric, giving the lower wavelength at the edge of the region of interest.
 }
   \item{L2}{
-Numeric, giving the upper wavelength at the edge of the region to be analyzed.
+Numeric, giving the upper wavelength at the edge of the region of interest.
 }
   \item{colSpace}{
 Character string giving the color space to use for drawing the gradient.  One of \code{c("sRGB", "Apple RGB")}.  \code{Apple RGB} is mainly of historical interest; no physical devices use it at this time.

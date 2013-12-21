@@ -7,7 +7,8 @@ Generate 5 colors for use with plotMiniCard
 This function generates a set of 5 colors for use with \code{plotMiniCard}.
 }
 \usage{
-gen5cols(cols = c("yellow", "orange", "red"), plotPC = TRUE, showRGB = FALSE, showCIE = FALSE, ...)
+gen5cols(cols = c("yellow", "orange", "red"),
+plotPC = TRUE, showRGB = FALSE, showCIE = FALSE, ...)
 }
 \arguments{
   \item{cols}{
@@ -46,6 +47,10 @@ $Munsell \tab char \tab A vector with the Munsell color designation.
 \author{
 Bryan A. Hanson, DePauw University. \email{hanson@depauw.edu}
 }
+\details{
+The Munsell colors returned are in effect 'rounded' as the Munsell system is quantized rather than continuous (i.e. there is less resolution in the Munsell system than in the CIE or RGB color spaces, and the nearest Munsell color is returned).
+}
+
 \examples{
 gen5cols() # defaults give yellow-orange-red swatches
 }

@@ -2,7 +2,7 @@
 \alias{plotLargeCard}
 \alias{plotMiniCard}
 \title{
-Plot a sample card containing calibration colors (paint chips)
+Plot a sample card containing color swatches (paint chips)
 }
 \description{
 These functions plot a 'card' containing a series of calibration colors (paint chips or color swatches) and a simple grid calibrated in centimeters.  A sample is placed on the card and photographed.  The photo is then analyzed.
@@ -10,6 +10,7 @@ These functions plot a 'card' containing a series of calibration colors (paint c
 \usage{
 plotLargeCard(calCols = NULL, size = c(6, 4), ruler = c(3.5, 2.5),
 chip.order = "pale2dark", chip.rep = 1, title = "no title", guide = "none")
+
 plotMiniCard(calCols = NULL, title = "no title", guide = "none")
 }
 \arguments{
@@ -42,7 +43,7 @@ Arguments to be passed downstream, likely to \code{grid} drawing functions.
 For \code{plotLargeCard}, pure black, 18 percent gray and pure white are added to \code{calCols} every 25 colors to serve as references when analyzing.  These are always outlined to identify them.  If there is a color cast or shadow on the photo, you can choose the reference swatches that are least affected. \code{plotMiniCard} plots 5 colors specified by the user along with a white to black gradient.
 }
 \section{Warning}{
-Be sure when printing that scaling is set to 100 percent or the scale will not be accurate.  Low ink supplies could lead to poor color reproduction.
+Be sure when printing that scaling is set to 100 percent or the scale will not be accurate.  Low ink supplies could lead to poor color reproduction.  Printing with different printers or different paper will affect the final outcome as well.
 }
 
 \value{
@@ -58,20 +59,20 @@ Bryan A. Hanson, DePauw University. \email{hanson@depauw.edu}
 require("grid")
 ### plotLargeCard Examples
 # Generate some colors:
-#
+
 green1 <- genManyCols(minHue = "5G", maxHue = "5G", plotPC = FALSE)
-#
+
 # Plot the card:
-#
+
 greenCard <- plotLargeCard(calCols = green1, size = c(6, 4), ruler = c(3.5, 2.5),
 chip.order = "pale2dark", chip.rep = 3, guide = "hex",
 title = "Middle Greens")
-#
+
 # A larger set of red colors, so use every 2nd color.
 # Also, illustrate labeling with the Munsell notation.
-#
+
 red1 <- genManyCols(minHue = "2.5R", maxHue = "10R", plotPC = FALSE)
-#
+
 redCard <- plotLargeCard(calCols = red1, size = c(6, 4), ruler = c(3.5, 2.5),
 chip.order = "munsell", chip.rep = 0.5, guide = "Munsell", title = "Half of All the Munsell Reds")
 

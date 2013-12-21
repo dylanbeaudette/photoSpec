@@ -6,9 +6,9 @@ Bryan A. Hanson DePauw University, Greencastle Indiana USA
 ##### Version 0.4-17
 Date: 2013-12-20
 >> findCIEindex2, the vectorized version, was renamed to findCIEindex.
->> Removed a lot temporary commenting in several places.
+>> Removed a lot of temporary commenting/alternate code sections.
 >> Organized the functions in internalFunctions.
->> Improved documentation examples.
+>> Improved documentation.
 
 ##### Version 0.4-16
 Date: 2013-12-20

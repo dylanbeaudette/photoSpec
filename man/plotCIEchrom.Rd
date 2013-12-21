@@ -13,7 +13,7 @@ plotCIEchrom(gradient = NULL, colSpace = "sRGB", ex = 1.0,
 }
 \arguments{
   \item{gradient}{
-Character: either \code{"sl"}, \code{NULL}, or a data frame with columns x and y.  If \code{NULL}, no gradient is drawn.  If \code{"sl"} a gradient filling the entire spectral locus is drawn (see the examples for convenient ways to specify the gradient).  If a data frame, the vertices should specify a polygon to be filled with the gradient.  The argument \code{"colSpace"} determines the color space of the gradient to be drawn.
+Character: either \code{"sl"}, \code{NULL}, or a data frame with columns x and y.  If \code{NULL}, no gradient is drawn.  If \code{"sl"} a gradient filling the entire spectral locus is drawn.  If a data frame, the vertices should specify a polygon to be filled with the gradient (see the examples for convenient ways to specify the gradient).
 }
   \item{colSpace}{
 Character string giving the color space to use for drawing the gradient.  One of \code{c("sRGB", "Apple RGB")}.  \code{Apple RGB} is mainly of historical interest; no physical devices use it at this time.
@@ -32,7 +32,7 @@ Additional arguments to be passed downstream, to \code{grid} functions.
 }
 }
 \value{
-A plot is drawn (using \code{grid} graphics).
+A plot is drawn using \code{grid} graphics.
 }
 \references{
 For \code{opts = "Munsell"} the Munsell designation by wavelength are taken from Romney & Indow \url{pnas.org/cgi/doi/10.1073/pnas.162368999}
