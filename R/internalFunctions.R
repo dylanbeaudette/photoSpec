@@ -55,7 +55,12 @@
 
 		# Get needed data
 		ns <- nrow(cie)
-		D65 <- getWhiteValues("D65")	
+		
+		cat("Hello from ccp\n")
+		cat("ns = ", ns, "\n")
+		cat("cie =")
+		print(cie)
+		D65 <- getWhiteValues("D65")
 		if (gamut == "sl") { # spectral locus data (shark fin)
 			pg <- CIExyz[,c(2,3)] # 4400 rows
 			pg <- rbind(pg, pg[1,]) # repeat row so that polygon can close
@@ -68,7 +73,11 @@
 
 		cie2 <-  extendAndRotateAroundD65(cie) # defaults: simply extends
 		hits <- findPolygonIntersection(XY = cie2, xy = pg) # indices of intersections
-		if (length(hits) != ns) stop("Wrong number of gamut intersections")
+		if (length(hits) != ns) {
+			message("Wrong number of gamut intersections.")
+			message("\tIf using lambdas, move the problem lambda by 1 nm either way.")
+			stop("May have encountered a zero length line segment.")
+			}
 
 		dc <- dAB(D65, cie) # distance from D65 to color
 		where <- lineIntersection(D65[1], D65[2], cie2[,1], cie2[,2],
@@ -160,10 +169,14 @@
 				
 		D65 <- as.numeric(getWhiteValues("D65"))
 		keep <- c()
+
+		TS <- FALSE # troubleshooting flag
+		
+	 	if (TS) cat("\nHello from findPolygonIntersection\n")
 	
 		for (i in 1:nrow(XY)) { # Loop over the line segments in XY
-			its <- nrow(xy)-1
-		
+			its <- nrow(xy)-1 # xy already has an extra row to close the polygon
+			
 			# Check to see if the line segments intersect
 			
 			# If a point is in the corner of the polygon
@@ -171,24 +184,46 @@
 			# twice.  Once an intersection is found, check
 			# for this condition and adjust the indices
 			
+			inter <- FALSE # intersection found
+			corner <- FALSE # intersection at polygon vertex/corner
+
+		 	if (TS) cat("Checking sample point ", i, "\n")
+			
 			for (n in 1:its) { # loop over xy (polygon)
+
 				inter <- doSegmentsIntersect(
 			        segment1 = c(XY[i,1], XY[i,2], D65[1], D65[2]),
-			        segment2 = c(xy[n,1], xy[n,2], xy[n+1,1], xy[n+1,2]))
-			    if (inter) { # check for intersection at a corner
+			        segment2 = c(xy[n,1], xy[n,2], xy[n+1,1], xy[n+1,2]))		
+			    
+			    if (TS) cat("\tChecking polygon segment ", n, "\n")
+
+				if ((!inter) & (TS)) {
+					cat("Segments:\n")
+					print(c(XY[i,1], XY[i,2], D65[1], D65[2]))
+					print(c(xy[n,1], xy[n,2], xy[n+1,1], xy[n+1,2]))	
+				}
+									
+			    if (inter) {
+			    	# Check for intersection at a polygon vertex (pure red in sRBG for instance)
+			    	# In this case the the point of intersection is at the end
+			    	# of one polygon segment and at the beginning of the next
+			    	# It is sufficient to check that the point is on the end of one
+			    	# segment; by definition it will also be at the beginning of the next segment
+			    	
+			    	where <- lineIntersection(XY[i,1], XY[i,2], D65[1], D65[2],
+			    		xy[n,1], xy[n,2], xy[n+1,1], xy[n+1,2])
+			    	#
+			    	pd <- as.numeric(where) - c(xy[n+1,1], xy[n+1,2])
+			    	if (TS) message("\tThere was an intersection")
 			    	keep <- c(keep, n)
-			    	# cat("inter is TRUE\n")
-			    	# cat("its = ", its, "\n")
-			    	# cat("i = ", i, "\n\n")
-			    	twoInt <- isPointOnLine(c(XY[i,1], XY[i,2], D65[1], D65[2]), c(xy[n,1], xy[n,2]))
-			    	if (twoInt) keep <- {
-			    		cat("twoInt is TRUE\n")
-			    		keep[-length(keep)]
-			    		}
+			    	corner <- isTRUE(all.equal(pd, c(0.0, 0.0)))
+			    	if ((corner) & (TS)) message("\t\t & it was at a vertex")
+			    	if (corner) keep <- keep[-length(keep)] # remove latest entry (double-counted)
 			    	}
 				}
 	 		} # end of loop that checks each XY segment
-	
+
+	 	if (TS) cat("keep = ", keep, "\n")
 		return(keep)
 		}
 

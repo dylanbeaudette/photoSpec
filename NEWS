@@ -3,6 +3,11 @@ NEWS file for package photoSpec
 photoSpec: A photographic spectrophotometer
 Bryan A. Hanson DePauw University, Greencastle Indiana USA
 
+##### Version 0.4-18
+Date: 2013-12-23
+>> Further tweaks of the documentation.
+>> Lots of troubleshooting in findPolygonIntersection, called by ccp.  Trying to find the issue in which the number of gamut intersections doesn't match the number of sample numbers given.  It is now certain it arises from a zero-length segment, but I'm not sure why this occurs.  Improved error messages.  Work-around is to move lambdas 1 unit either way.
+
 ##### Version 0.4-17
 Date: 2013-12-20
 >> findCIEindex2, the vectorized version, was renamed to findCIEindex.

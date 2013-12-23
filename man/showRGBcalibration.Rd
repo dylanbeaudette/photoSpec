@@ -5,7 +5,7 @@
 Draw a plot of calibration colors in a color space.  Optionally show a set of sample colors.
 }
 \description{
-These functions takes a vector of colors used for calibration and plots them in either the RGB or CIE color space.  \code{showRGBcalibration} uses package \code{rgl} to make a 3D interactive plot.  \code{\link{showCIE}} will display the CIE chromaticity diagram.  If sample colors are provided, the position of the samples relative to the calibration colors can be inspected to see if the sample colors are within the calibration region.  If sample colors are provided, the projection of the colors onto the principal curve is returned when using \code{showRGBcalibration} or the color purity is returned if using \code{\link{showCIE}}.
+These functions takes a vector of colors used for calibration and plots them in either the RGB or CIE color space.  \code{showRGBcalibration} uses package \code{rgl} to make a 3D interactive plot.  \code{showCIE} will display the CIE chromaticity diagram.  If sample colors are provided, the position of the samples relative to the calibration colors can be inspected to see if the sample colors are within the calibration region.  If sample colors are provided, the projection of the colors onto the principal curve is returned when using \code{showRGBcalibration} or the color purity is returned if using \code{showCIE}.
 }
 \usage{
 showRGBcalibration(calCols, sampCols = NULL, title = NULL, ...)
@@ -31,12 +31,12 @@ Character vector passed to \code{\link{plotCIEchrom}}.
 }
 
   \item{...}{
-Additional arguments to be passed to \code{\link{showCIE}}.  See the examples.
+Additional arguments to be passed downstream to the plotting functions.  For \code{showCIE}, if both \code{sampCols} and \code{lambdas} are used, \code{\link{calcColorPurity}} is called.  This function has an argument \code{gamut} which determines how the color purity is calculated (defaults to sRGB).
 }
 
 }
 \value{
-A plot is drawn using either \code{rgl} or \code{grid} graphics, and information about the calibration is returned in a data frame if \code{sampCols} is provided.  The new data frame is \code{sampCols} to which has been appended the purity and apparent lambda max (appLmax)if \code{\link{showCIE}} was called.  If \code{lambdas} are provided, those results are appended to the data frame as well.  If \code{\link{showRGBcalibration}} was called it appends the value and residual.
+A plot is drawn using either \code{rgl} or \code{grid} graphics, and information about the calibration is returned in a data frame if \code{sampCols} is provided.  The new data frame is \code{sampCols} to which has been appended the purity and apparent lambda max (appLmax)if \code{showCIE} was called.  If \code{lambdas} are provided, those results are appended to the data frame as well.  If \code{showRGBcalibration} was called it appends the value and residual.
 }
 \references{
 \url{https://github.com/bryanhanson/photoSpec}
