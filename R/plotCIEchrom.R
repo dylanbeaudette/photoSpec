@@ -71,7 +71,7 @@ plotCIEchrom <- function(gradient = NULL, colSpace = "sRGB", ex = 1.0,
 
 	# Labels for the spectral locus
 	
-	specl <- c(100, 850, 1100, 1350, 1600, 1850, 2100, 2350, 2600)
+	specl <- c(11, 86, 111, 136, 161, 186, 211, 236, 261)
 	labs <- c("400 nm  ", "475 nm  ", "500 nm  ", "  525 nm", "  550 nm",
 		"  575 nm", "  600 nm", "  625 nm", "  650 nm")
 	

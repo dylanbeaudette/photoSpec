@@ -56,13 +56,14 @@
 		# Get needed data
 		ns <- nrow(cie)
 		
-		cat("Hello from ccp\n")
-		cat("ns = ", ns, "\n")
-		cat("cie =")
-		print(cie)
+		# cat("Hello from ccp\n")
+		# cat("ns = ", ns, "\n")
+		# cat("cie =")
+		# print(cie)
+
 		D65 <- getWhiteValues("D65")
 		if (gamut == "sl") { # spectral locus data (shark fin)
-			pg <- CIExyz[,c(2,3)] # 4400 rows
+			pg <- CIExyz[,c(2,3)] # 441 rows
 			pg <- rbind(pg, pg[1,]) # repeat row so that polygon can close
 			}
 	
@@ -173,6 +174,7 @@
 		TS <- FALSE # troubleshooting flag
 		
 	 	if (TS) cat("\nHello from findPolygonIntersection\n")
+#	 	if (TS) {cat("\nXY = \n"); print(XY)}
 	
 		for (i in 1:nrow(XY)) { # Loop over the line segments in XY
 			its <- nrow(xy)-1 # xy already has an extra row to close the polygon
@@ -195,13 +197,13 @@
 			        segment1 = c(XY[i,1], XY[i,2], D65[1], D65[2]),
 			        segment2 = c(xy[n,1], xy[n,2], xy[n+1,1], xy[n+1,2]))		
 			    
-			    if (TS) cat("\tChecking polygon segment ", n, "\n")
+			    #if (TS) cat("\tChecking polygon segment ", n, "\n")
 
-				if ((!inter) & (TS)) {
-					cat("Segments:\n")
-					print(c(XY[i,1], XY[i,2], D65[1], D65[2]))
-					print(c(xy[n,1], xy[n,2], xy[n+1,1], xy[n+1,2]))	
-				}
+				# if ((!inter) & (TS)) {
+					# cat("Segments:\n")
+					# print(c(XY[i,1], XY[i,2], D65[1], D65[2]))
+					# print(c(xy[n,1], xy[n,2], xy[n+1,1], xy[n+1,2]))	
+				# }
 									
 			    if (inter) {
 			    	# Check for intersection at a polygon vertex (pure red in sRBG for instance)
@@ -212,9 +214,15 @@
 			    	
 			    	where <- lineIntersection(XY[i,1], XY[i,2], D65[1], D65[2],
 			    		xy[n,1], xy[n,2], xy[n+1,1], xy[n+1,2])
+			    	#print(str(where))
 			    	#
+			    	# if (TS) {
+			    		# plotCIEchrom()
+			    		# grid.points(x = where$x, y = where$y, gp = gpar(col = "red"))
+			    		# }
 			    	pd <- as.numeric(where) - c(xy[n+1,1], xy[n+1,2])
-			    	if (TS) message("\tThere was an intersection")
+			    	msg <- paste("\tThere was an intersection at XY sample no.", i, "and xy polygon segment no.", n)
+			    	if (TS) message(msg)
 			    	keep <- c(keep, n)
 			    	corner <- isTRUE(all.equal(pd, c(0.0, 0.0)))
 			    	if ((corner) & (TS)) message("\t\t & it was at a vertex")

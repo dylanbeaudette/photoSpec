@@ -41,7 +41,7 @@ calcColorPurity <- function(sampCols = NULL, gamut = "sRGB", lambdas = NULL,
 	# on the *far* side (so rotate 180 deg)
 	
 	cie2 <- extendAndRotateAroundD65(cie, ang = pi)
-	pg <- CIExyz[,c(2,3)] # 4400 rows
+	pg <- CIExyz[,c(2,3)] # 441 rows
 	pg <- rbind(pg, pg[1,]) # repeat row so that polygon can close
 	hits2 <- findPolygonIntersection(XY = cie2, xy = pg) # indices of intersections
 	if (length(hits2) != ns) stop("Wrong number of hits (spectral locus)")
@@ -92,7 +92,8 @@ calcColorPurity <- function(sampCols = NULL, gamut = "sRGB", lambdas = NULL,
 		for (n in 1:nl) { # unstack the data
 			projVals[,n] <- cpPts[((ns*n)-ns+1):(ns*n)] # yikes!
 			}
-		
+		# projPts seems to be correct, proving the slope, intercept & pOLNP work correctly
+
 		cp <- cbind(cp, projVals) # add to original sampCols for return value
 		
 		if (plotLambdas) {
@@ -101,45 +102,44 @@ calcColorPurity <- function(sampCols = NULL, gamut = "sRGB", lambdas = NULL,
 			
 			idx1 <- ind # index of lambdas from before
 			Lpts <- extendAndRotateAroundD65(CIExyz[idx1,c(2,3)], ang = pi)
-			idx2 <- findPolygonIntersection(XY = Lpts, xy = pg) # indices of intersections
+			idx2 <- findPolygonIntersection(XY = Lpts, xy = pg) # indices of intersections on far side
+			
+			# In this low res version with data every 1 nm, we need to interpolate
+			# because the absolute spacing between data points is large enough
+			# to require it, otherwise we will have a line that does not pass
+			# through the points it is suppposed to pass through.
 			
 			# Find the segment end points as x, y
-			# Must manually fix when idx2 = 4400, the line of purples
-			if (all(idx2 != 4400)) {
-				x0 = CIExyz[idx1,2]
-				y0 = CIExyz[idx1,3]
-				x1 = CIExyz[idx2,2]
-				y1 = CIExyz[idx2,3]
+			if (all(idx2 != 441)) {
+				# get the intersection of a line between CIE @ idx1 & D65, and the little
+				# piece of CIE @ idx2
+				loc <- lineIntersection(x1 = CIExyz[idx2,2], y1 = CIExyz[idx2,3],
+					x2 = CIExyz[idx2+1,2], y2 = CIExyz[idx2+1,3],
+					x3 = rep(D65[1], nl), y3 = rep(D65[2], nl),
+					x4 = CIExyz[idx1,2], y4 = CIExyz[idx1,3])
+				x0 <- CIExyz[idx1,2]
+				y0 <- CIExyz[idx1,3]
+				x1 <- loc[,1]
+				y1 <- loc[,2]
 				}
 
-			if (any(idx2 == 4400)) {
-				#cat("idx1 = ", idx1, "\n")
-				#cat("idx2 = ", idx2, "\n")
-				prb <- which(idx2 == 4400) # Remove that entry
+			if (any(idx2 == 441)) {
+			# Must manually fix when idx2 = 441, the line of purples
+				prb <- which(idx2 == 441) # Remove that entry
 				idx1a  <- idx1[-prb]
 				idx2a  <- idx2[-prb]
 				x0 = CIExyz[idx1a,2]
 				y0 = CIExyz[idx1a,3]
 				x1 = CIExyz[idx2a,2]
-				y1 = CIExyz[idx2a,3] # These are the  non-4400 coords, ready to use
+				y1 = CIExyz[idx2a,3] # These are the  non-441 coords, ready to use
 				
 				# Manually find the intersection between the line of purples and
 				# the lambda of interest.  Original idx1[prb] is correct & can be used
-				# idx2 is not-usable
-				
-				# cat("idx1[prb] = ", idx1[prb], "\n")
-				# cat("CIExyz[idx1[prb],2] = ", CIExyz[idx1[prb],2], "\n")
-				# cat("CIExyz[idx1[prb],3] = ", CIExyz[idx1[prb],3], "\n")
-				loc <- lineIntersection(CIExyz[1,2], CIExyz[1,3], CIExyz[4400,2], CIExyz[4400,3],
+				# idx2 is not-usable as it is the line of purples
+
+				loc <- lineIntersection(CIExyz[1,2], CIExyz[1,3], CIExyz[441,2], CIExyz[441,3],
 					D65[1], D65[2],
 					CIExyz[idx1[prb],2], CIExyz[idx1[prb],3])
-				# lp <- length(prb)
-# #				print(CIExyz[1,2])
-				# # loc <- lineIntersection(x1 = rep(CIExyz[1,2], lp), y1 = rep(CIExyz[1,3], lp),
-					# # x2 = rep(CIExyz[4400,2],lp), y2 = rep(CIExyz[4400,3], lp),
-					# # x3 = rep(D65[1], lp), y3 = rep(D65[2], lp),
-					# # x4 = CIExyz[idx1[prb],2], y4 = CIExyz[idx1[prb],3])
-				# print(loc)
 				x0 <- c(x0, CIExyz[idx1[prb],2])
 				y0 <- c(y0, CIExyz[idx1[prb],3])
 				x1 <- c(x1, loc[,1])

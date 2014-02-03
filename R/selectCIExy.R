@@ -19,7 +19,7 @@ selectCIExy <- function(L1 = NULL, L2 = NULL, colSpace = "sRGB", ex = 1.0, ...) 
 	
 	# Load spectral locus data (shark fin)
 	data(CIExyz)
-	xy <- CIExyz[,c(2,3)] # 4400 rows
+	xy <- CIExyz[,c(2,3)] # 441 rows
 	xy <- rbind(xy, xy[1,]) # repeat row so that polygon can close
 	D65 <- getWhiteValues("D65")
 	
@@ -52,7 +52,7 @@ selectCIExy <- function(L1 = NULL, L2 = NULL, colSpace = "sRGB", ex = 1.0, ...) 
 	# 5.  only the middle segments hits the l of p
 	# 6.  segment 1 hits the shark fin, the other two l of p
 	# 7.  segments 1 & 2 hit shark fin, segment 3 the l of p
-	# The line of purples is segment xy[c(4400,4401),]
+	# The line of purples is segment xy[c(441,442),]
 
 	# Store the intersection points p4, p5 & p6:
 	# L1/p1 -> D65 -> p4; L2/p2 -> D65 -> p5; L3/p3 -> D65 -> p6
@@ -63,13 +63,13 @@ selectCIExy <- function(L1 = NULL, L2 = NULL, colSpace = "sRGB", ex = 1.0, ...) 
 	Case <- NA
 	xPt <- vector("numeric", 2)
 	
-	if (!4400 %in% keep) Case1 <- TRUE
-	if ((keep[1] == 4400) && (!keep[2] == 4400) && (!keep[3] == 4400)) Case2 <- TRUE 	
-	if ((keep[1] == 4400) && (keep[2] == 4400) && (!keep[3] == 4400)) Case3 <- TRUE 	
-	if ((keep[1] == 4400) && (keep[2] == 4400) && (keep[3] == 4400)) Case4 <- TRUE
-	if ((!keep[1] == 4400) && (keep[2] == 4400) && (!keep[3] == 4400)) Case5 <- TRUE 	
-	if ((!keep[1] == 4400) && (keep[2] == 4400) && (keep[3] == 4400)) Case6 <- TRUE 	
-	if ((!keep[1] == 4400) && (!keep[2] == 4400) && (keep[3] == 4400)) Case7 <- TRUE 	
+	if (!441 %in% keep) Case1 <- TRUE
+	if ((keep[1] == 441) && (!keep[2] == 441) && (!keep[3] == 441)) Case2 <- TRUE 	
+	if ((keep[1] == 441) && (keep[2] == 441) && (!keep[3] == 441)) Case3 <- TRUE 	
+	if ((keep[1] == 441) && (keep[2] == 441) && (keep[3] == 441)) Case4 <- TRUE
+	if ((!keep[1] == 441) && (keep[2] == 441) && (!keep[3] == 441)) Case5 <- TRUE 	
+	if ((!keep[1] == 441) && (keep[2] == 441) && (keep[3] == 441)) Case6 <- TRUE 	
+	if ((!keep[1] == 441) && (!keep[2] == 441) && (keep[3] == 441)) Case7 <- TRUE 	
 	
 	if (Case1) { # Case 1 (OK)
 		Case <- "Case1"
@@ -92,7 +92,7 @@ selectCIExy <- function(L1 = NULL, L2 = NULL, colSpace = "sRGB", ex = 1.0, ...) 
 	if (Case2) { # Case 2 (OK)
 		Case <- "Case2"
 		p4 <- lineIntersection(in.segs[1,1], in.segs[1,2], in.segs[4,1],
-			in.segs[4,2], xy[4400,1], xy[4400,2], xy[4401,1], xy[4401,2])
+			in.segs[4,2], xy[441,1], xy[441,2], xy[442,1], xy[442,2])
 	 	p5 <- CIExyz[keep[2],2:3]
 	 	p6 <- CIExyz[keep[3],2:3]	 	
 	 	verts <- rbind(c(NA, segs[4,1], segs[4,2], NA),
@@ -114,9 +114,9 @@ selectCIExy <- function(L1 = NULL, L2 = NULL, colSpace = "sRGB", ex = 1.0, ...) 
 	if (Case3) { # Case 3 (OK)
 		Case <- "Case3"
 		p4 <- lineIntersection(in.segs[1,1], in.segs[1,2], in.segs[4,1],
-			in.segs[4,2], xy[4400,1], xy[4400,2], xy[4401,1], xy[4401,2])
+			in.segs[4,2], xy[441,1], xy[441,2], xy[442,1], xy[442,2])
 		p5 <- lineIntersection(in.segs[2,1], in.segs[2,2], in.segs[4,1],
-			in.segs[4,2], xy[4400,1], xy[4400,2], xy[4401,1], xy[4401,2])
+			in.segs[4,2], xy[441,1], xy[441,2], xy[442,1], xy[442,2])
 	 	p6 <- CIExyz[keep[3],2:3]	 	
 	 	verts <- rbind(c(NA, segs[4,1], segs[4,2], NA),
 	 		c(NA, p4[1], p4[2], NA), CIExyz[1:keep[3],])
@@ -136,11 +136,11 @@ selectCIExy <- function(L1 = NULL, L2 = NULL, colSpace = "sRGB", ex = 1.0, ...) 
 	if (Case4) { # Case 4 (OK)
 		Case <- "Case4"
 		p4 <- lineIntersection(in.segs[1,1], in.segs[1,2], in.segs[4,1],
-			in.segs[4,2], xy[4400,1], xy[4400,2], xy[4401,1], xy[4401,2])
+			in.segs[4,2], xy[441,1], xy[441,2], xy[442,1], xy[442,2])
 		p5 <- lineIntersection(in.segs[2,1], in.segs[2,2], in.segs[4,1],
-			in.segs[4,2], xy[4400,1], xy[4400,2], xy[4401,1], xy[4401,2])
+			in.segs[4,2], xy[441,1], xy[441,2], xy[442,1], xy[442,2])
 		p6 <- lineIntersection(in.segs[3,1], in.segs[3,2], in.segs[4,1],
-			in.segs[4,2], xy[4400,1], xy[4400,2], xy[4401,1], xy[4401,2])
+			in.segs[4,2], xy[441,1], xy[441,2], xy[442,1], xy[442,2])
 		verts <- rbind(segs[4,], p4, p6)
 		colnames(verts) <- c("x", "y")
 	 	# Figure xPt
@@ -158,35 +158,35 @@ selectCIExy <- function(L1 = NULL, L2 = NULL, colSpace = "sRGB", ex = 1.0, ...) 
 		Case <- "Case5"
 	 	p4 <- CIExyz[keep[1],2:3]
 		p5 <- lineIntersection(in.segs[2,1], in.segs[2,2], in.segs[4,1],
-			in.segs[4,2], xy[4400,1], xy[4400,2], xy[4401,1], xy[4401,2])
+			in.segs[4,2], xy[441,1], xy[441,2], xy[442,1], xy[442,2])
 	 	p6 <- CIExyz[keep[3],2:3]
-	 	verts <- rbind(CIExyz[keep[3]:4400,], CIExyz[1:keep[1],], c(NA, segs[4,1], segs[4,2], NA))
+	 	verts <- rbind(CIExyz[keep[3]:441,], CIExyz[1:keep[1],], c(NA, segs[4,1], segs[4,2], NA))
 	 	verts <- verts[,2:3]
 	 	# Figure xPt
 	 	d4 <- dAB(D65, p4)
 	 	d5 <- dAB(D65, p5)
 	 	d6 <- dAB(D65, p6)
 	 	xy1 <- as.numeric(CIExyz[1,2:3])
-	 	xy4400 <- as.numeric(CIExyz[4400,2:3])
+	 	xy441 <- as.numeric(CIExyz[441,2:3])
 	 	dxy1 <- dAB(D65, xy1)
-	 	dxy4400 <- dAB(D65, xy4400)
-	 	l <- c(d4, d5, d6, dxy1, dxy4400)
+	 	dxy441 <- dAB(D65, xy441)
+	 	l <- c(d4, d5, d6, dxy1, dxy441)
 	 	dm <- which.max(l)
 	 	if (dm == 1) xPt <- p4
 	 	if (dm == 2) xPt <- p5
 	 	if (dm == 3) xPt <- p6
 	 	if (dm == 4) xPt <- xy1
-	 	if (dm == 5) xPt <- xy4400
+	 	if (dm == 5) xPt <- xy441
 	 	}
 
 	if (Case6) { # Case 6 (OK)
 		Case <- "Case6"
 	 	p4 <- CIExyz[keep[1],2:3]
 		p5 <- lineIntersection(in.segs[2,1], in.segs[2,2], in.segs[4,1],
-			in.segs[4,2], xy[4400,1], xy[4400,2], xy[4401,1], xy[4401,2])
+			in.segs[4,2], xy[441,1], xy[441,2], xy[442,1], xy[442,2])
 		p6 <- lineIntersection(in.segs[3,1], in.segs[3,2], in.segs[4,1],
-			in.segs[4,2], xy[4400,1], xy[4400,2], xy[4401,1], xy[4401,2])
-	 	verts <- rbind(CIExyz[keep[1]:4400,], c(NA, p5[1], p5[2], NA),
+			in.segs[4,2], xy[441,1], xy[441,2], xy[442,1], xy[442,2])
+	 	verts <- rbind(CIExyz[keep[1]:441,], c(NA, p5[1], p5[2], NA),
 	 		c(NA, p6[1], p6[2], NA), c(NA, segs[4,1], segs[4,2], NA))
 	 	verts <- verts[,2:3]
 	 	# Figure xPt
@@ -194,17 +194,17 @@ selectCIExy <- function(L1 = NULL, L2 = NULL, colSpace = "sRGB", ex = 1.0, ...) 
 	 	d5 <- dAB(D65, p5)
 	 	d6 <- dAB(D65, p6)
 	 	xy1 <- as.numeric(CIExyz[1,2:3])
-	 	xy4400 <- as.numeric(CIExyz[4400,2:3])
+	 	xy441 <- as.numeric(CIExyz[441,2:3])
 	 	dxy1 <- dAB(D65, xy1)
-	 	dxy4400 <- dAB(D65, xy4400)
-	 	l <- c(d4, d5, d6, dxy1, dxy4400)
+	 	dxy441 <- dAB(D65, xy441)
+	 	l <- c(d4, d5, d6, dxy1, dxy441)
 	 	dm <- which.max(l)
 	 	if (length(xPt) > 1) xPt <- xPt[1] # In the event of a tie
 	 	if (dm == 1) xPt <- p4
 	 	if (dm == 2) xPt <- p5
 	 	if (dm == 3) xPt <- p6
 	 	if (dm == 4) xPt <- xy1
-	 	if (dm == 5) xPt <- xy4400
+	 	if (dm == 5) xPt <- xy441
  	 	}
 
 	if (Case7) { # Case 7 (OK)
@@ -212,23 +212,23 @@ selectCIExy <- function(L1 = NULL, L2 = NULL, colSpace = "sRGB", ex = 1.0, ...) 
 	 	p4 <- CIExyz[keep[1],2:3]
 	 	p5 <- CIExyz[keep[2],2:3]
 		p6 <- lineIntersection(in.segs[3,1], in.segs[3,2], in.segs[4,1],
-			in.segs[4,2], xy[4400,1], xy[4400,2], xy[4401,1], xy[4401,2])
-	 	verts <- rbind(CIExyz[keep[1]:4400,],
+			in.segs[4,2], xy[441,1], xy[441,2], xy[442,1], xy[442,2])
+	 	verts <- rbind(CIExyz[keep[1]:441,],
 	 		c(NA, p6[1], p6[2], NA), c(NA, segs[4,1], segs[4,2], NA))
 	 	verts <- verts[,2:3]
 	 	# Figure xPt
 	 	d4 <- dAB(D65, p4)
 	 	d5 <- dAB(D65, p5)
 	 	d6 <- dAB(D65, p6)
-	 	xy4400 <- as.numeric(CIExyz[4400,2:3])
-	 	dxy4400 <- dAB(D65, xy4400)
-	 	l <- c(d4, d5, d6, dxy4400)
+	 	xy441 <- as.numeric(CIExyz[441,2:3])
+	 	dxy441 <- dAB(D65, xy441)
+	 	l <- c(d4, d5, d6, dxy441)
 	 	dm <- which.max(l)
 	 	if (length(xPt) > 1) xPt <- xPt[1] # In the event of a tie
 	 	if (dm == 1) xPt <- p4
 	 	if (dm == 2) xPt <- p5
 	 	if (dm == 3) xPt <- p6
-	 	if (dm == 4) xPt <- xy4400
+	 	if (dm == 4) xPt <- xy441
 	 	}
 
  	# Now that the proper vertices have been selected, do the plot

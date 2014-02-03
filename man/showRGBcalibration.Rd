@@ -87,7 +87,15 @@ showCIE(calCols = purblues, sampCols = sc[4,], title = "Good Fit")
 
 # The apparent lambda max is around 575 nm.  Let's pass that to the function
 # along with a nearby value.
-showCIE(calCols = purblues, sampCols = sc[4,], title = "Good Fit", lambdas = c(575, 550), plotPts = TRUE, plotLambdas = TRUE)
+showCIE(calCols = purblues, sampCols = sc[4,], title = "Good Fit", lambdas = c(600, 575, 550), plotPts = TRUE, plotLambdas = TRUE)
+showCIE(calCols = purblues, sampCols = sc[4,], title = "Good Fit", lambdas = c(599, 600, 601), plotPts = TRUE, plotLambdas = TRUE)
+showCIE(calCols = purblues, sampCols = sc[3:4,], title = "Good Fit", lambdas = c(585, 590, 595, 600, 605, 610), plotPts = TRUE, plotLambdas = TRUE)
+showCIE(calCols = purblues, sampCols = sc[4,], title = "Good Fit", lambdas = c(600), plotPts = TRUE, plotLambdas = TRUE)
 
+# A ridiculously large test to make sure nothing is broken
+l <- seq(450, 630, 5)
+for (n in 1:length(l)) {
+	tst <- showCIE(calCols = purblues, sampCols = sc[3:4,], title = "Good Fit", lambdas = l[n], plotPts = TRUE, plotLambdas = TRUE)
+	}
 }
 \keyword{ plot }
