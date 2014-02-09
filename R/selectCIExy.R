@@ -16,6 +16,7 @@ selectCIExy <- function(L1 = NULL, L2 = NULL, colSpace = "sRGB", ex = 1.0, ...) 
 	# Re-order things so that L1 < L2 < L3 in what comes later
 	L3 <- L2	
 	L2 <- L1 + 0.5*(L2-L1) # This will be the mid point
+	L2 <- floor(L2) # round down in the low res version
 	
 	# Load spectral locus data (shark fin)
 	data(CIExyz)

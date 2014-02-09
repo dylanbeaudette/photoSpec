@@ -4,8 +4,9 @@
 Calculate the purity of a color
 }
 \description{
-This function takes a data frame of sample colors in hexadecimal code, converts them into the CIE color space, and uses the CIE xy values to compute their color purity.  Color purity is the distance from the white point D65 to the color, divided by the distance from D65 to either the sRGB gamut or the spectral locus, along the line extended from D65 through the color.  It is expressed as a fraction.  Optionally, a vector of wavelengths (\code{lambdas}) can be supplied, and the projection (color purity) of each color onto that wavelength is returned. Called by \code{\link{showCIE}} and generally not the user.  NEEDS A PICTURE OF THE COLOR PURITY CONCEPT.
+This function takes a data frame of sample colors in hexadecimal code, converts them into the CIE color space, and uses the CIE xy values to compute their color purity.  Color purity is the distance from the white point D65 to the color, divided by the distance from D65 to either the sRGB gamut or the spectral locus, along the line extended from D65 through the color.  The figure shows the definition of color purity.  It is expressed as a fraction.  Optionally, a vector of wavelengths (\code{lambdas}) can be supplied, and the projection (color purity) of each color onto that wavelength is returned. Called by \code{\link{showCIE}} and generally not the user.
 }
+%\figure{cp.pdf}
 \usage{
 calcColorPurity(sampCols = NULL, gamut = "sRGB", lambdas = NULL,
 	plotPts = TRUE, plotLambdas = FALSE, ...)

@@ -8,14 +8,14 @@ Draw a plot of calibration colors in a color space.  Optionally show a set of sa
 These functions takes a vector of colors used for calibration and plots them in either the RGB or CIE color space.  \code{showRGBcalibration} uses package \code{rgl} to make a 3D interactive plot.  \code{showCIE} will display the CIE chromaticity diagram.  If sample colors are provided, the position of the samples relative to the calibration colors can be inspected to see if the sample colors are within the calibration region.  If sample colors are provided, the projection of the colors onto the principal curve is returned when using \code{showRGBcalibration} or the color purity is returned if using \code{showCIE}.
 }
 \usage{
-showRGBcalibration(calCols, sampCols = NULL, title = NULL, ...)
+showRGBcalibration(calCols = NULL, sampCols = NULL, title = NULL, ...)
 
-showCIE(calCols, sampCols = NULL, title = NULL,
+showCIE(calCols = NULL, sampCols = NULL, title = NULL,
 gradient = NULL, opts = "sRGB", ...)
 }
 \arguments{
   \item{calCols}{
-An list with elements \code{rgb} and \code{hexcol}.  See \code{\link{genManyCols}} or \code{\link{gen5cols}}for details.
+An list with elements \code{rgb} and \code{hexcol}.  See \code{\link{genManyCols}} or \code{\link{gen5cols}}for details.  Must be provided for \code{showRGBcalibration}, optional for \code{showCIE}.
 }
   \item{sampCols}{
 A data frame with columns \code{hex} which contains hexadecimal strings, and \code{id} which has the sample names.

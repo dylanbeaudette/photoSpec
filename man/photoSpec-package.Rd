@@ -12,8 +12,8 @@ photoSpec allows one to apply the concept of Beer's Law to a photograph containi
 \tabular{ll}{
 Package: \tab photoSpec\cr
 Type: \tab Package\cr
-Version: \tab 0.5-1\cr
-Date: \tab 2014-02-02\cr
+Version: \tab 0.5-2\cr
+Date: \tab 2014-02-08\cr
 License: \tab GPL-3\cr
 LazyLoad: \tab yes\cr
 }

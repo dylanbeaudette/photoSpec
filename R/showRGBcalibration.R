@@ -1,5 +1,5 @@
 
-showRGBcalibration <- function(calCols, sampCols = NULL, title = NULL, ...) {
+showRGBcalibration <- function(calCols = NULL , sampCols = NULL, title = NULL, ...) {
 		
 	# Function to make a 3D plot of a color sample,
 	# along with a set of calibration colors.
@@ -7,6 +7,8 @@ showRGBcalibration <- function(calCols, sampCols = NULL, title = NULL, ...) {
 	# Bryan Hanson, DePauw University, March 2013 hanson@depauw.edu
 	# Part of the photoSpec package
 
+	if (is.null(calCols)) stop("calCols must be provided")
+	
 	open3d(windowRect = c(0, 0, 500, 500))
 	bg3d("black")
 	

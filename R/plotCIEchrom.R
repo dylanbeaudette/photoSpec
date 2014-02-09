@@ -155,7 +155,7 @@ plotCIEchrom <- function(gradient = NULL, colSpace = "sRGB", ex = 1.0,
 	# Misc decorations
 	
 	if ("Munsell" %in% opts) {
-		mun <- c(800, 980, 1110, 1220, 1650, 1900, 2100, 2600)
+		mun <- c(81, 99, 112, 123, 166, 191, 211, 266)
 		labs <- c("PB  ", "B  ", "BG  ", "G", "  GY",
 			"  Y", "YR", "R")
 		
