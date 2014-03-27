@@ -1,6 +1,7 @@
+ 
 
-
-selectCIExy <- function(L1 = NULL, L2 = NULL, colSpace = "sRGB", ex = 1.0, ...) {
+genColsUsingLambdas <- function(L1 = NULL, L2 = NULL, colSpace = "sRGB", ex = 1.0, res = 0.02,
+	plotPC = TRUE, showRGB = FALSE, showCIE = TRUE, ...) {
 
 	# Bryan Hanson, DePauw University, March 2013 hanson@depauw.edu
 	# Part of the photoSpec package
@@ -247,30 +248,24 @@ selectCIExy <- function(L1 = NULL, L2 = NULL, colSpace = "sRGB", ex = 1.0, ...) 
 		}
 	grid.text(label = expression(lambda[1]), lab.pos[1,1], lab.pos[1,2], default.units = "native")
 	grid.text(label = expression(lambda[2]), lab.pos[2,1], lab.pos[2,2], default.units = "native")
-	
-	# Prepare the enclosed colors to serve as the calibration colors
-	# Convert the raster into a list of calibration colors;
-	# Eliminate the pure whites which are outside the vertices
-
-	bgr2 <- as.raster(bgr)
-	bgr2 <- as.vector(bgr2)
-	bgr2 <- bgr2[bgr2 != "#FFFFFF"]
-
-#	message("Total colors to choose from:", length(bgr2))
-	
-	# Assemble a list for return
+		
+	# Assemble a list (in early versions, this was the return value)
 	wedge <- vector("list")
-	wedge$wavelength <- c(L1, L3) # input wavelengths
-	wedge$case <- Case
 	wedge$verts <- verts # vertices of wedge
-	wedge$raster <- bgr # colors in wedge
 	wedge$colSpace <- colSpace
 	wedge$ex <- ex
+	wedge$wavelength <- c(L1, L3) # input wavelengths
+	wedge$case <- Case
+	wedge$raster <- bgr # colors in wedge
 	wedge$p4 <- as.numeric(p4) # see above for defs of these pts
 	wedge$p5 <- as.numeric(p5)
 	wedge$p6 <- as.numeric(p6)
 	wedge$xPt <- as.numeric(xPt)
-	
+		
+	# Go and select colors from the wedge as calibration colors, and show them on CIE diagram
+
+	calCols <- xy2cC(wedge, res, colSpace, ex, ...)
+		
 	if (diagnostics) { # mark some of the relevent points
 		grid.points(x = p4[1], y = p4[2], default.units = "native",
 			gp = gpar(col = "red"), size = unit(0.5, "char"))
@@ -282,6 +277,11 @@ selectCIExy <- function(L1 = NULL, L2 = NULL, colSpace = "sRGB", ex = 1.0, ...) 
 			gp = gpar(col = "red"), size = unit(0.5, "char"))
 		}
 
-	invisible(wedge)
+	# Send out for visualization if requested
+	if (plotPC) print(plot_hex(calCols$hexcol)) # draws paint chips & labels them
+	if (showRGB) showRGBcalibration(calCols, ...)
+	if (showCIE) showCIE(calCols, ...)
+
+	invisible(calCols)
 
 	} # end of function

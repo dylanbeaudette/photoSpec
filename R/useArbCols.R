@@ -13,43 +13,29 @@ useArbCols <- function(munCols = NULL, rgbCols = NULL,
 		(is.null(hexCols)) & (is.null(namedCols)) ) {
 		stop("No colors provided. Pls give munCols, rgbCols, hexCols or namedCols")
 		}
+
+	# Currently NO check to see if more than one color specification is given
+	# In this case the last processed one will be the return value
 	
 	if (!is.null(munCols)) {
-		
+		calCols <- makecC(munCols = munCols)
 		}
 
 	if (!is.null(rgbCols)) {
-		
+		calCols <- makecC(rgbCols = rgbCols)
 		}
 
 	if (!is.null(hexCols)) {
-		
+		calCols <- makecC(hexCols = hexCols)
 		}
 
 	if (!is.null(namedCols)) {
-		# Convert to hexadecimal
-		hc <- ColToHex(namedCols))	
-		# Convert to rgb
-		hrgb <- col2rgb(namedCols)
-		# Convert  to Munsell
-		mm <- rgb2mnsl(hrgb)	
+		calCols <- makecC(namedCols = namedCols)
 		}
-
-		hc <- colorRampPalette(cols, space = "Lab")(5)	
-		# Convert to rgb for plotting in rgl
-		hrgb <- hex2RGB(hc)@coords
-		# Convert  to Munsell for labeling
-		mm <- rgb2mnsl(hrgb)	
-	
-	# Assemble list for return
-	
-	calCols <- vector("list")
-	calCols$hexcol <- hc
-	calCols$rgb <- hrgb
-	calCols$Munsell <- mm
 	
 	# Send out for visualization if requested
-	if (plotPC) print(plot_hex(hc)) # draws paint chips & labels them
+	
+	if (plotPC) print(plot_hex(calCols$hexcol))
 	if (showRGB) showRGBcalibration(calCols, ...)
 	if (showCIE) showCIE(calCols, ...)
 	

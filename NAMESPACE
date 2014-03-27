@@ -7,10 +7,9 @@ export(calcSampleValue,
 	plotCIEchrom,
 	plotLargeCard,
 	plotMiniCard,
-	prepCIEgradient,
-	selectCIExy,
+	genColsUsingLambdas,
 	showRGBcalibration,
 	showCIE,
 	runAllCal)
-import(munsell, princurve, grid, splancs, rgl, plyr, aqp, digest)
+import(munsell, princurve, grid, splancs, rgl, plyr, aqp, digest, DescTools)
 importFrom(colorspace, hex2RGB)

@@ -6,6 +6,135 @@
 	# Part of the photoSpec package
 
 ##### Misc Functions
+##### Other groups of functions below
+##### These are not exported
+
+	prepCIEgradient <- function(vertices = NULL, colSpace = "sRGB", ex = 1.0, ...) {
+	
+		# Bryan Hanson, DePauw University, March 2013 hanson@depauw.edu
+		# Part of the photoSpec package
+		
+		if (is.null(vertices)) stop("prepCIEgradient needs vertices")
+		
+		# Send out for a high res grid and associated colors
+		
+		xyzrgb <- grid2rgb(vertices = vertices, colSpace = colSpace, ex = ex, res = 0.002)
+		
+		# The actual drawing of the gradient will be done with a rasterGrob
+		# We need an array with separate planes for r, g, b
+		# It needs to be the size of np*np (raster objects are rectangular)
+		
+		np <- length(seq(-0.1, 0.9, 0.002)) # no. of points used to create grid
+		fin <- array(dim = c(np, np, 3))
+		names(fin) <- c("x", "y", "rgb")
+		
+		mr <- matrix(data = xyzrgb[,1], ncol = np, byrow = FALSE)
+		mg <- matrix(data = xyzrgb[,2], ncol = np, byrow = FALSE)
+		mb <- matrix(data = xyzrgb[,3], ncol = np, byrow = FALSE)
+		fin[,,1] <- mr
+		fin[,,2] <- mg
+		fin[,,3] <- mb
+		fin <- aperm(fin, c(2,1,3)) # This is needed to position the fin correctly
+		}
+	
+#####
+
+	makecC <- function(munCols = NULL, rgbCols = NULL,
+		hexCols = NULL, namedCols = NULL,
+		tidy = FALSE, sort = TRUE)  {
+	
+		# Bryan Hanson, DePauw University, March 2014 hanson@depauw.edu
+		# Part of the photoSpec package
+		
+		# Use user supplied colors in any format
+		# to create a calCols structure
+		
+		if ( (is.null(munCols)) & (is.null(rgbCols)) &
+			(is.null(hexCols)) & (is.null(namedCols)) ) {
+			stop("No colors provided. Please give munCols, rgbCols, hexCols or namedCols")
+			}
+	
+		# Currently NO check to see if more than one color specification is given
+		# In this case the last processed one will be the return value
+			
+		if (!is.null(munCols)) { # Munsell colors are potentially out of gamut
+			cm <- munCols # unique is used in case duplicates are created (see fix_mnsl)
+			ch <- unique(mnsl2hex(munCols, fix = TRUE)) # out of gamut will be NA & warning is issued w/o fix = T
+			crgb <- hex2RGB(ch)@coords
+			
+			msg <- paste("Total colors attempted:", length(munCols), "of which", length(ch), "were in gamut", sep = " ")
+			message(msg)
+			}
+	
+		if (!is.null(rgbCols)) {
+			crgb <- rgbCols
+			cm <- rgb2mnsl(crgb)
+			ch <- mnsl2hex(cm, fix = FALSE) # FALSE is default but should not occur
+			}
+	
+		if (!is.null(hexCols)) {
+			ch <- hexCols
+			crgb <- hex2RGB(ch)@coords
+			cm <- rgb2mnsl(crgb)	
+			}
+	
+		if (!is.null(namedCols)) {
+			ch <- ColToHex(namedCols)
+			crgb <- col2rgb(namedCols)
+			cm <- rgb2mnsl(crgb)
+			}
+	
+	# Assemble list for return
+	
+	calCols <- vector("list")
+	calCols$Munsell <- cm
+	calCols$rgb <- crgb
+	calCols$hexcol <- ch
+
+	if (tidy) {
+		
+		}
+
+	if (sort) {
+		
+		}
+	
+	return(calCols)
+	}
+	
+#####
+
+	xy2cC <- function(wedge, res = 0.02, colSpace = "sRGB", ex = 1.0, ...) {
+		
+		# Bryan Hanson, DePauw University, May 2013 hanson@depauw.edu
+		# Part of the photoSpec package
+	
+		# This function originated in v 3.0 as selectCalCols.  Brought back with modifications
+		# for v 5.0-3 in March 2014.
+		
+		# Function to process CIE xy colors selected by the user and
+		# reduce them in a sensible way to a limited no. of values for
+		# use as calibration colors
+				
+		colSpace <- wedge$colSpace
+		ex <- wedge$ex
+		verts <- wedge$verts
+		
+		xyz <- prepGrid(vertices = verts, res = res)
+		xyz <- xyz[xyz$inside,]
+		
+		# Add to diagram (is this the best place?)
+		grid.points(xyz$x, xyz$y, default.units = "native", size = unit(0.25, "char"))
+	
+		# Convert to other color spaces
+		xyz <- xyz[,-4]
+		rgbCols <- convertColor(xyz, from = "XYZ", to = colSpace)
+		calCols <- makecC(rgbCols = rgbCols)
+		return(calCols)
+
+		} # end of function
+
+#####
 
 	hex2CIExy <- function(somecols) {
 		# Convert to CIE xy  * this approach ignores brightness*
@@ -15,6 +144,54 @@
 		y <- XYZ[,2]/rowSums(XYZ)
 		cie <- cbind(x, y)
 		cie
+		}
+
+#####
+
+	grid2rgb <- function(vertices = NULL, colSpace = "sRGB", ex = 1.0, res = 0.002) {
+	
+		# Bryan Hanson, DePauw University, March 2014 hanson@depauw.edu
+		# Part of the photoSpec package
+		# Helper function to lay a grid over the CIE space and return
+		# rgb colors w/i a specified set of vertices
+				
+		# Go get the grid
+		
+		xyz <- prepGrid(vertices = vertices, res = res)
+		outsideL <- !xyz$inside
+		xyz <- xyz[,-4]
+		
+		# Get the colors ready and postion correct
+		
+		xyzrgb <- convertColor(xyz, from = "XYZ", to = colSpace)
+		xyzrgb <- xyzrgb*ex # push the whole color space
+	    xyzrgb[xyzrgb > 1] <- 1 # This is critical for ex > 1 and size of tongue
+		xyzrgb[outsideL,] <- 1.0 # Set the color outside the spectral locus to white
+		return(xyzrgb)
+		}
+
+#####
+
+	prepGrid <- function(vertices = NULL, res = 0.02) {
+	
+		# Bryan Hanson, DePauw University, March 2014 hanson@depauw.edu
+		# Part of the photoSpec package
+		
+		# Helper function to lay a grid over the CIE space
+		# at a given resolution, then note the area w/i the vertices w/a logical vector
+		# The z coordinate must be kept for certain color conversions in other functions
+		
+		x <- seq(-0.1, 0.9, res) # The raster that will be created must cover the entire plotting region
+		y <- seq(0.9, -0.1, -res) # The descending order here is important, but not intuitive
+		xyz <- expand.grid(x,y)
+		names(xyz) <- c("x", "y")
+		xyz$z <- (1 - xyz$x - xyz$y)
+	
+		# Find the points inside the requested polygon
+			
+		insideL <- inout(xyz, vertices, bound = FALSE) # TRUE = inside
+		xyz$inside <- insideL
+		return(xyz)
 		}
 
 #####

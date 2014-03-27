@@ -38,29 +38,29 @@ genManyCols <- function(minHue = "2.5R", maxHue = "10R",
 		chroma = seq(minChroma, maxChroma, by = 2)) # defaults give 216 colors (? no longer true)
 	m <- paste(hvc$hue, " ", hvc$value, "/", hvc$chroma, sep = "")
 	
-	# Convert colors to hexadecimals for plotting
-	mh <- unique(mnsl(m, fix = TRUE)) # out of gamut will be NA & warning is issued w/o fix = T
-	msg <- paste("Total colors attempted:", length(m), "of which",
-		length(mh), "were in gamut", sep = " ")
-	message(msg)
+	calCols <- makecC(munCols = m)
+	
+	# # Convert colors to hexadecimals for plotting
+	# mh <- unique(mnsl(m, fix = TRUE)) # out of gamut will be NA & warning is issued w/o fix = T
+	# msg <- paste("Total colors attempted:", length(m), "of which",
+		# length(mh), "were in gamut", sep = " ")
+	# message(msg)
 
-	if (plotPC) print(plot_hex(mh)) # draws paint chips & labels them
-	
-	# Convert colors to rgb for plotting in rgl
-	mrgb <- hex2RGB(mh)@coords
+	# # Convert colors to rgb for plotting in rgl
+	# mrgb <- hex2RGB(mh)@coords
 
-	# Convert back to Munsell for labeling
-	mm <- rgb2mnsl(mrgb)
+	# # Convert back to Munsell for labeling
+	# mm <- rgb2mnsl(mrgb)
 	
-	# Assemble list for return
+	# # Assemble list for return
 	
-	calCols <- vector("list")
-	calCols$hexcol <- mh
-	calCols$rgb <- mrgb
-	calCols$Munsell <- mm
+	# calCols <- data.frame()
+	# calCols$Munsell <- mm
+	# calCols$rgb <- mrgb
+	# calCols$hexcol <- mh
 	
-	# Send out for 3D view if requested
-	
+	# Send out for visualization if requested
+	if (plotPC) print(plot_hex(calCols$hexcol))
 	if (showRGB) showRGBcalibration(calCols, ...)
 	if (showCIE) showCIE(calCols, ...)
 	
