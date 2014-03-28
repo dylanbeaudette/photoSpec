@@ -9,7 +9,7 @@ gen5cols <- function(cols = c("yellow", "orange", "red"),
 	# Code generally follows logic of genManyCols
 	
 	hc <- colorRampPalette(cols, space = "Lab")(5)
-	calCols <- makecC(hexCols = hc)
+	calCols <- makeCalCols(hexCols = hc)
 		
 	# Send out for visualization if requested
 	if (plotPC) print(plot_hex(calCols$hexcol))

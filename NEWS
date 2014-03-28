@@ -3,6 +3,14 @@ NEWS file for package photoSpec
 photoSpec: A photographic spectrophotometer
 Bryan A. Hanson DePauw University, Greencastle Indiana USA
 
+##### Version 0.5-4
+Date: 2014-03-27
+>> Renamed several internalFunctions to fuller, more descriptive names: ccp -> computeColorPurity; dAB -> distAB; makecC -> makeCalCols; xy2cC -> CIExy2calCols.
+>> Forgot to export useArbCols, now added.  Also needed documentation file.
+>> Added documentation on calCols structure.
+>> Implemented sort option in makeCalCols.
+>> Added function sortColors to internalFunctions.
+
 ##### Version 0.5-3
 Date: 2014-03-27
 >> Brought selectCalCols back from version 3.0.  It is used with selectCIExy to convert the CIE xy coordinates to a limited number of Munsell colors for use in the cards.  Thus one can now use two wavelengths with the CIE diagram to select your calibration colors, which is much closer to the spirit of how one would use spectroscopic information to derive the appropriate colors.

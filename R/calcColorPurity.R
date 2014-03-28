@@ -34,7 +34,7 @@ calcColorPurity <- function(sampCols = NULL, gamut = "sRGB", lambdas = NULL,
 	# Compute color purity (ratio of D65 to color / D65 to gamut) @ apparent lambda max
 
 	cp <- sampCols # also should record which gamut was in use
-	cp$purity <- ccp(cie, gamut) # color purity by definition; always (+)
+	cp$purity <- computeColorPurity(cie, gamut) # color purity by definition; always (+)
 	
 	# Compute apparent lambda max for each sample (appLmax)
 	# Find where the D65 -> cie segment hits the spectral locus
@@ -87,7 +87,7 @@ calcColorPurity <- function(sampCols = NULL, gamut = "sRGB", lambdas = NULL,
 			if ((sx < dx) & (lx < dx)) sign[n] <- -1.0
 			}
 			
-		cpPts <- sign*ccp(projPts, gamut) # results in a vector ns * nl long, grouped first by ns
+		cpPts <- sign*computeColorPurity(projPts, gamut) # results in a vector ns * nl long, grouped first by ns
 
 		for (n in 1:nl) { # unstack the data
 			projVals[,n] <- cpPts[((ns*n)-ns+1):(ns*n)] # yikes!

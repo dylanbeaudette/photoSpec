@@ -39,7 +39,7 @@
 	
 #####
 
-	makecC <- function(munCols = NULL, rgbCols = NULL,
+	makeCalCols <- function(munCols = NULL, rgbCols = NULL,
 		hexCols = NULL, namedCols = NULL,
 		tidy = FALSE, sort = TRUE)  {
 	
@@ -57,12 +57,12 @@
 		# Currently NO check to see if more than one color specification is given
 		# In this case the last processed one will be the return value
 			
-		if (!is.null(munCols)) { # Munsell colors are potentially out of gamut
+		if (!is.null(munCols)) { # Munsell colors are potentially out of gamut (typically, some are)
 			cm <- munCols # unique is used in case duplicates are created (see fix_mnsl)
 			ch <- unique(mnsl2hex(munCols, fix = TRUE)) # out of gamut will be NA & warning is issued w/o fix = T
 			crgb <- hex2RGB(ch)@coords
-			
-			msg <- paste("Total colors attempted:", length(munCols), "of which", length(ch), "were in gamut", sep = " ")
+			cm <- rgb2mnsl(crgb) # Necessary since the out of gamuts have been eliminated
+			msg <- paste("Total Munsell colors attempted:", length(munCols), "of which", length(ch), "were in gamut", sep = " ")
 			message(msg)
 			}
 	
@@ -90,13 +90,32 @@
 	calCols$Munsell <- cm
 	calCols$rgb <- crgb
 	calCols$hexcol <- ch
-
+	
 	if (tidy) {
 		
 		}
 
 	if (sort) {
-		
+		# Sort from pale to dark
+		# Must separate the rgb part from the list and order
+		hexOrder <- sortColors(calCols$hexcol)
+		rgb <- as.data.frame(calCols$rgb)
+		rgb$hexOrder <- hexOrder
+		rgb <- arrange(rgb, hexOrder)
+		rgb <- rgb[,-4]
+		# now do the other parts
+#		str(calCols)
+		df <- data.frame(Munsell = calCols[[1]], hexcol = calCols[[3]], hexOrder, stringsAsFactors = FALSE)
+#		print("df is:")
+#		str(df)
+		df <- arrange(df, hexOrder)
+		# recombine
+		calCols <- vector("list")
+		calCols$Munsell <- df$Munsell
+		calCols$rgb <- rgb
+		calCols$hexcol <- df$hexcol
+#		print("calCols is:")
+#		str(calCols)
 		}
 	
 	return(calCols)
@@ -104,7 +123,7 @@
 	
 #####
 
-	xy2cC <- function(wedge, res = 0.02, colSpace = "sRGB", ex = 1.0, ...) {
+	CIExy2calCols <- function(wedge, res = 0.02, colSpace = "sRGB", ex = 1.0, ...) {
 		
 		# Bryan Hanson, DePauw University, May 2013 hanson@depauw.edu
 		# Part of the photoSpec package
@@ -129,7 +148,7 @@
 		# Convert to other color spaces
 		xyz <- xyz[,-4]
 		rgbCols <- convertColor(xyz, from = "XYZ", to = colSpace)
-		calCols <- makecC(rgbCols = rgbCols)
+		calCols <- makeCalCols(rgbCols = rgbCols)
 		return(calCols)
 
 		} # end of function
@@ -227,13 +246,13 @@
 
 #####
 
-	ccp <- function(cie, gamut) { # Calc color purity
+	computeColorPurity <- function(cie, gamut) { # Calc color purity
 		# cie is matrix of colors giving cie xy
 
 		# Get needed data
 		ns <- nrow(cie)
 		
-		# cat("Hello from ccp\n")
+		# cat("Hello from computeColorPurity\n")
 		# cat("ns = ", ns, "\n")
 		# cat("cie =")
 		# print(cie)
@@ -257,10 +276,10 @@
 			stop("May have encountered a zero length line segment.")
 			}
 
-		dc <- dAB(D65, cie) # distance from D65 to color
+		dc <- distAB(D65, cie) # distance from D65 to color
 		where <- lineIntersection(D65[1], D65[2], cie2[,1], cie2[,2],
 			pg[hits, 1], pg[hits, 2], pg[hits + 1, 1], pg[hits + 1, 2])
-		dg <- dAB(D65, where) # distance from D65 to gamut
+		dg <- distAB(D65, where) # distance from D65 to gamut
 		# Final calc
 		cp <- dc*100/dg # these are by definition always (+)
 		for (n in 1:length(cp)) {
@@ -288,7 +307,18 @@
 
 #####
 
-	dAB <- function(A, B) { # Euclidian distance between pts A & B
+	sortColors <- function(Cols) { # sort colors based upon distance from white
+		# Cols should be a vector of hexadecimal colors
+		oCols <- Cols # save the original
+		Cols <- col2rgb(Cols) # now in rgb
+	    whdist <- apply(Cols, 2, function(z) {sqrt(sum((z - 255)^2))})
+		whdist <- 100*whdist/(1.73*255) # gives answer a percentage of max dist
+		return(whdist)
+		}
+
+#####
+
+	distAB <- function(A, B) { # Euclidian distance between pts A & B
 		# Vectorized
 		# A, B each as data frames with columns x, y (not necessarily named)
 		# return value is a vector of distances

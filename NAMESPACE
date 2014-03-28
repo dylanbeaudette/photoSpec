@@ -10,6 +10,7 @@ export(calcSampleValue,
 	genColsUsingLambdas,
 	showRGBcalibration,
 	showCIE,
-	runAllCal)
+	runAllCal,
+	useArbCols)
 import(munsell, princurve, grid, splancs, rgl, plyr, aqp, digest, DescTools)
 importFrom(colorspace, hex2RGB)

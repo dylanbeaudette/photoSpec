@@ -18,19 +18,19 @@ useArbCols <- function(munCols = NULL, rgbCols = NULL,
 	# In this case the last processed one will be the return value
 	
 	if (!is.null(munCols)) {
-		calCols <- makecC(munCols = munCols)
+		calCols <- makeCalCols(munCols = munCols)
 		}
 
 	if (!is.null(rgbCols)) {
-		calCols <- makecC(rgbCols = rgbCols)
+		calCols <- makeCalCols(rgbCols = rgbCols)
 		}
 
 	if (!is.null(hexCols)) {
-		calCols <- makecC(hexCols = hexCols)
+		calCols <- makeCalCols(hexCols = hexCols)
 		}
 
 	if (!is.null(namedCols)) {
-		calCols <- makecC(namedCols = namedCols)
+		calCols <- makeCalCols(namedCols = namedCols)
 		}
 	
 	# Send out for visualization if requested

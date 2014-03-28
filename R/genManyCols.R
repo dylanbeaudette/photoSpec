@@ -38,7 +38,7 @@ genManyCols <- function(minHue = "2.5R", maxHue = "10R",
 		chroma = seq(minChroma, maxChroma, by = 2)) # defaults give 216 colors (? no longer true)
 	m <- paste(hvc$hue, " ", hvc$value, "/", hvc$chroma, sep = "")
 	
-	calCols <- makecC(munCols = m)
+	calCols <- makeCalCols(munCols = m)
 	
 	# # Convert colors to hexadecimals for plotting
 	# mh <- unique(mnsl(m, fix = TRUE)) # out of gamut will be NA & warning is issued w/o fix = T

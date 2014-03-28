@@ -81,9 +81,9 @@ genColsUsingLambdas <- function(L1 = NULL, L2 = NULL, colSpace = "sRGB", ex = 1.
 	 	p5 <- CIExyz[keep[2],2:3]
 	 	p6 <- CIExyz[keep[3],2:3]
 	 	# Figure xPt
-	 	d4 <- dAB(D65, p4)
-	 	d5 <- dAB(D65, p5)
-	 	d6 <- dAB(D65, p6)
+	 	d4 <- distAB(D65, p4)
+	 	d5 <- distAB(D65, p5)
+	 	d6 <- distAB(D65, p6)
 	 	l <- c(d4, d5, d6)
 	 	dm <- which.max(l)
 	 	if (dm == 1) xPt <- p4
@@ -101,10 +101,10 @@ genColsUsingLambdas <- function(L1 = NULL, L2 = NULL, colSpace = "sRGB", ex = 1.
 	 		c(NA, p4[1], p4[2], NA), CIExyz[1:keep[3],])
 	 	verts <- verts[,2:3]
 	 	# Figure xPt
-	 	d4 <- dAB(D65, p4)
-	 	d5 <- dAB(D65, p5)
-	 	d6 <- dAB(D65, p6)
-	 	xy1 <- dAB(D65, CIExyz[1,2:3])
+	 	d4 <- distAB(D65, p4)
+	 	d5 <- distAB(D65, p5)
+	 	d6 <- distAB(D65, p6)
+	 	xy1 <- distAB(D65, CIExyz[1,2:3])
 	 	l <- c(d4, d5, d6, xy1)
 	 	dm <- which.max(l)
 	 	if (dm == 1) xPt <- p4
@@ -124,10 +124,10 @@ genColsUsingLambdas <- function(L1 = NULL, L2 = NULL, colSpace = "sRGB", ex = 1.
 	 		c(NA, p4[1], p4[2], NA), CIExyz[1:keep[3],])
 	 	verts <- verts[,2:3]
 	 	# Figure xPt
-	 	d4 <- dAB(D65, p4)
-	 	d5 <- dAB(D65, p5)
-	 	d6 <- dAB(D65, p6)
-	 	xy1 <- dAB(D65, CIExyz[1,2:3])
+	 	d4 <- distAB(D65, p4)
+	 	d5 <- distAB(D65, p5)
+	 	d6 <- distAB(D65, p6)
+	 	xy1 <- distAB(D65, CIExyz[1,2:3])
 	 	l <- c(d4, d5, d6, xy1)
 	 	dm <- which.max(l)
 	 	if (dm == 2) xPt <- p5
@@ -146,9 +146,9 @@ genColsUsingLambdas <- function(L1 = NULL, L2 = NULL, colSpace = "sRGB", ex = 1.
 		verts <- rbind(segs[4,], p4, p6)
 		colnames(verts) <- c("x", "y")
 	 	# Figure xPt
-	 	d4 <- dAB(D65, p4)
-	 	d5 <- dAB(D65, p5)
-	 	d6 <- dAB(D65, p6)
+	 	d4 <- distAB(D65, p4)
+	 	d5 <- distAB(D65, p5)
+	 	d6 <- distAB(D65, p6)
 	 	l <- c(d4, d5, d6)
 	 	dm <- which.max(l)
 	 	if (dm == 1) xPt <- p4
@@ -165,13 +165,13 @@ genColsUsingLambdas <- function(L1 = NULL, L2 = NULL, colSpace = "sRGB", ex = 1.
 	 	verts <- rbind(CIExyz[keep[3]:441,], CIExyz[1:keep[1],], c(NA, segs[4,1], segs[4,2], NA))
 	 	verts <- verts[,2:3]
 	 	# Figure xPt
-	 	d4 <- dAB(D65, p4)
-	 	d5 <- dAB(D65, p5)
-	 	d6 <- dAB(D65, p6)
+	 	d4 <- distAB(D65, p4)
+	 	d5 <- distAB(D65, p5)
+	 	d6 <- distAB(D65, p6)
 	 	xy1 <- as.numeric(CIExyz[1,2:3])
 	 	xy441 <- as.numeric(CIExyz[441,2:3])
-	 	dxy1 <- dAB(D65, xy1)
-	 	dxy441 <- dAB(D65, xy441)
+	 	dxy1 <- distAB(D65, xy1)
+	 	dxy441 <- distAB(D65, xy441)
 	 	l <- c(d4, d5, d6, dxy1, dxy441)
 	 	dm <- which.max(l)
 	 	if (dm == 1) xPt <- p4
@@ -192,13 +192,13 @@ genColsUsingLambdas <- function(L1 = NULL, L2 = NULL, colSpace = "sRGB", ex = 1.
 	 		c(NA, p6[1], p6[2], NA), c(NA, segs[4,1], segs[4,2], NA))
 	 	verts <- verts[,2:3]
 	 	# Figure xPt
-	 	d4 <- dAB(D65, p4)
-	 	d5 <- dAB(D65, p5)
-	 	d6 <- dAB(D65, p6)
+	 	d4 <- distAB(D65, p4)
+	 	d5 <- distAB(D65, p5)
+	 	d6 <- distAB(D65, p6)
 	 	xy1 <- as.numeric(CIExyz[1,2:3])
 	 	xy441 <- as.numeric(CIExyz[441,2:3])
-	 	dxy1 <- dAB(D65, xy1)
-	 	dxy441 <- dAB(D65, xy441)
+	 	dxy1 <- distAB(D65, xy1)
+	 	dxy441 <- distAB(D65, xy441)
 	 	l <- c(d4, d5, d6, dxy1, dxy441)
 	 	dm <- which.max(l)
 	 	if (length(xPt) > 1) xPt <- xPt[1] # In the event of a tie
@@ -219,11 +219,11 @@ genColsUsingLambdas <- function(L1 = NULL, L2 = NULL, colSpace = "sRGB", ex = 1.
 	 		c(NA, p6[1], p6[2], NA), c(NA, segs[4,1], segs[4,2], NA))
 	 	verts <- verts[,2:3]
 	 	# Figure xPt
-	 	d4 <- dAB(D65, p4)
-	 	d5 <- dAB(D65, p5)
-	 	d6 <- dAB(D65, p6)
+	 	d4 <- distAB(D65, p4)
+	 	d5 <- distAB(D65, p5)
+	 	d6 <- distAB(D65, p6)
 	 	xy441 <- as.numeric(CIExyz[441,2:3])
-	 	dxy441 <- dAB(D65, xy441)
+	 	dxy441 <- distAB(D65, xy441)
 	 	l <- c(d4, d5, d6, dxy441)
 	 	dm <- which.max(l)
 	 	if (length(xPt) > 1) xPt <- xPt[1] # In the event of a tie
@@ -264,7 +264,7 @@ genColsUsingLambdas <- function(L1 = NULL, L2 = NULL, colSpace = "sRGB", ex = 1.
 		
 	# Go and select colors from the wedge as calibration colors, and show them on CIE diagram
 
-	calCols <- xy2cC(wedge, res, colSpace, ex, ...)
+	calCols <- CIExy2calCols(wedge, res, colSpace, ex, ...)
 		
 	if (diagnostics) { # mark some of the relevent points
 		grid.points(x = p4[1], y = p4[2], default.units = "native",
@@ -280,7 +280,7 @@ genColsUsingLambdas <- function(L1 = NULL, L2 = NULL, colSpace = "sRGB", ex = 1.
 	# Send out for visualization if requested
 	if (plotPC) print(plot_hex(calCols$hexcol)) # draws paint chips & labels them
 	if (showRGB) showRGBcalibration(calCols, ...)
-	if (showCIE) showCIE(calCols, ...)
+#	if (showCIE) showCIE(calCols, ...)
 
 	invisible(calCols)
 
