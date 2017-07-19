@@ -28,7 +28,7 @@ useArbCols <- function(munCols = NULL, rgbCols = NULL,
 
 	if (!is.null(namedCols)) {
 		# Convert to hexadecimal
-		hc <- ColToHex(namedCols))	
+		hc <- ColToHex(namedCols)
 		# Convert to rgb
 		hrgb <- col2rgb(namedCols)
 		# Convert  to Munsell
